@@ -6,9 +6,9 @@ import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { setupReveals } from "@/components/motion/reveal";
 import Lines from "@/components/motion/Lines";
 import Placeholder from "@/components/ui/Placeholder";
-import AddToCart from "@/components/product/AddToCart";
 import { LinkButton } from "@/components/ui/Button";
 import { hvWhey, formatPrice, availabilityLabel } from "@/lib/catalog";
+import { store } from "@/data/catalog";
 
 /** 05 — The signature product, presented like a print ad. */
 export default function Signature() {
@@ -20,14 +20,13 @@ export default function Signature() {
       setupReveals();
       if (prefersReducedMotion()) return;
       const q = gsap.utils.selector(root);
-      gsap.fromTo(q("[data-sig-pack]"), { yPercent: 12, rotation: -4 }, {
-        yPercent: -8, rotation: 3, ease: "none",
-        scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true },
-      });
-      gsap.fromTo(q("[data-sig-num]"), { yPercent: 20 }, {
-        yPercent: -30, ease: "none",
-        scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true },
-      });
+      // "Make every rep count": the two lines slide together while the tub rises through them.
+      const box = q("[data-rep-box]")[0];
+      gsap
+        .timeline({ scrollTrigger: { trigger: box, start: "top bottom", end: "bottom bottom", scrub: 1 } })
+        .fromTo(q("[data-rep-top]"), { xPercent: -14 }, { xPercent: 0, ease: "none" }, 0)
+        .fromTo(q("[data-rep-bottom]"), { xPercent: 14 }, { xPercent: 0, ease: "none" }, 0)
+        .fromTo(q("[data-rep-rise]"), { yPercent: 45, scale: 0.85 }, { yPercent: 0, scale: 1, ease: "none" }, 0);
       gsap.fromTo(q("[data-vertical]"), { xPercent: 0 }, {
         xPercent: -50, ease: "none",
         scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true },
@@ -38,30 +37,33 @@ export default function Signature() {
 
   return (
     <section ref={root} aria-labelledby="sig-title" className="relative bg-charcoal py-24 md:py-32">
-      <div className="shell grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
+      <div className="shell grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
         {/* Visual */}
-        <div data-reveal="clip" className="grain relative min-h-[110vw] overflow-hidden bg-obsidian md:col-span-7 md:min-h-[86vh]">
-          <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(55% 45% at 55% 45%, rgba(243,242,237,0.12) 0%, transparent 70%)" }} />
-          <span data-sig-num aria-hidden className="display outline-text absolute -left-[0.05em] top-[2%] text-[52vw] leading-none [--stroke:rgba(243,242,237,0.16)] md:text-[30vw]">
-            01
-          </span>
-          <div aria-hidden className="absolute bottom-6 left-0 w-full overflow-hidden whitespace-nowrap">
+        <div data-rep-box data-reveal="clip" className="grain relative isolate min-h-[120vw] overflow-hidden bg-obsidian md:min-h-[90vw] lg:col-span-7 lg:min-h-[86vh]">
+          <div aria-hidden className="absolute inset-0 -z-10" style={{ background: "radial-gradient(50% 50% at 50% 62%, rgba(243,242,237,0.12) 0%, transparent 70%)" }} />
+          <p aria-hidden className="display absolute inset-x-0 top-[9%] z-0 text-center text-[19vw] leading-[0.8] lg:text-[10.5vw]">
+            <span data-rep-top className="block">Make every</span>
+            <span data-rep-bottom className="block">
+              rep <span className="text-lime">count.</span>
+            </span>
+          </p>
+          <div data-rep-rise className="absolute inset-x-[14%] bottom-[11%] top-[30%] z-10">
+            <Image src={p.images[0].src} alt={p.images[0].alt} fill sizes="(min-width:1024px) 42vw, 75vw" className="object-contain drop-shadow-[0_50px_60px_rgba(0,0,0,0.75)]" />
+          </div>
+          <div aria-hidden className="absolute bottom-5 left-0 z-20 w-full overflow-hidden whitespace-nowrap">
             <p data-vertical className="eyebrow inline-block text-mute">
               {Array.from({ length: 8 }).map((_, i) => (
                 <span key={i} className="mr-8">HV Whey Protein — Chocolate — 1kg —</span>
               ))}
             </p>
           </div>
-          <div data-sig-pack className="absolute inset-[12%_10%_14%_14%]">
-            <Image src={p.images[0].src} alt={p.images[0].alt} fill sizes="(min-width:768px) 50vw, 90vw" className="object-contain drop-shadow-[0_45px_60px_rgba(0,0,0,0.7)]" />
-          </div>
-          <span className="eyebrow absolute right-4 top-4 bg-lime px-2 py-1 text-obsidian">HV Original</span>
+          <span className="eyebrow absolute right-4 top-4 z-20 bg-lime px-2 py-1 text-ink">HV Original</span>
         </div>
 
         {/* Copy */}
-        <div className="flex flex-col justify-center md:col-span-5 md:pl-6">
+        <div className="flex flex-col justify-center lg:col-span-5 lg:pl-6">
           <span className="eyebrow text-mute">(05) The signature</span>
-          <Lines as="h2" id="sig-title" className="display mt-5 text-[17vw] md:text-[6.5vw]" lines={["HV Whey", <span key="p" className="text-lime">Protein.</span>]} />
+          <Lines as="h2" id="sig-title" className="display mt-5 text-[17vw] md:text-[12vw] lg:text-[6.5vw]" lines={["HV Whey", <span key="p" className="text-lime">Protein.</span>]} />
 
           <div data-reveal="fade" className="mt-8 flex flex-col gap-4 text-[1rem] leading-relaxed text-soft/80">
             {p.description.map((d, i) => (
@@ -98,9 +100,11 @@ export default function Signature() {
             </div>
             <p className="text-xs text-mute">{availabilityLabel[p.availability]}</p>
             <div className="flex flex-col gap-3 xs:flex-row">
-              <AddToCart product={p} className="flex-1" />
-              <LinkButton href={`/products/${p.slug}`} variant="ghost" className="flex-1">
-                Explore product
+              <LinkButton href={`/products/${p.slug}`} className="xs:flex-1">
+                View details
+              </LinkButton>
+              <LinkButton href={store.phoneHref} variant="ghost" arrow={false} className="xs:flex-1">
+                Call to order
               </LinkButton>
             </div>
           </div>

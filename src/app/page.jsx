@@ -1,14 +1,12 @@
 import Hero from "@/components/sections/Hero";
 import ProductReveal from "@/components/sections/ProductReveal";
-import Philosophy from "@/components/sections/Philosophy";
 import Categories from "@/components/sections/Categories";
 import Signature from "@/components/sections/Signature";
 import Marketplace from "@/components/sections/Marketplace";
-import Featured from "@/components/sections/Featured";
 import Discovery from "@/components/sections/Discovery";
 import Trust from "@/components/sections/Trust";
-import Journal from "@/components/sections/Journal";
-import FinalCta from "@/components/sections/FinalCta";
+import Founder from "@/components/sections/Founder";
+import Philosophy from "@/components/sections/Philosophy";
 import { store } from "@/data/catalog";
 
 export const metadata = {
@@ -40,15 +38,13 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Hero />
       <ProductReveal />
-      <Philosophy />
       <Categories />
-      <Signature />
       <Marketplace />
-      <Featured />
+      <Signature />
       <Discovery />
       <Trust />
-      <Journal />
-      <FinalCta />
+      <Founder />
+      <Philosophy />
     </>
   );
 }

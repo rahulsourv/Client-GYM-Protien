@@ -6,9 +6,7 @@ import Intro from "@/components/layout/Intro";
 import Header from "@/components/layout/Header";
 import MobileMenu from "@/components/layout/MobileMenu";
 import Footer from "@/components/layout/Footer";
-import CartDrawer from "@/components/cart/CartDrawer";
 import SearchOverlay from "@/components/search/SearchOverlay";
-import QuickView from "@/components/product/QuickView";
 
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
@@ -39,7 +37,8 @@ export const viewport = {
 };
 
 // Decides before first paint whether the once-per-session intro plays.
-const introScript = `document.documentElement.classList.add('js');try{if(!sessionStorage.getItem('hv-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.intro='play'}catch(e){}`;
+// Also applies the saved colour theme before paint so there is no flash.
+const introScript = `document.documentElement.classList.add('js');try{if(localStorage.getItem('hv-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}try{if(!sessionStorage.getItem('hv-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.intro='play'}catch(e){}`;
 
 export default function RootLayout({ children }) {
   return (
@@ -56,9 +55,7 @@ export default function RootLayout({ children }) {
           <MobileMenu />
           <main id="main">{children}</main>
           <Footer />
-          <CartDrawer />
           <SearchOverlay />
-          <QuickView />
         </ShopProvider>
       </body>
     </html>

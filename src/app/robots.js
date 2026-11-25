@@ -1,6 +1,6 @@
 export default function robots() {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/cart"] },
+    rules: { userAgent: "*", allow: "/", },
     sitemap: "https://hvnutrition.in/sitemap.xml",
   };
 }

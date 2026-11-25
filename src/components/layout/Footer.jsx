@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-line bg-obsidian pt-20">
       <div className="shell grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-12">
-        <div className="col-span-2 md:col-span-4">
+        <div className="col-span-2 md:col-span-12 lg:col-span-4">
           <Wordmark className="text-xl" />
           <p className="mt-6 max-w-xs text-sm leading-relaxed text-mute">
             Sports nutrition from {store.city}. Our own whey, alongside the brands we trust on our shelf.
@@ -27,18 +27,18 @@ export default function Footer() {
             <a href={`mailto:${store.email}`} className="break-all text-warm hover:text-lime">{store.email}</a>
           </address>
         </div>
-        <FooterCol title="Shop" className="md:col-span-3">
+        <FooterCol title="Shop" className="md:col-span-4 lg:col-span-3">
           <FooterLink href="/shop">All products</FooterLink>
           {categories.map((c) => (
             <FooterLink key={c.slug} href={`/collections/${c.slug}`}>{c.name}</FooterLink>
           ))}
         </FooterCol>
-        <FooterCol title="Brands" className="md:col-span-2">
+        <FooterCol title="Brands" className="md:col-span-4 lg:col-span-2">
           {brands.map((b) => (
             <FooterLink key={b.slug} href={`/collections/${b.slug}`}>{b.name}</FooterLink>
           ))}
         </FooterCol>
-        <FooterCol title="Help" className="md:col-span-3">
+        <FooterCol title="Help" className="md:col-span-4 lg:col-span-3">
           {help.map((h) => (
             <FooterLink key={h.href} href={h.href}>{h.label}</FooterLink>
           ))}

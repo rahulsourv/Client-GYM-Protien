@@ -32,7 +32,7 @@ export default function Categories() {
       <div className="shell">
         <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
           <div>
-            <span className="eyebrow text-mute">(04) Index</span>
+            <span className="eyebrow text-mute">(03) Index</span>
             <Lines as="h2" id="cat-title" className="display mt-4 text-[16vw] md:text-[8vw]" lines={["Shop by", "category"]} />
           </div>
           <p data-reveal="fade" className="max-w-xs text-sm text-mute">
@@ -84,7 +84,7 @@ export default function Categories() {
                       />
                     )}
                   </span>
-                  <span className="grid size-12 place-items-center border border-line transition-colors duration-500 group-hover:border-lime group-hover:bg-lime group-hover:text-obsidian max-md:hidden">
+                  <span className="grid size-12 place-items-center border border-line transition-colors duration-500 group-hover:border-lime group-hover:bg-lime group-hover:text-ink max-md:hidden">
                     <ArrowUpRight className="size-5 transition-transform duration-500 group-hover:rotate-45" aria-hidden />
                   </span>
                 </span>

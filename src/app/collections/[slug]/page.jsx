@@ -44,7 +44,7 @@ export default async function CollectionPage({ params }) {
         {own && (
           <div className="grain relative mt-12 h-[60vh] min-h-[380px] overflow-hidden bg-graphite">
             <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(50% 60% at 50% 50%, rgba(243,242,237,0.12), transparent 70%)" }} />
-            <p aria-hidden className="display outline-text absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[22vw] [--stroke:rgba(243,242,237,0.2)]">
+            <p aria-hidden className="display outline-text absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[22vw] [--stroke:color-mix(in_srgb,var(--color-warm)_20%,transparent)]">
               Original
             </p>
             <div className="absolute inset-[8%]">

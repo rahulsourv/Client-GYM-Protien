@@ -11,6 +11,8 @@
   --color-soft: #e8e8e4;
   --color-mute: #858585;
   --color-lime: #c7ff38;
+  /* Text that sits on an accent (lime/gold) background — dark in both themes. */
+  --color-ink: #090909;
 
   --font-display: var(--font-archivo), "Arial Narrow", sans-serif;
   --font-sans: var(--font-manrope), system-ui, sans-serif;
@@ -22,10 +24,48 @@
   --breakpoint-xs: 26rem;
 }
 
+/*
+ * Light theme: the same token names with inverted values, so every utility
+ * (bg-obsidian, text-warm, …) flips automatically. Lime deepens to an olive
+ * gold (echoing the HV tub) — accent backgrounds keep dark "ink" text.
+ */
+html[data-theme="light"] {
+  color-scheme: light;
+  --color-obsidian: #f3f2ed;
+  --color-charcoal: #eae8e2;
+  --color-graphite: #dfddd6;
+  --color-line: #d2d0c8;
+  --color-warm: #0b0b0b;
+  --color-soft: #1c1c1a;
+  --color-mute: #696964;
+  --color-lime: #ffb300;
+}
+/* Neon gold is too pale for small text on paper: small labels use a deeper gold. */
+html[data-theme="light"] .eyebrow.text-lime,
+html[data-theme="light"] .font-mono.text-lime {
+  color: #a86400;
+}
+
+/* Sections drawn with fixed colours (e.g. the Philosophy shaker) keep the
+   original palette in both themes. */
+.palette-fixed {
+  --color-obsidian: #090909;
+  --color-charcoal: #111111;
+  --color-graphite: #191919;
+  --color-line: #2a2a2a;
+  --color-warm: #f3f2ed;
+  --color-soft: #e8e8e4;
+  --color-mute: #858585;
+  --color-lime: #c7ff38;
+}
+
 @layer base {
   :root {
     color-scheme: dark;
     --gutter: clamp(1rem, 3vw, 2.5rem);
+  }
+  html {
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
   html {
     background: var(--color-obsidian);
@@ -51,7 +91,7 @@
   }
   ::selection {
     background: var(--color-lime);
-    color: var(--color-obsidian);
+    color: var(--color-ink);
   }
   :focus-visible {
     outline: 2px solid var(--color-lime);
@@ -93,7 +133,7 @@
   }
   .outline-text {
     color: transparent;
-    -webkit-text-stroke: clamp(1.5px, 0.14vw, 3px) var(--stroke, #f3f2ed);
+    -webkit-text-stroke: clamp(1.5px, 0.14vw, 3px) var(--stroke, var(--color-warm));
   }
   .shell {
     padding-inline: var(--gutter);

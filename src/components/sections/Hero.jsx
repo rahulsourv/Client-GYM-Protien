@@ -84,10 +84,10 @@ export default function Hero() {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div
           data-light
-          className="absolute left-1/2 top-[-10%] h-[120%] w-[110vw] -translate-x-1/2 md:left-[60%] md:w-[80vw]"
+          className="absolute left-1/2 top-[-10%] h-[120%] w-[110vw] -translate-x-1/2 lg:left-[60%] lg:w-[80vw]"
           style={{ background: "radial-gradient(50% 45% at 50% 42%, rgba(243,242,237,0.13) 0%, rgba(243,242,237,0.04) 45%, transparent 75%)" }}
         />
-        <div className="shell absolute inset-0 hidden grid-cols-6 md:grid">
+        <div className="shell absolute inset-0 hidden grid-cols-6 lg:grid">
           {Array.from({ length: 6 }).map((_, i) => (
             <span key={i} className="border-l border-warm/[0.045] last:border-r" />
           ))}
@@ -100,8 +100,8 @@ export default function Hero() {
       </h1>
 
       {/* Layer 1: wall of type, behind the product */}
-      <div data-type-layer aria-hidden className="relative z-0 mt-[6vh] md:mt-[3vh]">
-        <p data-word data-hero-hide className="display flex justify-center overflow-hidden text-[27.5vw] leading-[0.8] text-warm md:text-[25vw]">
+      <div data-type-layer aria-hidden className="relative z-0 mt-[6vh] lg:mt-[3vh]">
+        <p data-word data-hero-hide className="display flex justify-center overflow-hidden text-[27.5vw] leading-[0.8] text-warm lg:text-[25vw]">
           {"OUTWORK".split("").map((c, i) => (
             <span key={i} className="inline-block">
               {c}
@@ -111,7 +111,7 @@ export default function Hero() {
       </div>
 
       {/* Layer 2: the product */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-[36svh] top-[21svh] z-10 flex justify-center md:bottom-[4vh] md:left-[22%] md:right-[10%] md:top-[16vh]">
+      <div className="pointer-events-none absolute inset-x-0 bottom-[36svh] top-[21svh] z-10 flex justify-center lg:bottom-[4vh] lg:left-[40%] lg:right-[12%] lg:top-[16vh] xl:left-[22%] xl:right-[10%]">
         <div data-scroll-pack className="relative h-full w-full">
           <div data-parallax className="relative h-full w-full">
             <div data-hero-pack data-hero-hide className="relative h-full w-full">
@@ -122,7 +122,7 @@ export default function Hero() {
                   fill
                   priority
                   quality={90}
-                  sizes="(min-width: 768px) 60vw, 90vw"
+                  sizes="(min-width: 1024px) 60vw, 90vw"
                   className="object-contain object-bottom drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)]"
                 />
               </div>
@@ -131,32 +131,32 @@ export default function Hero() {
               data-shadow
               data-hero-hide
               aria-hidden
-              className="absolute -bottom-3 left-1/2 h-10 w-[46%] -translate-x-1/2 rounded-[50%] bg-black/90 blur-2xl md:w-[34%]"
+              className="absolute -bottom-3 left-1/2 h-10 w-[46%] -translate-x-1/2 rounded-[50%] bg-black/90 blur-2xl lg:w-[34%]"
             />
           </div>
         </div>
       </div>
 
       {/* Layer 3: foreground copy */}
-      <div data-fade-out className="shell relative z-20 mt-auto grid grid-cols-1 items-end gap-8 pb-8 md:grid-cols-12 md:pb-10">
-        <div className="md:col-span-5">
-          <p data-line2 data-hero-hide aria-hidden className="display overflow-hidden text-[18vw] text-warm md:text-[8.5vw]">
+      <div data-fade-out className="shell relative z-20 mt-auto grid grid-cols-1 items-end gap-8 pb-8 lg:grid-cols-12 lg:pb-10">
+        <div className="lg:col-span-6 xl:col-span-5">
+          <p data-line2 data-hero-hide aria-hidden className="display overflow-hidden text-[18vw] text-warm sm:text-[15vw] lg:text-[8.5vw]">
             <span className="block">
               Yesterday<span className="text-lime">.</span>
             </span>
           </p>
-          <p data-fade data-hero-hide className="mt-4 max-w-sm text-[0.95rem] md:mt-5 leading-relaxed text-soft/80">
+          <p data-fade data-hero-hide className="mt-4 max-w-sm text-[0.95rem] lg:mt-5 leading-relaxed text-soft/80">
             HV Whey Protein — our own tub, made for the rep after the one you thought was your last.
           </p>
-          <div data-fade data-hero-hide className="mt-6 flex flex-col gap-3 xs:flex-row md:mt-7">
-            <LinkButton href={`/products/${p.slug}`} className="max-md:h-12">Shop HV Protein</LinkButton>
-            <LinkButton href="/shop" variant="ghost" className="max-md:h-12">
+          <div data-fade data-hero-hide className="mt-6 flex flex-col flex-wrap gap-3 xs:flex-row lg:mt-7">
+            <LinkButton href={`/products/${p.slug}`} className="shrink-0 max-md:h-12">Shop HV Protein</LinkButton>
+            <LinkButton href="/shop" variant="ghost" className="shrink-0 max-md:h-12">
               Explore collection
             </LinkButton>
           </div>
         </div>
 
-        <div data-fade data-hero-hide className="hidden md:col-span-2 md:col-start-11 md:block"><dl className="flex flex-col">
+        <div data-fade data-hero-hide className="hidden lg:col-span-2 lg:col-start-11 lg:block"><dl className="flex flex-col">
           {p.labelStats.map((s) => (
             <div key={s.label} className="relative flex items-baseline justify-between py-2.5">
               <span data-rule aria-hidden className="absolute inset-x-0 top-0 h-px origin-left bg-warm/20" />
@@ -173,7 +173,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll cue */}
-      <div data-fade data-hero-hide aria-hidden className="absolute right-[var(--gutter)] top-[42%] z-20 hidden flex-col items-center gap-3 md:flex">
+      <div data-fade data-hero-hide aria-hidden className="absolute right-[var(--gutter)] top-[42%] z-20 hidden flex-col items-center gap-3 lg:flex">
         <span className="eyebrow text-mute [writing-mode:vertical-rl]">Scroll</span>
         <span className="relative h-10 w-px overflow-hidden bg-warm/15">
           <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_1.8s_cubic-bezier(0.76,0,0.24,1)_infinite] bg-lime" />

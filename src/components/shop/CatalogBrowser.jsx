@@ -181,7 +181,7 @@ function Chip({ on, onClick, children, count }) {
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      className="flex items-center gap-2 border border-line px-3.5 py-2 text-sm text-warm transition-colors hover:border-warm aria-pressed:border-lime aria-pressed:bg-lime aria-pressed:text-obsidian"
+      className="flex items-center gap-2 border border-line px-3.5 py-2 text-sm text-warm transition-colors hover:border-warm aria-pressed:border-lime aria-pressed:bg-lime aria-pressed:text-ink"
     >
       {children}
       {count != null && <span className="font-mono text-[0.65rem] opacity-60">{count}</span>}
@@ -231,7 +231,7 @@ function Filters({ f, setF, toggle, brandOpts, catOpts, bounds, base, compact })
             step={50}
             value={f.maxPrice}
             onChange={(e) => setF((s) => ({ ...s, maxPrice: Number(e.target.value) }))}
-            className="h-1 flex-1 cursor-pointer accent-[#c7ff38]"
+            className="h-1 flex-1 cursor-pointer accent-lime"
           />
           <output className="w-20 text-right font-mono text-xs tabular-nums">≤ {formatPrice(f.maxPrice)}</output>
         </label>
@@ -250,7 +250,7 @@ function Filters({ f, setF, toggle, brandOpts, catOpts, bounds, base, compact })
               type="checkbox"
               checked={f.inStockOnly}
               onChange={(e) => setF((s) => ({ ...s, inStockOnly: e.target.checked }))}
-              className="size-4 accent-[#c7ff38]"
+              className="size-4 accent-lime"
             />
             In stock only
           </label>

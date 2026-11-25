@@ -14,7 +14,7 @@ const themes = {
   "hv-nutrition": { panel: "bg-obsidian text-warm", sub: "text-soft/70", accent: "text-lime", line: "border-line" },
   wellcore: { panel: "bg-soft text-obsidian", sub: "text-obsidian/65", accent: "text-obsidian", line: "border-obsidian/15" },
   muscleblaze: { panel: "bg-graphite text-warm", sub: "text-soft/70", accent: "text-warm", line: "border-line" },
-  rebuild: { panel: "bg-[#131313] text-warm", sub: "text-soft/70", accent: "text-warm", line: "border-line" },
+  rebuild: { panel: "bg-charcoal text-warm", sub: "text-soft/70", accent: "text-warm", line: "border-line" },
 };
 
 /** 06 — The marketplace: our own line plus the independent brands we stock. */
@@ -39,7 +39,7 @@ export default function Marketplace() {
       <div className="shell">
         <div className="mb-14 grid gap-6 md:mb-20 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
-            <span className="eyebrow text-mute">(06) The marketplace</span>
+            <span className="eyebrow text-mute">(04) The marketplace</span>
             <Lines as="h2" id="market-title" className="display mt-4 text-[15vw] md:text-[7.5vw]" lines={["The right fuel.", <span key="2" className="outline-text">The right formula.</span>]} />
           </div>
           <p data-reveal="fade" className="max-w-sm text-sm leading-relaxed text-mute md:col-span-4">

@@ -5,8 +5,8 @@ const base =
   "group/btn relative inline-flex items-center justify-center gap-3 overflow-hidden whitespace-nowrap font-mono text-[0.72rem] font-medium uppercase tracking-[0.14em] transition-[transform,background-color,color,border-color] duration-300 ease-[var(--ease-out-expo)] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40";
 
 const variants = {
-  primary: "bg-lime text-obsidian h-14 px-7 hover:bg-warm",
-  light: "bg-warm text-obsidian h-14 px-7 hover:bg-lime",
+  primary: "bg-lime text-ink h-14 px-7 hover:bg-warm hover:text-obsidian",
+  light: "bg-warm text-obsidian h-14 px-7 hover:bg-lime hover:text-ink",
   ghost: "h-14 px-7 border border-warm/25 text-warm hover:border-warm hover:bg-warm hover:text-obsidian",
   dark: "bg-obsidian text-warm h-14 px-7 hover:bg-graphite",
   inline: "h-auto px-0 text-warm",

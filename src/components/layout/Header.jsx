@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Search, ShoppingBag, ChevronDown } from "lucide-react";
+import { Search, Phone, ChevronDown } from "lucide-react";
 import Wordmark from "@/components/ui/Wordmark";
 import MegaMenu from "./MegaMenu";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useShop } from "@/store/shop";
+import { store } from "@/data/catalog";
 
 const links = [
   { href: "/collections/hv-nutrition", label: "HV Nutrition" },
@@ -18,7 +19,7 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname();
-  const { count, setCartOpen, setSearchOpen, setMenuOpen, menuOpen, hydrated } = useShop();
+  const { setSearchOpen, setMenuOpen, menuOpen } = useShop();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [mega, setMega] = useState(false);
@@ -81,7 +82,7 @@ export default function Header() {
           solid ? "border-line bg-obsidian/85 backdrop-blur-md" : "border-transparent bg-transparent"
         }`}
       />
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:bg-lime focus:px-4 focus:py-2 focus:text-obsidian">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:bg-lime focus:px-4 focus:py-2 focus:text-ink">
         Skip to content
       </a>
       <nav aria-label="Primary" className="shell flex h-16 items-center justify-between gap-6 md:h-20">
@@ -133,28 +134,15 @@ export default function Header() {
             <Search className="size-[1.15rem]" aria-hidden />
             <kbd className="hidden border border-line px-1.5 py-0.5 font-mono text-[0.6rem] text-mute xl:inline">/</kbd>
           </button>
-          <button
-            type="button"
-            onClick={() => setCartOpen(true)}
-            className="relative flex h-11 items-center gap-2 px-3 text-warm transition-colors hover:text-lime"
-            aria-label={`Open cart, ${count} item${count === 1 ? "" : "s"}`}
+          <ThemeToggle />
+          <a
+            href={store.phoneHref}
+            className="flex h-11 items-center gap-2 px-3 text-warm transition-colors hover:text-lime"
+            aria-label={`Call the store, ${store.phone}`}
           >
-            <ShoppingBag className="size-[1.15rem]" aria-hidden />
-            <span className="relative h-4 min-w-4 overflow-hidden font-mono text-[0.72rem] tabular-nums">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
-                  key={hydrated ? count : "x"}
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  exit={{ y: "-100%" }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className={`block ${count ? "text-lime" : ""}`}
-                >
-                  {hydrated ? String(count).padStart(2, "0") : "00"}
-                </motion.span>
-              </AnimatePresence>
-            </span>
-          </button>
+            <Phone className="size-[1.05rem]" aria-hidden />
+            <span className="hidden font-mono text-[0.72rem] tracking-[0.08em] xl:inline">{store.phone}</span>
+          </a>
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}

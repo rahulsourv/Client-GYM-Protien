@@ -34,9 +34,9 @@ const rows = [
     extra: <Placeholder>Owner to provide sourcing statement</Placeholder>,
   },
   {
-    k: "Payments & returns",
-    v: "Accepted payment methods and the return policy.",
-    extra: <Placeholder>Owner to provide policy</Placeholder>,
+    k: "How to buy",
+    v: "We don’t take orders or payments online. Every product here shows its price — call, email or visit the store to buy.",
+    extra: <Placeholder>Owner to provide return policy</Placeholder>,
   },
   {
     k: "Visit",
@@ -50,14 +50,14 @@ export default function Trust() {
   useGSAP(() => setupReveals(), { scope: root });
   return (
     <section ref={root} aria-labelledby="trust-title" className="bg-obsidian py-24 md:py-36">
-      <div className="shell grid gap-12 md:grid-cols-12">
-        <div className="md:col-span-4">
-          <div className="md:sticky md:top-32">
-            <span className="eyebrow text-mute">(09) Shopping with us</span>
-            <Lines as="h2" id="trust-title" className="display mt-4 text-[15vw] md:text-[6vw]" lines={["Straight", "answers."]} />
+      <div className="shell grid gap-12 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-32">
+            <span className="eyebrow text-mute">(07) Shopping with us</span>
+            <Lines as="h2" id="trust-title" className="display mt-4 text-[15vw] md:text-[10vw] lg:text-[6vw]" lines={["Straight", "answers."]} />
           </div>
         </div>
-        <dl className="md:col-span-8">
+        <dl className="lg:col-span-8">
           {rows.map((r, i) => (
             <div key={r.k} className="relative grid gap-3 py-8 md:grid-cols-[80px_200px_1fr] md:gap-6">
               <span data-reveal="rule" aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
