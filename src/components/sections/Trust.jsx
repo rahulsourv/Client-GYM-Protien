@@ -1,0 +1,77 @@
+"use client";
+
+import { useRef } from "react";
+import { useGSAP } from "@/lib/gsap";
+import { setupReveals } from "@/components/motion/reveal";
+import Lines from "@/components/motion/Lines";
+import Placeholder from "@/components/ui/Placeholder";
+import { store } from "@/data/catalog";
+
+/**
+ * 09 — Trust. Only what the current site actually states; everything else is
+ * an explicit placeholder for the owner to fill in.
+ */
+const rows = [
+  {
+    k: "Shipping",
+    v: store.shippingNote,
+    note: "As stated on hvnutrition.in.",
+    extra: <Placeholder>Rates & timelines outside Surat</Placeholder>,
+  },
+  {
+    k: "Talk to a person",
+    v: (
+      <>
+        Call <a href={store.phoneHref} className="text-warm underline decoration-lime underline-offset-4 hover:text-lime">{store.phone}</a> or
+        email <a href={`mailto:${store.email}`} className="break-all text-warm underline decoration-lime underline-offset-4 hover:text-lime">{store.email}</a>.
+      </>
+    ),
+    note: `Led by ${store.founder} — ${store.yearsInNutrition}+ years in sports nutrition.`,
+  },
+  {
+    k: "Product sourcing",
+    v: "How HV Nutrition sources third-party brands, and how customers can verify a product.",
+    extra: <Placeholder>Owner to provide sourcing statement</Placeholder>,
+  },
+  {
+    k: "Payments & returns",
+    v: "Accepted payment methods and the return policy.",
+    extra: <Placeholder>Owner to provide policy</Placeholder>,
+  },
+  {
+    k: "Visit",
+    v: store.address,
+    note: "Store address as listed on the contact page.",
+  },
+];
+
+export default function Trust() {
+  const root = useRef(null);
+  useGSAP(() => setupReveals(), { scope: root });
+  return (
+    <section ref={root} aria-labelledby="trust-title" className="bg-obsidian py-24 md:py-36">
+      <div className="shell grid gap-12 md:grid-cols-12">
+        <div className="md:col-span-4">
+          <div className="md:sticky md:top-32">
+            <span className="eyebrow text-mute">(09) Shopping with us</span>
+            <Lines as="h2" id="trust-title" className="display mt-4 text-[15vw] md:text-[6vw]" lines={["Straight", "answers."]} />
+          </div>
+        </div>
+        <dl className="md:col-span-8">
+          {rows.map((r, i) => (
+            <div key={r.k} className="relative grid gap-3 py-8 md:grid-cols-[80px_200px_1fr] md:gap-6">
+              <span data-reveal="rule" aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
+              <span className="font-mono text-xs text-mute">{String(i + 1).padStart(2, "0")}</span>
+              <dt className="display text-3xl">{r.k}</dt>
+              <dd data-reveal="fade" className="flex flex-col items-start gap-3 text-[1rem] leading-relaxed text-soft/85">
+                <span>{r.v}</span>
+                {r.note && <span className="text-xs text-mute">{r.note}</span>}
+                {r.extra}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
