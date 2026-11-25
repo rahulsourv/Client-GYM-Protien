@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Phone, Mail, MapPin } from "lucide-react";
-import ProductGallery from "./ProductGallery";
+import { useGSAP } from "@/lib/gsap";
+import { setupReveals } from "@/components/motion/reveal";
+import ProductCover from "./ProductCover";
 import VariantPicker from "./VariantPicker";
 import { LinkButton } from "@/components/ui/Button";
 import Placeholder from "@/components/ui/Placeholder";
@@ -20,6 +21,11 @@ export default function ProductView({ product: p }) {
   const router = useRouter();
   const [barVisible, setBarVisible] = useState(false);
   const buyRef = useRef(null);
+  const band = useRef(null);
+  const [active, setActive] = useState("overview");
+  const details = useRef(null);
+  useGSAP(() => setupReveals(), { scope: band });
+  useGSAP(() => setupReveals(), { scope: details });
   const brand = getBrand(p.brand);
   const category = getCategory(p.category);
   const variants = getVariants(p);
@@ -64,76 +70,47 @@ export default function ProductView({ product: p }) {
 
   return (
     <>
-      {/* ── Summary ───────────────────────────────────────────── */}
-      <div className="shell grid gap-10 pb-20 pt-24 md:pt-28 lg:grid-cols-12 lg:gap-12">
-        <div className="mx-auto w-full max-w-xl lg:col-span-7 lg:max-w-none">
-          <ProductGallery key={p.id} product={p} />
-        </div>
+      <ScrollSpy ids={sections.map((s) => s.id)} onChange={setActive} />
+      {/* ── Cover ─────────────────────────────────────────────── */}
+      <ProductCover key={p.id} product={p} brand={brand} category={category} />
 
-        <div className="lg:col-span-5">
-          <div className="flex flex-col gap-7 lg:sticky lg:top-28">
-            <nav aria-label="Breadcrumb">
-              <ol className="eyebrow flex flex-wrap gap-2 text-mute">
-                <li><Link href="/shop" className="hover:text-warm">Shop</Link></li>
-                <li aria-hidden>/</li>
-                <li><Link href={`/collections/${p.brand}`} className="hover:text-warm">{brand.name}</Link></li>
-                <li aria-hidden>/</li>
-                <li><Link href={`/collections/${p.category}`} className="hover:text-warm">{category.name}</Link></li>
-              </ol>
-            </nav>
+      {/* ── Choose · Availability · Buy ───────────────────────── */}
+      <div ref={band} className="shell grid gap-px pb-20 pt-10 md:pt-14 lg:grid-cols-12 lg:gap-10">
+        <BandCol n="01" label="Choose" className="lg:col-span-4">
+          <VariantPicker product={p} onSelect={(v) => router.replace(`/products/${v.slug}`, { scroll: false })} />
+        </BandCol>
 
-            <div>
-              <p className={`eyebrow ${brand.own ? "text-lime" : "text-mute"}`}>
-                {brand.name}
-                {!brand.own && " · independent brand"}
-              </p>
-              <h1 className="display mt-3 text-[15vw] sm:text-7xl">{p.name}</h1>
-              <p className="mt-3 text-soft/75">{[p.flavour, p.size, p.servings && `${p.servings} servings`].filter(Boolean).join(" · ")}</p>
-            </div>
-
-            <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
-              <p className="display text-6xl tabular-nums">
-                {brand.own && <span className="text-3xl">From </span>}
-                {formatPrice(p.price)}
-              </p>
-              {p.listedMrp && <p className="pb-2 font-mono text-xs text-mute">Listed MRP {formatPrice(p.listedMrp)}</p>}
-              {isPlaceholder("price") && <Placeholder className="mb-2">Price to be confirmed</Placeholder>}
-            </div>
-
-            <VariantPicker product={p} onSelect={(v) => router.replace(`/products/${v.slug}`, { scroll: false })} />
-
-            <div className="flex items-center gap-2 text-sm">
-              <span className={`size-2 rounded-full ${p.availability === "in_stock" ? "bg-lime" : p.availability === "out_of_stock" ? "bg-red-500" : "bg-mute"}`} aria-hidden />
-              <span className="text-soft/80">{availabilityLabel[p.availability]}</span>
-              {isPlaceholder("availability") && <Placeholder className="ml-2">Not yet listed in store</Placeholder>}
-            </div>
-
-            {/* How to buy */}
-            <div ref={buyRef} className="border border-line bg-charcoal p-5 md:p-6">
-              <p className="eyebrow text-lime">How to buy</p>
-              <p className="mt-3 text-sm leading-relaxed text-soft/80">
-                We don’t sell online. Call or email us to order this product, or pick it up at our {store.city} store.
-              </p>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <LinkButton href={store.phoneHref} arrow={false} className="sm:flex-1">
-                  <span className="flex items-center gap-2"><Phone className="size-4" aria-hidden /> Call to order</span>
-                </LinkButton>
-                <LinkButton href={enquiry} variant="ghost" arrow={false} className="sm:flex-1">
-                  <span className="flex items-center gap-2"><Mail className="size-4" aria-hidden /> Email enquiry</span>
-                </LinkButton>
-              </div>
-              <p className="mt-4 font-mono text-xs text-mute">{store.phone}</p>
-            </div>
-
-            <a href="#details" className="eyebrow self-start text-mute underline decoration-line underline-offset-4 hover:text-warm">
-              Full product details ↓
-            </a>
+        <BandCol n="02" label="Availability" className="lg:col-span-3">
+          <div className="flex items-center gap-2 text-sm">
+            <span className={`size-2 rounded-full ${p.availability === "in_stock" ? "bg-lime" : p.availability === "out_of_stock" ? "bg-red-500" : "bg-mute"}`} aria-hidden />
+            <span className="text-soft/80">{availabilityLabel[p.availability]}</span>
           </div>
-        </div>
+          {isPlaceholder("availability") && <Placeholder className="mt-3">Not yet listed in store</Placeholder>}
+          <a href="#details" className="eyebrow mt-6 inline-block text-mute underline decoration-line underline-offset-4 hover:text-warm">
+            Full product details ↓
+          </a>
+        </BandCol>
+
+        <BandCol n="03" label="How to buy" className="lg:col-span-5">
+          <div ref={buyRef}>
+            <p className="text-sm leading-relaxed text-soft/80">
+              We don’t sell online. Call or email us to order this product, or pick it up at our {store.city} store.
+            </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <LinkButton href={store.phoneHref} arrow={false} className="sm:flex-1">
+                <span className="flex items-center gap-2"><Phone className="size-4" aria-hidden /> Call to order</span>
+              </LinkButton>
+              <LinkButton href={enquiry} variant="ghost" arrow={false} className="sm:flex-1">
+                <span className="flex items-center gap-2"><Mail className="size-4" aria-hidden /> Email enquiry</span>
+              </LinkButton>
+            </div>
+            <p className="mt-4 font-mono text-xs text-mute">{store.phone}</p>
+          </div>
+        </BandCol>
       </div>
 
       {/* ── Full details ──────────────────────────────────────── */}
-      <section id="details" aria-label="Product details" className="border-t border-line bg-charcoal">
+      <section ref={details} id="details" aria-label="Product details" className="border-t border-line bg-charcoal">
         <div className="shell grid gap-10 py-20 md:py-28 lg:grid-cols-12 lg:gap-12">
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
@@ -141,14 +118,29 @@ export default function ProductView({ product: p }) {
               <p className="display mt-4 text-5xl md:text-6xl">{p.name}</p>
               <nav aria-label="On this page" className="mt-8 hidden lg:block">
                 <ol className="flex flex-col border-t border-line">
-                  {sections.map((s, i) => (
-                    <li key={s.id} className="border-b border-line">
-                      <a href={`#${s.id}`} className="flex gap-4 py-3 font-mono text-xs uppercase tracking-[0.14em] text-soft/70 transition-colors hover:text-lime">
-                        <span className="text-mute">{String(i + 1).padStart(2, "0")}</span>
-                        {s.label}
-                      </a>
-                    </li>
-                  ))}
+                  {sections.map((s, i) => {
+                    const on = active === s.id;
+                    return (
+                      <li key={s.id} className="relative border-b border-line">
+                        {on && (
+                          <motion.span
+                            layoutId="details-nav-active"
+                            aria-hidden
+                            className="absolute inset-0 bg-lime shadow-[0_0_28px_-6px_var(--color-lime)]"
+                            transition={{ type: "spring", stiffness: 380, damping: 36 }}
+                          />
+                        )}
+                        <a
+                          href={`#${s.id}`}
+                          aria-current={on ? "location" : undefined}
+                          className={`relative flex gap-4 py-3 font-mono text-xs uppercase tracking-[0.14em] transition-[color,padding] duration-500 ${on ? "pl-4 font-bold text-ink" : "text-soft/70 hover:text-lime"}`}
+                        >
+                          <span className={on ? "text-ink" : "text-mute"}>{String(i + 1).padStart(2, "0")}</span>
+                          {s.label}
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ol>
               </nav>
             </div>
@@ -261,9 +253,51 @@ export default function ProductView({ product: p }) {
   );
 }
 
+/** Reports which details block sits under the reading line (~35% down the screen). */
+function ScrollSpy({ ids, onChange }) {
+  const key = ids.join(",");
+  useEffect(() => {
+    const els = key.split(",").map((id) => document.getElementById(id)).filter(Boolean);
+    if (!els.length) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.35;
+      let current = els[0].id;
+      for (const el of els) if (el.getBoundingClientRect().top <= line) current = el.id;
+      // At the very bottom, the last block wins even if it's short.
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = els[els.length - 1].id;
+      onChange(current);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [key, onChange]);
+  return null;
+}
+
+function BandCol({ n, label, className = "", children }) {
+  return (
+    <div data-reveal="fade" className={`relative pt-6 pb-8 lg:pb-0 ${className}`}>
+      <span data-reveal="rule" aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
+      <p className="eyebrow mb-5 flex gap-3 text-mute">
+        <span className="text-lime">{n}</span>
+        {label}
+      </p>
+      {children}
+    </div>
+  );
+}
+
 function Block({ id, title, children }) {
   return (
-    <div id={id} className="scroll-mt-28">
+    <div id={id} data-reveal="fade" className="scroll-mt-28">
       <h2 className="eyebrow mb-6 flex items-center gap-3 text-warm">
         <span aria-hidden className="h-px w-6 bg-lime" />
         {title}
