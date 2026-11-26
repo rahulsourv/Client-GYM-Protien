@@ -23,7 +23,7 @@ export default function AboutPage() {
 
       <section className="shell grid gap-12 pb-24 md:grid-cols-12" aria-labelledby="founder">
         <div className="grain relative aspect-[4/5] overflow-hidden bg-graphite md:col-span-5">
-          <Image src="/assets/Black HV Nutrition Whey Protein Tub.png" alt="HV Nutrition Whey Protein tub" fill sizes="(min-width:768px) 40vw, 100vw" className="object-contain p-[12%]" />
+          <Image src="/assets/HV Nutrition Whey Protein Tub.png" alt="HV Nutrition Whey Protein tub" fill sizes="(min-width:768px) 40vw, 100vw" className="object-contain p-[12%]" />
         </div>
         <div className="flex flex-col gap-8 md:col-span-6 md:col-start-7">
           <h2 id="founder" className="display text-6xl md:text-7xl">

@@ -37,7 +37,7 @@ export default function Founder() {
             <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(55% 45% at 50% 45%, rgba(243,242,237,0.14) 0%, transparent 70%)" }} />
             <div data-crop className="absolute inset-[10%]">
               <Image
-                src="/assets/Black HV Nutrition Whey Protein Tub.png"
+                src="/assets/HV Nutrition Whey Protein Tub.png"
                 alt="HV Nutrition Whey Protein tub, chocolate flavour, 1kg"
                 fill
                 sizes="(min-width:768px) 35vw, 80vw"

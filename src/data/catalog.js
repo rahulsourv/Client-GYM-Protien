@@ -192,7 +192,7 @@ const hvWhey = {
   listedMrp: null,
   images: [
     {
-      src: "/assets/Black HV Nutrition Whey Protein Tub.png",
+      src: "/assets/HV Nutrition Whey Protein Tub.png",
       width: 1170,
       height: 1344,
       alt: "HV Nutrition Whey Protein tub, chocolate flavour, 1kg",

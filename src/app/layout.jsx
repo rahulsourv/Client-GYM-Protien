@@ -26,7 +26,7 @@ export const metadata = {
     type: "website",
     siteName: "HV Nutrition",
     locale: "en_IN",
-    images: [{ url: "/assets/Black HV Nutrition Whey Protein Tub.png", width: 1170, height: 1344, alt: "HV Nutrition Whey Protein" }],
+    images: [{ url: "/assets/HV Nutrition Whey Protein Tub.png", width: 1170, height: 1344, alt: "HV Nutrition Whey Protein" }],
   },
   twitter: { card: "summary_large_image" },
 };
