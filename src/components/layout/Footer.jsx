@@ -15,7 +15,7 @@ const help = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-obsidian pt-14 md:pt-20">
+    <footer className="relative overflow-hidden border-t border-line bg-obsidian pt-10 md:pt-20">
       <div className="shell grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-12">
         <div className="col-span-2 md:col-span-12 lg:col-span-4">
           <Wordmark className="text-xl" />

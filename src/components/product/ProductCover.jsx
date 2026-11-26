@@ -27,21 +27,24 @@ function toLines(name) {
   return best;
 }
 
-function TitleLayer({ line, fontSize, align, outline = false }) {
+/** Both title lines stacked at the top of the cover, behind the packshot. */
+function TitleLayer({ lines, fontSize }) {
   return (
     <div
       data-title
       aria-hidden
-      className={`display pointer-events-none absolute inset-x-0 inset-y-3 flex select-none flex-col items-center uppercase leading-[0.82] ${align}`}
+      className="display pointer-events-none absolute inset-x-0 top-3 flex select-none flex-col items-center uppercase leading-[0.82]"
       style={{ fontSize }}
     >
-      <span data-line className="block overflow-hidden whitespace-nowrap px-[0.04em] pb-[0.04em]">
+      {lines.map((line, li) => (
+      <span key={li} data-line className="block overflow-hidden whitespace-nowrap px-[0.04em] pb-[0.04em]">
         {[...line].map((c, ci) => (
-          <span key={ci} data-char className={`inline-block ${outline ? "outline-text" : "text-warm"}`}>
+          <span key={ci} data-char className={`inline-block ${li === 0 ? "text-warm" : "text-lime"}`}>
             {c === " " ? " " : c}
           </span>
         ))}
       </span>
+      ))}
     </div>
   );
 }
@@ -58,8 +61,12 @@ export default function ProductCover({ product: p, brand, category }) {
   const own = brand.own;
   const lines = toLines(p.name);
   const longest = Math.max(...lines.map((l) => l.length));
-  // Condensed display face: ~0.46em per glyph. Keep each line inside ~92vw.
-  const fontSize = `${Math.min(23, 205 / longest).toFixed(2)}vw`;
+  // Condensed display face: ~0.46em per glyph. Keep each line inside ~92vw,
+  // and cap by height so the two stacked lines never eat the whole cover.
+  const fontSize = `min(${Math.min(23, 205 / longest).toFixed(2)}vw, 17svh)`;
+  // The packshot starts partway down the second line, so that line sits behind it.
+  // (The house tub's image has empty space above the lid, so it starts higher.)
+  const packTop = `calc(0.75rem + ${fontSize} * ${lines.length > 1 ? (own ? 0.9 : 1.15) : 0.5})`;
 
   useGSAP(
     () => {
@@ -153,13 +160,13 @@ export default function ProductCover({ product: p, brand, category }) {
         <h1 id="product-title" className="sr-only">
           {brand.name} {p.name}
         </h1>
-        <TitleLayer line={lines[0]} fontSize={fontSize} align={lines.length > 1 ? "justify-start" : "justify-center"} />
+        <TitleLayer lines={lines} fontSize={fontSize} />
 
-        {/* Packshot */}
-        <div className="absolute inset-0 flex items-center justify-center [perspective:1200px]">
+        {/* Packshot — in front of the title */}
+        <div className="absolute inset-x-0 bottom-0 flex items-start justify-center pb-[3%] [perspective:1200px]" style={{ top: packTop }}>
           <div
             data-par
-            className={`relative ${own ? "h-[68%] md:h-[72%] lg:h-[80%]" : "h-[60%] md:h-[64%] lg:h-[68%]"}`}
+            className={`relative ${own ? "h-full" : "h-[88%]"}`}
             style={{ aspectRatio: "3 / 4" }}
           >
             {own && (
@@ -207,9 +214,6 @@ export default function ProductCover({ product: p, brand, category }) {
             </div>
           </div>
         </div>
-
-        {/* Second line sits over the packshot, like a cover line */}
-        {lines[1] && <TitleLayer line={lines[1]} fontSize={fontSize} align="justify-end" outline />}
 
         {/* Cover lines (desktop) */}
         <div data-meta-col className="pointer-events-none absolute inset-y-0 left-[var(--gutter)] hidden flex-col justify-center gap-6 lg:flex">

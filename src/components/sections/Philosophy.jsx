@@ -32,7 +32,12 @@ export default function Philosophy() {
         const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { ...scrollTrigger, scrub: 0.8 } });
         const steps = q("[data-step]");
         const caps = q("[data-caption]");
-        gsap.set(q("[data-shaker]"), { svgOrigin: "120 330" });
+        // The shaker's tilt is written straight into its SVG transform, always pivoting
+        // low in the cup — GSAP's origin smoothing otherwise drifts it sideways.
+        const shakerEl = q("[data-shaker]")[0];
+        const sh = { r: 4, y: 40 };
+        const drawShaker = () => shakerEl.setAttribute("transform", `translate(0 ${sh.y}) rotate(${sh.r} ${SHAKER_ORIGIN})`);
+        drawShaker();
         gsap.set(q("[data-lid]"), { svgOrigin: "120 90" });
         gsap.set(q("[data-stream]"), { transformOrigin: "50% 0%" });
         gsap.set(q("[data-pour]"), { svgOrigin: "154 44" });
@@ -47,7 +52,7 @@ export default function Philosophy() {
           .set(caps, { autoAlpha: 0, y: 8 }, 0)
           .set(caps[0], { autoAlpha: 1, y: 0 }, 0)
           .fromTo(q("[data-progress]"), { scaleX: 0 }, { scaleX: 1, duration: 10 }, 0)
-          .fromTo(q("[data-shaker]"), { y: 40, rotation: 4 }, { y: 0, rotation: 0, duration: 1.2, ease: "power2.out" }, 0)
+          .fromTo(sh, { r: 4, y: 40 }, { r: 0, y: 0, duration: 1.2, ease: "power2.out", onUpdate: drawShaker }, 0)
           .fromTo(q("[data-lid]"), { y: -70, opacity: 0 }, { y: -70, opacity: 0, duration: 0.01 }, 0)
           // 01 Fill — water pours, the level rises, the scoop drops in.
           .fromTo(q("[data-stream]"), { opacity: 0, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: 0.4 }, 0.2)
@@ -72,18 +77,19 @@ export default function Philosophy() {
           .to(steps[1], { opacity: 1, duration: 0.2 }, 5.3)
           .to(caps[0], { autoAlpha: 0, y: -8, duration: 0.2 }, 5.3)
           .to(caps[1], { autoAlpha: 1, y: 0, duration: 0.25 }, 5.45)
-          .to(q("[data-shaker]"), {
+          .to(sh, {
             keyframes: [
-              { rotation: 16, y: -24 },
-              { rotation: -16, y: 0 },
-              { rotation: 14, y: -20 },
-              { rotation: -14, y: 0 },
-              { rotation: 9, y: -12 },
-              { rotation: -6, y: 0 },
-              { rotation: 0, y: 0 },
+              { r: 16, y: -24 },
+              { r: -16, y: 0 },
+              { r: 14, y: -20 },
+              { r: -14, y: 0 },
+              { r: 9, y: -12 },
+              { r: -6, y: 0 },
+              { r: 0, y: 0 },
             ],
             duration: 3,
             ease: "sine.inOut",
+            onUpdate: drawShaker,
           }, 5.4)
           .fromTo(q("[data-wave]"), { x: 0 }, { x: -240, duration: 3.2 }, 5.4)
           .to(q("[data-heap]"), { opacity: 0, scaleX: 1.4, scaleY: 0.4, svgOrigin: HEAP_ORIGIN, duration: 1.4 }, 5.6)
@@ -127,7 +133,7 @@ export default function Philosophy() {
       {/* Layer 1 — text that scrolls up behind the shaker */}
       <div aria-hidden={false} className="pointer-events-none absolute inset-0 z-0">
         <div data-scroller className="shell flex flex-col items-center text-center will-change-transform motion-reduce:pt-32">
-          <h2 id="philosophy-title" className="display max-w-[14ch] text-[12vw] leading-[0.9] md:text-[6.6vw]">
+          <h2 id="philosophy-title" className="display max-w-[16ch] text-[9vw] leading-[0.92] md:text-[5vw] lg:text-[4.4vw]">
             {statement}
           </h2>
           {beats.map((b, i) => (
@@ -201,6 +207,8 @@ function wavePath(baseY) {
 // The scoop's rim: left end x, rim line y — just above the cup opening.
 const SCOOP_LIP = { x: 132, y: 42 };
 const TILT_ORIGIN = `${SCOOP_LIP.x + 30} ${SCOOP_LIP.y}`;
+// The shaker rocks around a point low in the cup, like a hand holding it.
+const SHAKER_ORIGIN = "120 330";
 // The powder pile grows up from where the pour hits the water (bottom centre of the heap).
 const HEAP_ORIGIN = "152 184";
 
@@ -214,7 +222,7 @@ const INNER = "M30 116 L210 116 L196.5 484 Q195 498 182 498 L58 498 Q45 498 43.5
 
 function Shaker() {
   return (
-    <div className="relative w-[min(56vw,calc((100svh-340px)*0.4375))] md:w-[min(34vw,320px,calc((100svh-320px)*0.4375))] lg:w-[min(24vw,320px,calc((100svh-320px)*0.4375))]">
+    <div className="relative w-[min(44vw,calc((100svh-380px)*0.4375))] md:w-[min(34vw,320px,calc((100svh-320px)*0.4375))] lg:w-[min(24vw,320px,calc((100svh-320px)*0.4375))]">
       <svg
         viewBox="-20 -100 280 640"
         className="block h-auto w-full overflow-visible"

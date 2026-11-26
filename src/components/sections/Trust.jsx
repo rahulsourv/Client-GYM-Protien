@@ -54,8 +54,8 @@ export default function Trust() {
   const root = useRef(null);
   useGSAP(() => setupReveals(), { scope: root });
   return (
-    <section ref={root} aria-labelledby="trust-title" className="bg-obsidian py-14 md:py-36">
-      <div className="shell grid gap-12 lg:grid-cols-12">
+    <section ref={root} aria-labelledby="trust-title" className="bg-obsidian py-10 md:py-36">
+      <div className="shell grid gap-6 md:gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
             <span className="eyebrow text-mute">(06) Shopping with us</span>
@@ -64,7 +64,7 @@ export default function Trust() {
         </div>
         <dl className="lg:col-span-8">
           {rows.map((r, i) => (
-            <div key={r.k} className="relative grid gap-3 py-8 md:grid-cols-[80px_200px_1fr] md:gap-6">
+            <div key={r.k} className="relative grid gap-3 py-6 md:py-8 md:grid-cols-[80px_200px_1fr] md:gap-6">
               <span data-reveal="rule" aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
               <span className="font-mono text-xs text-mute">{String(i + 1).padStart(2, "0")}</span>
               <dt className="display text-3xl">{r.k}</dt>
