@@ -11,11 +11,16 @@ import { hvWhey } from "@/lib/catalog";
  * then the label's own numbers count in around it. Only facts printed on the
  * HV pack are used here.
  */
+// Two columns, two rows: every callout shares an edge inset and a row line.
+const TOP = "top-[17%] md:top-[22%]";
+const BOTTOM = "bottom-[14%] md:bottom-[17%]";
+const LEFT = "left-[5%] md:left-[8%]";
+const RIGHT = "right-[5%] text-right md:right-[8%]";
 const callouts = [
-  { key: "protein", value: 24, decimals: 0, unit: "g", label: "Protein", pos: "left-[5%] top-[17%] md:left-[7%] md:top-[24%]" },
-  { key: "bcaa", value: 5.5, decimals: 1, unit: "g", label: "BCAAs", pos: "right-[5%] top-[17%] text-right md:right-[7%] md:top-[20%]" },
-  { key: "glut", value: 4, decimals: 0, unit: "g", label: "Glutamine", pos: "right-[5%] bottom-[14%] text-right md:right-[10%] md:bottom-[18%]" },
-  { key: "whey", value: 100, decimals: 0, unit: "%", label: "Premium whey protein", pos: "left-[5%] bottom-[14%] md:left-[10%] md:bottom-[20%]" },
+  { key: "protein", value: 24, decimals: 0, unit: "g", label: "Protein", pos: `${LEFT} ${TOP}` },
+  { key: "bcaa", value: 5.5, decimals: 1, unit: "g", label: "BCAAs", pos: `${RIGHT} ${TOP}` },
+  { key: "glut", value: 4, decimals: 0, unit: "g", label: "Glutamine", pos: `${RIGHT} ${BOTTOM}` },
+  { key: "whey", value: 100, decimals: 0, unit: "%", label: "Premium whey protein", pos: `${LEFT} ${BOTTOM}` },
 ];
 
 export default function ProductReveal() {
@@ -97,16 +102,21 @@ export default function ProductReveal() {
       <ul className="absolute inset-0 z-20" aria-label="As printed on the HV Whey Protein pack">
         {callouts.map((c) => (
           <li key={c.key} data-callout className={`absolute opacity-100 motion-safe:opacity-0 ${c.pos}`}>
-            <span className="display block text-[15vw] leading-[0.85] text-warm md:text-[7.5vw]">
+            <span className="display block pb-[0.32em] text-[15vw] leading-[0.85] text-warm md:text-[7.5vw]">
               <span data-num data-value={c.value} data-decimals={c.decimals}>
                 {c.value}
               </span>
-              <span className="normal-case text-lime">{c.unit}</span>
+              {/* Yellow dash sits under the unit (g / %), clear of the "g" descender. */}
+              <span className="relative inline-block normal-case text-lime">
+                {c.unit}
+                <span
+                  data-tick
+                  aria-hidden
+                  className={`absolute inset-x-[0.04em] top-[calc(100%+0.2em)] h-[3px] bg-lime ${c.pos.includes("text-right") ? "origin-right" : "origin-left"}`}
+                />
+              </span>
             </span>
-            <span className={`mt-2 flex items-center gap-3 ${c.pos.includes("text-right") ? "flex-row-reverse" : ""}`}>
-              <span data-tick aria-hidden className="h-px w-8 origin-left bg-lime md:w-14" />
-              <span className="eyebrow text-soft">{c.label}</span>
-            </span>
+            <span className="eyebrow block text-soft">{c.label}</span>
           </li>
         ))}
       </ul>
