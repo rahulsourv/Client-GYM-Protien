@@ -10,8 +10,8 @@ import { store } from "@/data/catalog";
 const pages = {
   shipping: {
     title: "Shipping",
-    known: [store.shippingNote],
-    body: "Delivery areas, rates outside Surat, dispatch times and courier partners.",
+    known: [store.shippingNote].filter(Boolean),
+    body: "Delivery areas, rates, dispatch times and courier partners.",
   },
   returns: { title: "Returns", known: [], body: "Return window, condition requirements, refunds and how to start a return." },
   privacy: { title: "Privacy policy", known: [], body: "What personal data is collected, why, how it’s stored and customers’ rights." },

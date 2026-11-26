@@ -82,7 +82,7 @@ export default function Intro() {
       <div className="mt-8 h-px w-40 overflow-hidden bg-line">
         <div data-bar className="h-full w-full origin-left scale-x-0 bg-lime" />
       </div>
-      <p className="eyebrow mt-4 text-mute">Nutrition · Surat</p>
+      <p className="eyebrow mt-4 text-mute">Nutrition · Uttarpara</p>
     </div>
   );
 }

@@ -18,17 +18,19 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Store",
   name: store.name,
+  legalName: store.legalName,
   url: "https://hvnutrition.in",
   telephone: store.phone.replace(/\s/g, ""),
   email: store.email,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Ganeshpura Housing, Amroli",
-    addressLocality: "Surat",
-    addressRegion: "Gujarat",
-    postalCode: "394107",
+    streetAddress: store.street,
+    addressLocality: store.city,
+    addressRegion: "West Bengal",
+    postalCode: store.postcode,
     addressCountry: "IN",
   },
+  identifier: { "@type": "PropertyValue", propertyID: "FSSAI Registration Number", value: store.fssai.number },
   founder: { "@type": "Person", name: store.founder },
 };
 

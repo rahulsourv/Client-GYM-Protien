@@ -6,6 +6,7 @@ import { setupReveals } from "@/components/motion/reveal";
 import Lines from "@/components/motion/Lines";
 import Placeholder from "@/components/ui/Placeholder";
 import { store } from "@/data/catalog";
+import FssaiBadge from "@/components/ui/FssaiBadge";
 
 /**
  * 09 — Trust. Only what the current site actually states; everything else is
@@ -13,10 +14,14 @@ import { store } from "@/data/catalog";
  */
 const rows = [
   {
+    k: "FSSAI registered",
+    v: `${store.legalName} is registered with the Food Safety and Standards Authority of India as a food retailer.`,
+    extra: <FssaiBadge className="w-full max-w-xl" />,
+  },
+  {
     k: "Shipping",
-    v: store.shippingNote,
-    note: "As stated on hvnutrition.in.",
-    extra: <Placeholder>Rates & timelines outside Surat</Placeholder>,
+    v: "Delivery areas, rates and timelines from our Uttarpara store.",
+    extra: <Placeholder>Owner to provide shipping terms</Placeholder>,
   },
   {
     k: "Talk to a person",
@@ -26,7 +31,7 @@ const rows = [
         email <a href={`mailto:${store.email}`} className="break-all text-warm underline decoration-lime underline-offset-4 hover:text-lime">{store.email}</a>.
       </>
     ),
-    note: `Led by ${store.founder} — ${store.yearsInNutrition}+ years in sports nutrition.`,
+    note: `Run by ${store.founder}.`,
   },
   {
     k: "Product sourcing",
@@ -41,7 +46,7 @@ const rows = [
   {
     k: "Visit",
     v: store.address,
-    note: "Store address as listed on the contact page.",
+    note: "Address as registered with FSSAI.",
   },
 ];
 

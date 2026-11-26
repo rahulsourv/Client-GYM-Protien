@@ -49,7 +49,7 @@ export const brands = [
     own: true,
     tagline: "Our own formula.",
     description:
-      "HV Nutrition’s house line. Built in Surat by a team with a decade in sports nutrition and fifteen years in bodybuilding.",
+      "HV Nutrition’s house line, from High Voltage Nutrition in Uttarpara, Hooghly.",
   },
   {
     slug: "wellcore",
@@ -216,16 +216,37 @@ export const products = [hvWhey, ...imported];
 
 export const store = {
   name: "HV Nutrition",
-  founder: "Harsh Parmar",
-  city: "Surat",
-  // From hvnutrition.in/contact-us
-  address: "Ganeshpura Housing, Amroli, Surat, Gujarat 394107",
+  // Name, owner and address as printed on the FSSAI registration certificate.
+  legalName: "High Voltage Nutrition",
+  founder: "Suvodip Ghosh",
+  city: "Uttarpara",
+  region: "Hooghly, West Bengal",
+  street: "7/1, Drubesh Chatterjee Lane, Uttarpara",
+  postcode: "712258",
+  address: "7/1, Drubesh Chatterjee Lane, Uttarpara, Hooghly, West Bengal 712258",
+  // From hvnutrition.in/contact-us — confirm these are still current.
   phone: "+91 70481 36688",
   phoneHref: "tel:+917048136688",
   email: "hvnutritionservices@hvnutrition.in",
-  // From hvnutrition.in/about-us
-  yearsInNutrition: 10,
-  yearsInBodybuilding: 15,
-  // From the homepage service strip
-  shippingNote: "Free shipping on all Surat orders.",
+  // PLACEHOLDER — years of experience for the current owner not yet provided.
+  yearsInNutrition: null,
+  yearsInBodybuilding: null,
+  // PLACEHOLDER — shipping terms for the Uttarpara store not yet provided.
+  shippingNote: null,
+  fssai: {
+    number: "22826093000182",
+    type: "Registration",
+    kind: "Retailer",
+    issuedOn: "2 Nov 2026",
+    validUntil: "1 Nov 2027",
+    authority: "Hooghly, Govt. of West Bengal",
+    status: "Registration Certificate issued",
+    // Product Annexure of the certificate.
+    categories: [
+      "13 — Foodstuffs intended for particular nutritional uses",
+      "100 — Standardised food products (excluding categories 1–14)",
+    ],
+    pdf: "/assets/fssai-registration-certificate.pdf",
+    portal: "https://foscos.fssai.gov.in",
+  },
 };

@@ -48,12 +48,14 @@ export default function Philosophy() {
         gsap.set(q("[data-shaker]"), { svgOrigin: "120 330" });
         gsap.set(q("[data-lid]"), { svgOrigin: "120 90" });
         gsap.set(q("[data-stream]"), { transformOrigin: "50% 0%" });
+        gsap.set(q("[data-pour]"), { svgOrigin: "154 44" });
+        gsap.set(q("[data-heap]"), { svgOrigin: "152 182" });
         // Scoop rolls over along its rim line (x axis), so the opening turns to face down.
         gsap.set(q("[data-scoop-tilt]"), { svgOrigin: `${SCOOP_LIP.x + 30} ${SCOOP_LIP.y}` });
 
         // Start state: empty cup, lid off, scoop waiting out of frame.
         tl.set(steps, { opacity: 0.3 }, 0)
-          .set(q("[data-powder]"), { opacity: 0 }, 0)
+          .set(q("[data-pour], [data-heap]"), { opacity: 0 }, 0)
           .set(steps[0], { opacity: 1 }, 0)
           .fromTo(q("[data-progress]"), { scaleX: 0 }, { scaleX: 1, duration: 10 }, 0)
           .fromTo(q("[data-shaker]"), { y: 40, rotation: 4 }, { y: 0, rotation: 0, duration: 1.2, ease: "power2.out" }, 0)
@@ -66,22 +68,16 @@ export default function Philosophy() {
           // A heaped scoop swings in, tips over the opening, and the powder pours out of its lip.
           .fromTo(q("[data-scoop]"), { x: 200, y: -30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 2.4)
           .fromTo(q("[data-scoop-tilt]"), { scaleY: 1 }, { scaleY: -1, duration: 0.5, ease: "power2.inOut" }, 3)
-          .fromTo(q("[data-mound]"), { opacity: 1 }, { opacity: 0, duration: 0.4 }, 3.25)
-          .fromTo(
-            q("[data-powder]"),
-            {
-              opacity: 1,
-              // Spill from along the whole upturned rim, not from a single point.
-              x: (i, el) => SCOOP_LIP.x + 4 + ((i * 13) % 52) - Number(el.getAttribute("cx")),
-              y: (i, el) => SCOOP_LIP.y - Number(el.getAttribute("cy")) + (i % 3) * 3,
-            },
-            { x: 0, y: 0, duration: 0.7, ease: "power2.in", stagger: 0.015, immediateRender: false },
-            3.25
-          )
-          .to(q("[data-scoop-tilt]"), { scaleY: 1, duration: 0.35, ease: "power2.inOut" }, 3.95)
-          .to(q("[data-scoop]"), { x: 200, y: -30, opacity: 0, duration: 0.45, ease: "power2.in" }, 4.15)
+          .fromTo(q("[data-mound]"), { opacity: 1 }, { opacity: 0, duration: 0.5 }, 3.3)
+          // A solid stream of powder falls from the lip to the water…
+          .fromTo(q("[data-pour]"), { opacity: 0, scaleY: 0 }, { opacity: 0.95, scaleY: 1, duration: 0.35, ease: "power1.in", immediateRender: false }, 3.3)
+          .to(q("[data-pour]"), { opacity: 0, scaleY: 0.2, duration: 0.35, ease: "power1.in" }, 4.25)
+          // …and piles up on the surface until it's shaken in.
+          .fromTo(q("[data-heap]"), { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 1.1, ease: "power1.out", immediateRender: false }, 3.55)
+          .to(q("[data-scoop-tilt]"), { scaleY: 1, duration: 0.35, ease: "power2.inOut" }, 4.45)
+          .to(q("[data-scoop]"), { x: 200, y: -30, opacity: 0, duration: 0.45, ease: "power2.in" }, 4.65)
           // Lid goes on.
-          .to(q("[data-lid]"), { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 4.7)
+          .to(q("[data-lid]"), { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 4.9)
           // 02 Shake.
           .to(steps[0], { opacity: 0.3, duration: 0.2 }, 5.3)
           .to(steps[1], { opacity: 1, duration: 0.2 }, 5.3)
@@ -99,7 +95,7 @@ export default function Philosophy() {
             ease: "sine.inOut",
           }, 5.4)
           .fromTo(q("[data-wave]"), { x: 0 }, { x: -240, duration: 3.2 }, 5.4)
-          .to(q("[data-powder]"), { opacity: 0, duration: 1.6, stagger: 0.02 }, 5.6)
+          .to(q("[data-heap]"), { opacity: 0, scaleX: 1.4, duration: 1.4 }, 5.6)
           .to(q("[data-fill]"), { attr: { fill: "#5b3a28" }, duration: 2.4 }, 5.6)
           .fromTo(q("[data-foam]"), { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.8, stagger: 0.05, transformOrigin: "50% 50%" }, 7.6)
           // 03 Refuel — the spout flips open.
@@ -187,16 +183,8 @@ function wavePath(baseY) {
 // The scoop's rim: left end x, rim line y — just above the cup opening.
 const SCOOP_LIP = { x: 132, y: 42 };
 
-// Deterministic "random" powder specks (same on server and client).
-const powder = Array.from({ length: 26 }, (_, i) => {
-  // Rounded so server and browser floating-point output match exactly.
-  const r = (n) => Math.round(((Math.sin((i + 1) * n) + 1) / 2) * 100) / 100;
-  return {
-    cx: Math.round(56 + r(12.9898) * 128),
-    cy: Math.round(210 + r(78.233) * 110),
-    r: Math.round((2.2 + r(3.7) * 2.6) * 10) / 10,
-  };
-});
+// Falling column of powder from the scoop lip down to the water.
+const POUR = "M140 44 Q154 40 168 44 L163 120 Q160 160 157 184 L149 184 Q146 160 143 120 Z";
 
 const foam = [70, 92, 112, 133, 152, 172].map((cx, i) => ({ cx, cy: 176 + (i % 2) * 3, r: 5 + (i % 3) * 2 }));
 
@@ -239,10 +227,14 @@ function Shaker() {
                 <circle key={i} data-foam cx={f.cx} cy={f.cy} r={f.r} fill="#e8dccb" />
               ))}
             </g>
+            {/* Powder floating on the water before it's shaken in */}
+            <g data-heap opacity="0">
+              <ellipse cx="152" cy="184" rx="42" ry="9" fill="#8a6446" />
+              <path d="M116 184 Q134 166 152 168 Q172 166 188 184 Z" fill="#a47b58" />
+            </g>
           </g>
-          {powder.map((p, i) => (
-            <circle key={i} data-powder cx={p.cx} cy={p.cy} r={p.r} fill="#a47b58" opacity="0" />
-          ))}
+          {/* Powder column */}
+          <path data-pour d={POUR} fill="#a47b58" opacity="0" />
 
           {/* Scoop: slides in, tips at its lip, slides back out */}
           <g data-scoop opacity="0">

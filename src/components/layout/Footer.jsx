@@ -2,6 +2,7 @@ import Link from "next/link";
 import { brands, categories } from "@/lib/catalog";
 import { store } from "@/data/catalog";
 import Wordmark from "@/components/ui/Wordmark";
+import FssaiBadge from "@/components/ui/FssaiBadge";
 
 const help = [
   { href: "/about", label: "About" },
@@ -26,6 +27,7 @@ export default function Footer() {
             <a href={store.phoneHref} className="text-warm hover:text-lime">{store.phone}</a>
             <a href={`mailto:${store.email}`} className="break-all text-warm hover:text-lime">{store.email}</a>
           </address>
+          <FssaiBadge compact className="mt-6" />
         </div>
         <FooterCol title="Shop" className="md:col-span-4 lg:col-span-3">
           <FooterLink href="/shop">All products</FooterLink>
@@ -46,7 +48,7 @@ export default function Footer() {
       </div>
 
       <div className="shell mt-20 flex flex-col justify-between gap-3 border-t border-line py-6 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-mute md:flex-row">
-        <span>© HV Nutrition · {store.city}, Gujarat</span>
+        <span>© {store.legalName} · {store.city}, {store.region} · FSSAI Reg. {store.fssai.number}</span>
         <span>Wellcore and Rebuild are trademarks of their respective owners.</span>
       </div>
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Search, Phone, ChevronDown } from "lucide-react";
+import { Search, Phone, ChevronDown, ShieldCheck } from "lucide-react";
 import Wordmark from "@/components/ui/Wordmark";
 import MegaMenu from "./MegaMenu";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -137,9 +137,29 @@ export default function Header() {
               </Link>
             </li>
           ))}
+          <li onMouseEnter={closeMega} className="ml-2">
+            <Link
+              href="/verified"
+              aria-current={active("/verified") ? "page" : undefined}
+              className="group relative flex items-center gap-2 overflow-hidden bg-lime px-4 py-2 font-mono text-[0.72rem] font-bold uppercase tracking-[0.14em] text-ink shadow-[0_0_24px_-6px_var(--color-lime)] transition-shadow hover:shadow-[0_0_34px_-4px_var(--color-lime)]"
+            >
+              <ShieldCheck className="size-4" aria-hidden />
+              Verified
+              {/* sheen */}
+              <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 animate-[sheen_3.2s_ease-in-out_infinite] bg-white/45" />
+            </Link>
+          </li>
         </ul>
 
         <div className="flex items-center gap-1">
+          <Link
+            href="/verified"
+            className="flex h-9 items-center gap-1.5 bg-lime px-2.5 font-mono text-[0.62rem] font-bold uppercase tracking-[0.12em] text-ink lg:hidden"
+            aria-label="FSSAI verified — view registration"
+          >
+            <ShieldCheck className="size-4" aria-hidden />
+            <span className="hidden xs:inline">FSSAI</span>
+          </Link>
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
@@ -152,7 +172,7 @@ export default function Header() {
           <ThemeToggle />
           <a
             href={store.phoneHref}
-            className="flex h-11 items-center gap-2 px-3 text-warm transition-colors hover:text-lime"
+            className="hidden h-11 items-center gap-2 px-3 text-warm transition-colors hover:text-lime xs:flex"
             aria-label={`Call the store, ${store.phone}`}
           >
             <Phone className="size-[1.05rem]" aria-hidden />

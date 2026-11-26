@@ -7,6 +7,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { useGSAP } from "@/lib/gsap";
 import { setupReveals } from "@/components/motion/reveal";
 import ProductCover from "./ProductCover";
+import FssaiBadge from "@/components/ui/FssaiBadge";
 import VariantPicker from "./VariantPicker";
 import { LinkButton } from "@/components/ui/Button";
 import Placeholder from "@/components/ui/Placeholder";
@@ -105,6 +106,7 @@ export default function ProductView({ product: p }) {
               </LinkButton>
             </div>
             <p className="mt-4 font-mono text-xs text-mute">{store.phone}</p>
+            <FssaiBadge compact className="mt-5" />
           </div>
         </BandCol>
       </div>
@@ -217,7 +219,7 @@ export default function ProductView({ product: p }) {
                 <Contact icon={MapPin} label="Visit" value={store.address} href={directions} external />
               </div>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-soft/80">
-                There’s no online checkout — prices are shown so you know what to expect. {store.shippingNote}
+                There’s no online checkout — prices are shown so you know what to expect.{store.shippingNote && ` ${store.shippingNote}`}
               </p>
             </Block>
           </div>

@@ -4,7 +4,7 @@ import { store } from "@/data/catalog";
 
 export const metadata = {
   title: "Contact",
-  description: `Contact HV Nutrition in Surat — ${store.phone}, ${store.email}.`,
+  description: `Contact HV Nutrition in Uttarpara — ${store.phone}, ${store.email}.`,
   alternates: { canonical: "/contact" },
 };
 

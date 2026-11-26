@@ -46,7 +46,8 @@ export function Button({ variant = "primary", arrow = false, className = "", chi
 }
 
 export function LinkButton({ href, variant = "primary", arrow = true, className = "", children, ...props }) {
-  const external = /^(mailto:|tel:|https?:)/.test(href);
+  // Files (e.g. the FSSAI PDF) are plain links, not client-side routes.
+  const external = /^(mailto:|tel:|https?:)/.test(href) || /\.pdf$/i.test(href);
   const Comp = external ? "a" : Link;
   return (
     <Comp href={href} className={`${base} ${variants[variant]} ${className}`} {...props}>

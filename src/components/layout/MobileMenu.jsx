@@ -27,6 +27,7 @@ export default function MobileMenu() {
   const primary = [
     { href: "/shop", label: "Shop all" },
     ...brands.map((b) => ({ href: `/collections/${b.slug}`, label: b.name })),
+    { href: "/verified", label: "Verified", highlight: true },
     { href: "/about", label: "About" },
   ];
 
@@ -57,10 +58,12 @@ export default function MobileMenu() {
                     <Link
                       href={l.href}
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-baseline justify-between py-3 active:text-lime"
+                      className={`flex items-baseline justify-between py-3 active:text-lime ${l.highlight ? "text-lime" : ""}`}
                     >
                       <span className="display text-[13vw] leading-[0.9] xs:text-6xl">{l.label}</span>
-                      <span className="font-mono text-xs text-mute">{String(i + 1).padStart(2, "0")}</span>
+                      <span className={`font-mono text-xs ${l.highlight ? "bg-lime px-2 py-0.5 font-bold text-ink" : "text-mute"}`}>
+                        {l.highlight ? "FSSAI ✓" : String(i + 1).padStart(2, "0")}
+                      </span>
                     </Link>
                   </motion.div>
                 </li>

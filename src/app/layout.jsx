@@ -17,11 +17,11 @@ const SITE_URL = "https://hvnutrition.in";
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "HV Nutrition — Whey Protein, Creatine & Sports Nutrition, Surat",
+    default: "HV Nutrition — Whey Protein, Creatine & Sports Nutrition, Uttarpara",
     template: "%s — HV Nutrition",
   },
   description:
-    "HV Nutrition is a sports nutrition store from Surat. Shop HV Whey Protein alongside Wellcore creatine and Rebuild pre-workout.",
+    "HV Nutrition is a sports nutrition store from Uttarpara, Hooghly (FSSAI registered). Shop HV Whey Protein alongside Wellcore creatine and Rebuild pre-workout.",
   openGraph: {
     type: "website",
     siteName: "HV Nutrition",
