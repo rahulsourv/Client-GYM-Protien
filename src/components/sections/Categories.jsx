@@ -14,7 +14,7 @@ import { categories, byCategory, onePerFamily, hvWhey } from "@/lib/catalog";
  * 04 — Shop by category. An editorial index instead of a tile grid: huge rows,
  * each with a fixed packshot thumbnail that zooms gently on hover.
  */
-export default function Categories() {
+export default function Categories({ bare = false }) {
   const root = useRef(null);
   const [active, setActive] = useState(null);
 
@@ -28,8 +28,9 @@ export default function Categories() {
   useGSAP(() => setupReveals(), { scope: root });
 
   return (
-    <section ref={root} aria-labelledby="cat-title" className="relative overflow-hidden bg-obsidian py-24 md:py-36">
+    <section ref={root} aria-labelledby={bare ? undefined : "cat-title"} aria-label={bare ? "Categories" : undefined} className={`relative overflow-hidden bg-obsidian ${bare ? "pb-28" : "py-24 md:py-36"}`}>
       <div className="shell">
+        {!bare && (
         <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
           <div>
             <span className="eyebrow text-mute">(03) Index</span>
@@ -39,6 +40,7 @@ export default function Categories() {
             Everything on our shelf, sorted by what it does in your routine.
           </p>
         </div>
+        )}
 
         <ul onPointerLeave={() => setActive(null)}>
           {rows.map((c, i) => (

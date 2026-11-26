@@ -122,7 +122,7 @@ export default function Philosophy() {
       <div className="shell grid grid-cols-1 md:grid-cols-12 md:gap-x-8">
         <div className="pt-24 md:col-span-7 md:row-start-1 md:pt-40">
           <div className="flex items-center justify-between gap-4">
-            <span className="eyebrow text-obsidian/60">(09) Philosophy</span>
+            <span className="eyebrow text-obsidian/60">(08) Philosophy</span>
             <Placeholder className="text-obsidian/60">Draft copy — edit in Philosophy.jsx</Placeholder>
           </div>
           <h2 id="philosophy-title" data-statement className="display mt-10 max-w-[16ch] text-[13vw] leading-[0.88] md:mt-16 md:text-[6.4vw]">

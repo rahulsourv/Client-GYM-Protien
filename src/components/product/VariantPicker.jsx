@@ -7,8 +7,7 @@ import { getVariants, formatPrice } from "@/lib/catalog";
  * catalog product (as on the source store), so selecting one calls
  * `onSelect(variantProduct)` — the PDP navigates, the quick view swaps.
  *
- * The pack axis uses servings when every variant has them (Wellcore's net
- * weight differs by flavour for the same serving count), otherwise size.
+ * The pack axis uses servings when every variant has them, otherwise size.
  */
 export default function VariantPicker({ product, onSelect }) {
   const variants = getVariants(product);

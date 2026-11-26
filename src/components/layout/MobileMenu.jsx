@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useShop } from "@/store/shop";
-import { brands, categories } from "@/lib/catalog";
+import { categories } from "@/lib/catalog";
 import { store } from "@/data/catalog";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
 
@@ -25,10 +25,12 @@ export default function MobileMenu() {
   }, [menuOpen, setMenuOpen]);
 
   const primary = [
-    { href: "/shop", label: "Shop all" },
-    ...brands.map((b) => ({ href: `/collections/${b.slug}`, label: b.name })),
+    { href: "/categories", label: "Categories" },
+    { href: "/shop", label: "Products" },
+    { href: "/contact", label: "Contact" },
     { href: "/verified", label: "Verified", highlight: true },
     { href: "/about", label: "About" },
+    { href: "/login", label: "Login" },
   ];
 
   return (
@@ -44,7 +46,7 @@ export default function MobileMenu() {
           animate={{ clipPath: "inset(0 0 0% 0)" }}
           exit={{ clipPath: "inset(0 0 100% 0)" }}
           transition={{ duration: 0.7, ease }}
-          className="fixed inset-0 z-[55] flex flex-col overflow-y-auto bg-obsidian pt-20 lg:hidden"
+          className="fixed inset-0 z-[55] flex flex-col overflow-y-auto bg-obsidian pt-24 lg:hidden"
         >
           <nav aria-label="Mobile" className="shell flex-1">
             <ul>
@@ -88,7 +90,6 @@ export default function MobileMenu() {
             </motion.div>
           </nav>
           <div className="shell flex flex-col gap-1 py-8 font-mono text-xs text-mute">
-            <a href={store.phoneHref} className="text-warm">{store.phone}</a>
             <a href={`mailto:${store.email}`} className="break-all">{store.email}</a>
           </div>
         </motion.div>

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { searchProducts, categories, brands, formatPrice, getBrand } from "@/lib/catalog";
 import ProductImage from "@/components/product/ProductImage";
 
-const suggestions = ["Whey", "Creatine", "Pre-workout", "Kiwi Kick", "Unflavoured"];
+const suggestions = ["Whey", "Chocolate"];
 
 /** Shared search UI used by the overlay and the /search page. */
 export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
@@ -29,7 +29,7 @@ export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
           autoFocus={autoFocus}
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search whey, creatine, Wellcore…"
+          placeholder="Search whey protein"
           autoComplete="off"
           spellCheck={false}
           className="display min-w-0 flex-1 bg-transparent text-5xl text-warm outline-none placeholder:text-graphite md:text-7xl"
@@ -71,7 +71,7 @@ export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
         ) : results.length === 0 ? (
           <div className="py-10">
             <p className="display text-5xl text-soft">No match for “{deferred}”.</p>
-            <p className="mt-3 text-sm text-mute">Try a brand (Wellcore, Rebuild), a category (creatine, whey) or a flavour.</p>
+            <p className="mt-3 text-sm text-mute">Try whey or chocolate.</p>
           </div>
         ) : (
           <>

@@ -4,9 +4,6 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *  Single source of truth for brands, categories and products.
  *
- *  • Third-party products come from a snapshot of the public WooCommerce Store
- *    API on hvnutrition.in (see scripts/import-catalog.mjs). Names, prices,
- *    listed MRPs, feature bullets, descriptions and images are as listed there.
  *  • Fields marked `PLACEHOLDER` are NOT verified and must be confirmed by the
  *    store owner before launch. The UI shows a visible "To be confirmed" tag
  *    wherever `placeholder` data is rendered.
@@ -15,8 +12,6 @@
  *  with a fetch + mapping into the same shape (see `Product` typedef).
  * ─────────────────────────────────────────────────────────────────────────────
  */
-import source from "./source/hvnutrition-products.json";
-
 /**
  * @typedef {Object} Product
  * @property {string} id
@@ -51,22 +46,6 @@ export const brands = [
     description:
       "HV Nutrition’s house line, from High Voltage Nutrition in Uttarpara, Hooghly.",
   },
-  {
-    slug: "wellcore",
-    name: "Wellcore",
-    own: false,
-    tagline: "Micronised creatine, in every flavour on our shelf.",
-    description:
-      "Wellcore (by Wellversed) is an independent brand. HV Nutrition stocks its micronised creatine range in multiple flavours and pack sizes.",
-  },
-  {
-    slug: "rebuild",
-    name: "Rebuild",
-    own: false,
-    tagline: "Pre-workout from Rebuild Sports Nutrition.",
-    description:
-      "Rebuild Sports Nutrition is an independent brand. HV Nutrition stocks its PUMP-AF pre-workout.",
-  },
 ];
 
 export const categories = [
@@ -76,82 +55,7 @@ export const categories = [
     short: "Protein",
     description: "Whey protein powders for your daily protein intake.",
   },
-  {
-    slug: "creatine",
-    name: "Creatine",
-    short: "Creatine",
-    description: "Micronised creatine monohydrate — flavoured and unflavoured, small and large packs.",
-  },
-  {
-    slug: "pre-workout",
-    name: "Pre-Workout",
-    short: "Pre",
-    description: "Pre-workout formulas taken before training.",
-  },
 ];
-
-/* ── Enrichment for imported products, keyed by the store's product ID ─────── */
-const enrich = {
-  1402: { brand: "rebuild", category: "pre-workout", name: "PUMP-AF Pre-Workout", flavour: "Pineapple", size: "450g", servings: 30, family: "rebuild-pump-af", featured: true },
-  // Wellcore micronised creatine — one family, flavour × pack-size variants.
-  1092: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Tropical Tango", size: "122g", servings: 33, family: "wellcore-creatine", featured: true },
-  1265: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Watermelon Wave", size: "122g", servings: 33, family: "wellcore-creatine" },
-  1270: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Unflavoured", size: "100g", servings: 33, family: "wellcore-creatine" },
-  1274: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Fruit Fusion", size: "122g", servings: 33, family: "wellcore-creatine" },
-  1279: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Kiwi Kick", size: "122g", servings: 33, family: "wellcore-creatine" },
-  1311: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Lemon Lime", size: "149g", servings: 33, family: "wellcore-creatine" },
-  1283: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Watermelon Wave", size: "307g", servings: 83, family: "wellcore-creatine", featured: true },
-  1288: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Unflavoured", size: "250g", servings: 83, family: "wellcore-creatine" },
-  1293: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Tropical Tango", size: "307g", servings: 83, family: "wellcore-creatine" },
-  1298: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Fruit Fusion", size: "307g", servings: 83, family: "wellcore-creatine" },
-  1303: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Kiwi Kick", size: "307g", servings: 83, family: "wellcore-creatine" },
-  1307: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Lemon Lime", size: "374g", servings: 83, family: "wellcore-creatine" },
-};
-
-const slugify = (s) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-
-const brandName = (slug) => brands.find((b) => b.slug === slug)?.name ?? slug;
-
-const imported = source.products
-  .filter((p) => enrich[p.sourceId])
-  .map((p) => {
-    const e = enrich[p.sourceId];
-    const fullName = p.name.replace(/\s*\|\s*$/, "").trim();
-    return {
-      id: String(p.sourceId),
-      slug: slugify(`${brandName(e.brand)} ${e.name} ${e.flavour ?? ""} ${e.size ?? ""}`),
-      legacySlug: p.sourceSlug,
-      name: e.name,
-      fullName,
-      brand: e.brand,
-      category: e.category,
-      price: p.price,
-      listedMrp: p.regularPrice && p.regularPrice > p.price ? p.regularPrice : null,
-      images: p.images
-        .filter((im) => im.width >= 200) // drop tiny thumbnails from the source
-        .map((im, i) => ({
-          src: im.src,
-          width: im.width,
-          height: im.height,
-          alt: `${brandName(e.brand)} ${e.name}${e.flavour ? ` ${e.flavour}` : ""}${e.size ? ` ${e.size}` : ""} — image ${i + 1}`,
-        })),
-      description: p.description,
-      features: p.features,
-      flavour: e.flavour ?? null,
-      size: e.size ?? null,
-      servings: e.servings ?? null,
-      family: e.family ?? null,
-      availability: p.inStock ? "in_stock" : "out_of_stock",
-      featured: Boolean(e.featured),
-      // Not published on the source listing → intentionally null (UI says "not provided").
-      nutrition: null,
-      ingredients: null,
-      usage: null,
-      placeholderFields: [],
-      source: p.sourceUrl,
-    };
-  });
 
 /* ── HV Nutrition’s own product ───────────────────────────────────────────────
  * Not listed in the live store’s product catalog. Facts below come from:
@@ -212,7 +116,7 @@ const hvWhey = {
 };
 
 /** @type {Product[]} */
-export const products = [hvWhey, ...imported];
+export const products = [hvWhey];
 
 export const store = {
   name: "HV Nutrition",

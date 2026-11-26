@@ -6,6 +6,7 @@ export default function sitemap() {
   return [
     { url: `${BASE}/`, priority: 1 },
     { url: `${BASE}/shop`, priority: 0.9 },
+    { url: `${BASE}/categories`, priority: 0.9 },
     { url: `${BASE}/verified`, priority: 0.8 },
     { url: `${BASE}/about` },
     { url: `${BASE}/contact` },

@@ -35,7 +35,7 @@ const rows = [
   },
   {
     k: "Product sourcing",
-    v: "How HV Nutrition sources third-party brands, and how customers can verify a product.",
+    v: "For questions about HV Nutrition Whey Protein or its packaging, contact HV Nutrition.",
     extra: <Placeholder>Owner to provide sourcing statement</Placeholder>,
   },
   {
@@ -58,7 +58,7 @@ export default function Trust() {
       <div className="shell grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
-            <span className="eyebrow text-mute">(07) Shopping with us</span>
+            <span className="eyebrow text-mute">(06) Shopping with us</span>
             <Lines as="h2" id="trust-title" className="display mt-4 text-[15vw] md:text-[10vw] lg:text-[6vw]" lines={["Straight", "answers."]} />
           </div>
         </div>

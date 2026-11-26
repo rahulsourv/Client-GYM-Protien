@@ -151,7 +151,7 @@ export default function VerifiedView() {
           </div>
           <div className="flex flex-col items-start gap-4 md:col-span-7">
             <p className="text-sm leading-relaxed text-soft/80">
-              How HV Nutrition sources the third-party brands on its shelf, and how you can check a product is genuine.
+              For questions about HV Nutrition Whey Protein or its packaging, contact HV Nutrition.
             </p>
             <Placeholder>Owner to provide sourcing & authenticity statement</Placeholder>
             <a href={store.phoneHref} className="mt-2 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-warm underline decoration-lime underline-offset-4 hover:text-lime">

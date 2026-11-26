@@ -2,7 +2,6 @@ import Hero from "@/components/sections/Hero";
 import ProductReveal from "@/components/sections/ProductReveal";
 import Categories from "@/components/sections/Categories";
 import Signature from "@/components/sections/Signature";
-import Marketplace from "@/components/sections/Marketplace";
 import Discovery from "@/components/sections/Discovery";
 import Trust from "@/components/sections/Trust";
 import Founder from "@/components/sections/Founder";
@@ -41,7 +40,6 @@ export default function Home() {
       <Hero />
       <ProductReveal />
       <Categories />
-      <Marketplace />
       <Signature />
       <Discovery />
       <Trust />

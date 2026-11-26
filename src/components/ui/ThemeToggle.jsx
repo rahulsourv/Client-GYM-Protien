@@ -39,11 +39,11 @@ export default function ThemeToggle({ className = "" }) {
     >
       <Sun
         aria-hidden
-        className={`absolute size-[1.1rem] transition-all duration-500 ease-[var(--ease-out-expo)] ${theme === "dark" ? "rotate-0 opacity-100" : "-rotate-90 scale-50 opacity-0"}`}
+        className={`absolute size-5 transition-all duration-500 ease-[var(--ease-out-expo)] ${theme === "dark" ? "rotate-0 opacity-100" : "-rotate-90 scale-50 opacity-0"}`}
       />
       <Moon
         aria-hidden
-        className={`absolute size-[1.05rem] transition-all duration-500 ease-[var(--ease-out-expo)] ${theme === "light" ? "rotate-0 opacity-100" : "rotate-90 scale-50 opacity-0"}`}
+        className={`absolute size-5 transition-all duration-500 ease-[var(--ease-out-expo)] ${theme === "light" ? "rotate-0 opacity-100" : "rotate-90 scale-50 opacity-0"}`}
       />
     </button>
   );

@@ -92,7 +92,7 @@ export default function Signature() {
 
         {/* Copy */}
         <div data-copy className="flex flex-col justify-center lg:col-span-5 lg:pl-6">
-          <span data-in className="eyebrow text-mute">(05) The signature</span>
+          <span data-in className="eyebrow text-mute">(04) The signature</span>
           <h2 id="sig-title" className="display mt-4 text-[17vw] md:text-[12vw] lg:mt-3 lg:text-[clamp(3rem,4.6vw,5.5rem)]">
             <span className="line-mask"><span data-title-line className="block">HV Whey</span></span>
             <span className="line-mask"><span data-title-line className="block text-lime">Protein.</span></span>

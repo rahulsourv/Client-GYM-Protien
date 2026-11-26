@@ -54,7 +54,7 @@ export default function Founder() {
         </div>
 
         <div className="flex flex-col lg:col-span-6 lg:col-start-7">
-          <span className="eyebrow text-mute">(08) Founder</span>
+          <span className="eyebrow text-mute">(07) Founder</span>
           <Lines
             as="h2"
             id="founder-title"

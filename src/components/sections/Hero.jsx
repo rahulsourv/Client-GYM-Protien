@@ -78,7 +78,7 @@ export default function Hero() {
     <section
       ref={root}
       aria-labelledby="hero-title"
-      className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-obsidian pt-16 md:pt-20"
+      className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-obsidian pt-[4.5rem] md:pt-24"
     >
       {/* Environment: studio light, column rules, floor */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -140,7 +140,7 @@ export default function Hero() {
       {/* Layer 3: foreground copy */}
       <div data-fade-out className="shell relative z-20 mt-auto grid grid-cols-1 items-end gap-8 pb-8 lg:grid-cols-12 lg:pb-10">
         <div className="lg:col-span-6 xl:col-span-5">
-          <p data-line2 data-hero-hide aria-hidden className="display overflow-hidden text-[18vw] text-lime sm:text-[15vw] lg:text-[8.5vw]">
+          <p data-line2 data-hero-hide aria-hidden className="display overflow-hidden text-center text-[18vw] text-lime sm:text-[15vw] lg:text-left lg:text-[8.5vw]">
             <span className="block">
               Yesterday.
             </span>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { brands, categories, byBrand, byCategory, hvWhey, getProduct, formatPrice } from "@/lib/catalog";
+import { brands, categories, byBrand, byCategory, hvWhey, formatPrice } from "@/lib/catalog";
 import ProductImage from "@/components/product/ProductImage";
 
 const ease = [0.16, 1, 0.3, 1];
@@ -16,7 +16,7 @@ export default function MegaMenu({ open, onEnter, onClose }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const spotlight = [hvWhey(), getProduct("rebuild-pump-af-pre-workout-pineapple-450g")].filter(Boolean);
+  const spotlight = [hvWhey()];
 
   return (
     <AnimatePresence>

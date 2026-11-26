@@ -20,7 +20,7 @@ export default function Footer() {
         <div className="col-span-2 md:col-span-12 lg:col-span-4">
           <Wordmark className="text-xl" />
           <p className="mt-6 max-w-xs text-sm leading-relaxed text-mute">
-            Sports nutrition from {store.city}. Our own whey, alongside the brands we trust on our shelf.
+            Sports nutrition from {store.city}. Home of HV Nutrition Whey Protein.
           </p>
           <address className="mt-6 flex flex-col gap-1 text-sm not-italic text-mute">
             <span>{store.address}</span>
@@ -49,7 +49,6 @@ export default function Footer() {
 
       <div className="shell mt-20 flex flex-col justify-between gap-3 border-t border-line py-6 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-mute md:flex-row">
         <span>© {store.legalName} · {store.city}, {store.region} · FSSAI Reg. {store.fssai.number}</span>
-        <span>Wellcore and Rebuild are trademarks of their respective owners.</span>
       </div>
 
       <p aria-hidden className="display pointer-events-none -mb-[0.12em] select-none whitespace-nowrap text-center text-[18.5vw] leading-[0.78] text-graphite">

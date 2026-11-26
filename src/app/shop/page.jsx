@@ -1,10 +1,9 @@
 import PageHeader from "@/components/layout/PageHeader";
 import CatalogBrowser from "@/components/shop/CatalogBrowser";
-import { products, brands } from "@/lib/catalog";
 
 export const metadata = {
   title: "Shop all supplements",
-  description: "Shop whey protein, creatine and pre-workout from HV Nutrition, Wellcore and Rebuild.",
+  description: "Shop HV Nutrition Whey Protein.",
   alternates: { canonical: "/shop" },
 };
 
@@ -12,10 +11,10 @@ export default function ShopPage() {
   return (
     <>
       <PageHeader
-        eyebrow={`${products.length} products · ${brands.length} brands`}
+        eyebrow="HV Nutrition"
         lines={["The shop", <span key="a" className="outline-text">everything.</span>]}
-        description="Our own whey and every product we stock from Wellcore and Rebuild. Filter, sort and search below."
-        crumbs={[{ label: "Shop" }]}
+        description="Explore our chocolate whey protein."
+        crumbs={[{ label: "Products" }]}
       />
       <section className="shell pb-28" aria-label="Products">
         <CatalogBrowser />
