@@ -13,7 +13,6 @@ import { store } from "@/data/catalog";
 const links = [
   { href: "/collections/hv-nutrition", label: "HV Nutrition" },
   { href: "/collections/wellcore", label: "Wellcore" },
-  { href: "/collections/muscleblaze", label: "MuscleBlaze" },
   { href: "/about", label: "About" },
 ];
 
@@ -27,11 +26,27 @@ export default function Header() {
   const closeTimer = useRef(null);
 
   useEffect(() => {
+    // Hide after scrolling down a bit; show again only after a deliberate
+    // scroll up. `anchor` is where the current scroll direction began, so
+    // tiny smooth-scroll steps never flip the bar back and forth.
+    let anchor = window.scrollY;
+    let dir = 0;
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 40);
-      setHidden(y > 300 && y > lastY.current + 4);
-      if (y < lastY.current - 4) setHidden(false);
+      if (y < 120) {
+        setHidden(false);
+        anchor = y;
+        dir = 0;
+      } else {
+        const d = y > lastY.current ? 1 : y < lastY.current ? -1 : dir;
+        if (d !== dir) {
+          dir = d;
+          anchor = lastY.current;
+        }
+        if (dir === 1 && y - anchor > 24) setHidden(true);
+        else if (dir === -1 && anchor - y > 48) setHidden(false);
+      }
       lastY.current = y;
     };
     onScroll();

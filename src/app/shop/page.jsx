@@ -4,7 +4,7 @@ import { products, brands } from "@/lib/catalog";
 
 export const metadata = {
   title: "Shop all supplements",
-  description: "Shop whey protein, creatine, pre-workout and L-carnitine from HV Nutrition, Wellcore, MuscleBlaze and Rebuild.",
+  description: "Shop whey protein, creatine and pre-workout from HV Nutrition, Wellcore and Rebuild.",
   alternates: { canonical: "/shop" },
 };
 
@@ -14,7 +14,7 @@ export default function ShopPage() {
       <PageHeader
         eyebrow={`${products.length} products · ${brands.length} brands`}
         lines={["The shop", <span key="a" className="outline-text">everything.</span>]}
-        description="Our own whey and every product we stock from Wellcore, MuscleBlaze and Rebuild. Filter, sort and search below."
+        description="Our own whey and every product we stock from Wellcore and Rebuild. Filter, sort and search below."
         crumbs={[{ label: "Shop" }]}
       />
       <section className="shell pb-28" aria-label="Products">

@@ -16,7 +16,7 @@ export default function MegaMenu({ open, onEnter, onClose }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const spotlight = [hvWhey(), getProduct("muscleblaze-biozyme-performance-whey-rich-chocolate-1kg")].filter(Boolean);
+  const spotlight = [hvWhey(), getProduct("rebuild-pump-af-pre-workout-pineapple-450g")].filter(Boolean);
 
   return (
     <AnimatePresence>

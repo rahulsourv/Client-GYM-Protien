@@ -10,11 +10,23 @@ import Lines from "@/components/motion/Lines";
 import ProductImage from "@/components/product/ProductImage";
 import { brands, byBrand } from "@/lib/catalog";
 
+// Each brand gets its own colour block (fixed, so it reads the same in both themes).
 const themes = {
-  "hv-nutrition": { panel: "bg-obsidian text-warm", sub: "text-soft/70", accent: "text-lime", line: "border-line" },
-  wellcore: { panel: "bg-soft text-obsidian", sub: "text-obsidian/65", accent: "text-obsidian", line: "border-obsidian/15" },
-  muscleblaze: { panel: "bg-graphite text-warm", sub: "text-soft/70", accent: "text-warm", line: "border-line" },
-  rebuild: { panel: "bg-charcoal text-warm", sub: "text-soft/70", accent: "text-warm", line: "border-line" },
+  "hv-nutrition": {
+    panel: "bg-[linear-gradient(160deg,#ffc928_0%,#ffb300_45%,#ff8a00_100%)] text-ink",
+    sub: "text-ink/70",
+    accent: "text-ink",
+  },
+  wellcore: {
+    panel: "bg-[linear-gradient(160deg,#17806d_0%,#0e5a4d_60%,#093d35_100%)] text-white",
+    sub: "text-white/70",
+    accent: "text-white",
+  },
+  rebuild: {
+    panel: "bg-[linear-gradient(160deg,#5b45d6_0%,#3b2a9f_55%,#241a66_100%)] text-white",
+    sub: "text-white/70",
+    accent: "text-white",
+  },
 };
 
 /** 06 — The marketplace: our own line plus the independent brands we stock. */
@@ -40,10 +52,10 @@ export default function Marketplace() {
         <div className="mb-14 grid gap-6 md:mb-20 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
             <span className="eyebrow text-mute">(04) The marketplace</span>
-            <Lines as="h2" id="market-title" className="display mt-4 text-[15vw] md:text-[7.5vw]" lines={["The right fuel.", <span key="2" className="outline-text">The right formula.</span>]} />
+            <Lines as="h2" id="market-title" className="display mt-4 text-[15vw] md:text-[7.5vw]" lines={["The right fuel.", <span key="2" className="text-lime">The right formula.</span>]} />
           </div>
           <p data-reveal="fade" className="max-w-sm text-sm leading-relaxed text-mute md:col-span-4">
-            Our own whey sits alongside independent brands we stock and stand behind. Wellcore, MuscleBlaze and Rebuild are
+            Our own whey sits alongside independent brands we stock and stand behind. Wellcore and Rebuild are
             separate companies — not HV Nutrition products.
           </p>
         </div>

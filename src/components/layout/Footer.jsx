@@ -47,7 +47,7 @@ export default function Footer() {
 
       <div className="shell mt-20 flex flex-col justify-between gap-3 border-t border-line py-6 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-mute md:flex-row">
         <span>© HV Nutrition · {store.city}, Gujarat</span>
-        <span>Wellcore, MuscleBlaze and Rebuild are trademarks of their respective owners.</span>
+        <span>Wellcore and Rebuild are trademarks of their respective owners.</span>
       </div>
 
       <p aria-hidden className="display pointer-events-none -mb-[0.12em] select-none whitespace-nowrap text-center text-[18.5vw] leading-[0.78] text-graphite">

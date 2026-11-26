@@ -60,14 +60,6 @@ export const brands = [
       "Wellcore (by Wellversed) is an independent brand. HV Nutrition stocks its micronised creatine range in multiple flavours and pack sizes.",
   },
   {
-    slug: "muscleblaze",
-    name: "MuscleBlaze",
-    own: false,
-    tagline: "Whey, creatine, pre-workout and L-carnitine.",
-    description:
-      "MuscleBlaze is an independent sports nutrition brand. HV Nutrition stocks a selection of its whey protein, creatine, pre-workout and L-carnitine products.",
-  },
-  {
     slug: "rebuild",
     name: "Rebuild",
     own: false,
@@ -96,22 +88,11 @@ export const categories = [
     short: "Pre",
     description: "Pre-workout formulas taken before training.",
   },
-  {
-    slug: "l-carnitine",
-    name: "L-Carnitine",
-    short: "Carnitine",
-    description: "Ready-to-drink liquid L-carnitine.",
-  },
 ];
 
 /* ── Enrichment for imported products, keyed by the store's product ID ─────── */
 const enrich = {
-  1097: { brand: "muscleblaze", category: "whey-protein", name: "Biozyme Performance Whey", flavour: "Rich Chocolate", size: "1kg", servings: null, family: "mb-biozyme-whey", featured: true },
   1402: { brand: "rebuild", category: "pre-workout", name: "PUMP-AF Pre-Workout", flavour: "Pineapple", size: "450g", servings: 30, family: "rebuild-pump-af", featured: true },
-  1321: { brand: "muscleblaze", category: "pre-workout", name: "WrathX Pre-Workout", flavour: "Fruit Fury", size: "340g", servings: 20, family: "mb-wrathx", featured: true },
-  1341: { brand: "muscleblaze", category: "creatine", name: "CreAMP Micronised Creatine", flavour: "Unflavoured", size: "100g", servings: 32, family: "mb-creamp", featured: true },
-  1332: { brand: "muscleblaze", category: "l-carnitine", name: "Liquid L-Carnitine PRO", flavour: "Tangy Orange", size: "450ml", servings: null, family: "mb-lcarnitine-pro", featured: true },
-  1328: { brand: "muscleblaze", category: "l-carnitine", name: "Liquid L-Carnitine PRO", flavour: "Key Lime", size: "450ml", servings: null, family: "mb-lcarnitine-pro", featured: false },
   // Wellcore micronised creatine — one family, flavour × pack-size variants.
   1092: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Tropical Tango", size: "122g", servings: 33, family: "wellcore-creatine", featured: true },
   1265: { brand: "wellcore", category: "creatine", name: "Micronised Creatine", flavour: "Watermelon Wave", size: "122g", servings: 33, family: "wellcore-creatine" },

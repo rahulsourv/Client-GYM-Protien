@@ -21,7 +21,7 @@ export const metadata = {
     template: "%s — HV Nutrition",
   },
   description:
-    "HV Nutrition is a sports nutrition store from Surat. Shop HV Whey Protein alongside Wellcore creatine, MuscleBlaze and Rebuild supplements.",
+    "HV Nutrition is a sports nutrition store from Surat. Shop HV Whey Protein alongside Wellcore creatine and Rebuild pre-workout.",
   openGraph: {
     type: "website",
     siteName: "HV Nutrition",
