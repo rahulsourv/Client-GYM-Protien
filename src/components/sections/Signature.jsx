@@ -66,7 +66,7 @@ export default function Signature() {
   );
 
   return (
-    <section ref={root} aria-labelledby="sig-title" className="relative bg-charcoal py-24 md:py-32 lg:flex lg:min-h-svh lg:items-center lg:py-12">
+    <section ref={root} aria-labelledby="sig-title" className="relative bg-charcoal py-14 md:py-32 lg:flex lg:min-h-svh lg:items-center lg:py-12">
       <div className="shell grid w-full grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
         {/* Visual */}
         <div data-rep-box data-reveal="clip" className="grain relative isolate min-h-[120vw] overflow-hidden bg-obsidian md:min-h-[90vw] lg:col-span-7 lg:h-[calc(100svh-6rem)] lg:min-h-[520px]">

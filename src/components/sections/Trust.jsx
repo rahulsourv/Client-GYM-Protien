@@ -54,7 +54,7 @@ export default function Trust() {
   const root = useRef(null);
   useGSAP(() => setupReveals(), { scope: root });
   return (
-    <section ref={root} aria-labelledby="trust-title" className="bg-obsidian py-24 md:py-36">
+    <section ref={root} aria-labelledby="trust-title" className="bg-obsidian py-14 md:py-36">
       <div className="shell grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">

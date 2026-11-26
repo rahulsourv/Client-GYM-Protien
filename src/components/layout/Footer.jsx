@@ -15,7 +15,7 @@ const help = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-obsidian pt-20">
+    <footer className="relative overflow-hidden border-t border-line bg-obsidian pt-14 md:pt-20">
       <div className="shell grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-12">
         <div className="col-span-2 md:col-span-12 lg:col-span-4">
           <Wordmark className="text-xl" />
@@ -47,7 +47,7 @@ export default function Footer() {
         </FooterCol>
       </div>
 
-      <div className="shell mt-20 flex flex-col justify-between gap-3 border-t border-line py-6 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-mute md:flex-row">
+      <div className="shell mt-12 flex flex-col justify-between md:mt-20 gap-3 border-t border-line py-6 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-mute md:flex-row">
         <span>© {store.legalName} · {store.city}, {store.region} · FSSAI Reg. {store.fssai.number}</span>
       </div>
 

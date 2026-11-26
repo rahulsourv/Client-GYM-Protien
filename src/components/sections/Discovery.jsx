@@ -11,7 +11,7 @@ export default function Discovery() {
   const root = useRef(null);
   useGSAP(() => setupReveals(), { scope: root });
   return (
-    <section ref={root} aria-labelledby="discover-title" className="border-t border-line bg-charcoal py-24 md:py-36">
+    <section ref={root} aria-labelledby="discover-title" className="border-t border-line bg-charcoal py-14 md:py-36">
       <div className="shell">
         <div className="mb-12 grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
