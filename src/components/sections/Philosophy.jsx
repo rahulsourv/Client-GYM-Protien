@@ -285,7 +285,7 @@ function Shaker() {
             {/* Spout cap, hinged at its left edge */}
             <g data-spout>
               <rect x="150" y="26" width="52" height="18" rx="6" fill="#090909" />
-              <rect x="190" y="30" width="18" height="6" rx="3" fill="#c7ff38" />
+              <rect x="190" y="30" width="18" height="6" rx="3" fill="#ffb300" />
             </g>
           </g>
         </g>

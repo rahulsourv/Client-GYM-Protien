@@ -140,9 +140,9 @@ export default function Hero() {
       {/* Layer 3: foreground copy */}
       <div data-fade-out className="shell relative z-20 mt-auto grid grid-cols-1 items-end gap-8 pb-8 lg:grid-cols-12 lg:pb-10">
         <div className="lg:col-span-6 xl:col-span-5">
-          <p data-line2 data-hero-hide aria-hidden className="display overflow-hidden text-[18vw] text-warm sm:text-[15vw] lg:text-[8.5vw]">
+          <p data-line2 data-hero-hide aria-hidden className="display overflow-hidden text-[18vw] text-lime sm:text-[15vw] lg:text-[8.5vw]">
             <span className="block">
-              Yesterday<span className="text-lime">.</span>
+              Yesterday.
             </span>
           </p>
           <p data-fade data-hero-hide className="mt-4 max-w-sm text-[0.95rem] lg:mt-5 leading-relaxed text-soft/80">

@@ -242,7 +242,7 @@ export default function ProductView({ product: p }) {
             </div>
             <a
               href={store.phoneHref}
-              className="flex h-12 items-center gap-2 bg-lime px-5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink active:scale-95"
+              className="flex h-12 items-center gap-2 bg-gold px-5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink active:scale-95"
             >
               <Phone className="size-4" aria-hidden /> Call
             </a>

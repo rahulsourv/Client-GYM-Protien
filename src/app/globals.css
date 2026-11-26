@@ -10,7 +10,10 @@
   --color-warm: #f3f2ed;
   --color-soft: #e8e8e4;
   --color-mute: #858585;
-  --color-lime: #c7ff38;
+  /* "lime" is the accent token name; the accent itself is now brand gold. */
+  --color-lime: #ffb300;
+  /* Brand gold (matches the HV logo) — used for primary buttons in both themes. */
+  --color-gold: #ffb300;
   /* Text that sits on an accent (lime/gold) background — dark in both themes. */
   --color-ink: #090909;
 
@@ -56,7 +59,7 @@ html[data-theme="light"] .font-mono.text-lime {
   --color-warm: #f3f2ed;
   --color-soft: #e8e8e4;
   --color-mute: #858585;
-  --color-lime: #c7ff38;
+  --color-lime: #ffb300;
 }
 
 @layer base {

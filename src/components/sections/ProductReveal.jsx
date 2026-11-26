@@ -75,7 +75,7 @@ export default function ProductReveal() {
         data-glow
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 opacity-100 motion-safe:opacity-0"
-        style={{ background: "radial-gradient(40% 50% at 50% 55%, rgba(199,255,56,0.07) 0%, transparent 70%), radial-gradient(60% 60% at 50% 45%, rgba(243,242,237,0.08) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(40% 50% at 50% 55%, rgba(255,179,0,0.08) 0%, transparent 70%), radial-gradient(60% 60% at 50% 45%, rgba(243,242,237,0.08) 0%, transparent 70%)" }}
       />
 
       <div className="shell absolute inset-x-0 top-20 z-20 flex justify-between md:top-24">
