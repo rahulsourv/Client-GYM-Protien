@@ -10,7 +10,7 @@ import { useAccount } from "@/store/account";
 
 const inputStyle = "mt-2 w-full border border-line bg-obsidian p-3";
 
-export default function AccountForm({ profile = false }) {
+export default function AccountForm({ profile = false, signup = false }) {
   const { session, checkingSession, updateSession } = useAccount();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -28,13 +28,14 @@ export default function AccountForm({ profile = false }) {
     setNotice("");
 
     try {
-      if (action === "login") {
-        const { accessToken } = await api("/auth/login", { method: "POST", body: form });
+      if (action === "login" || action === "register") {
+        const { accessToken } = await api(`/auth/${action}`, { method: "POST", body: form });
         if (!accessToken) throw new Error("The API did not return an access token.");
         const account = await api("/auth/me", { token: accessToken });
         const user = account.user ?? account;
         const accountType = ["ADMIN", "SUPER_ADMIN"].includes(user.role) ? "ADMIN" : user.role;
-        if (accountType !== form.accountType) {
+        const expectedType = action === "register" ? "CUSTOMER" : form.accountType;
+        if (accountType !== expectedType) {
           throw new Error("Select the account type that matches your account.");
         }
         updateSession({ token: accessToken, user });
@@ -52,7 +53,11 @@ export default function AccountForm({ profile = false }) {
       if (session && requestError.status === 401 && requestError.code !== "INVALID_CREDENTIALS") {
         updateSession(null);
       }
-      setError(requestError.message);
+      setError(
+        action === "register" && requestError.status === 409
+          ? "An account already exists with this email. Sign in instead."
+          : requestError.message
+      );
     } finally {
       setBusy(false);
     }
@@ -64,11 +69,11 @@ export default function AccountForm({ profile = false }) {
   }
 
   const isAdmin = ["ADMIN", "SUPER_ADMIN"].includes(session?.user.role);
-  const title = profile ? (isAdmin ? "Admin profile" : "Profile") : "Login";
+  const title = profile ? (isAdmin ? "Admin profile" : "Profile") : signup ? "Customer signup" : "Login";
 
   return (
     <>
-      <PageHeader lines={[title]} crumbs={[{ label: profile ? "Profile" : "Login" }]} />
+      <PageHeader lines={[title]} crumbs={[{ label: profile ? "Profile" : signup ? "Sign up" : "Login" }]} />
       <section className="shell grid items-start gap-8 pb-24 lg:grid-cols-2">
         <div className="max-w-lg space-y-5 border border-line p-6">
           {error && <p role="alert">{error}</p>}
@@ -105,24 +110,46 @@ export default function AccountForm({ profile = false }) {
           ) : profile ? (
             <LinkButton href="/login">Sign in</LinkButton>
           ) : (
-            <form method="post" className="space-y-4" onSubmit={(event) => submitForm("login", event)}>
-              <label className="block">
-                Sign in as
-                <select name="accountType" defaultValue="" className={inputStyle} required>
-                  <option value="" disabled>Select account type</option>
-                  <option value="CUSTOMER">Customer</option>
-                  <option value="ADMIN">Admin</option>
-                </select>
-              </label>
+            <form method="post" className="space-y-4" onSubmit={(event) => submitForm(signup ? "register" : "login", event)}>
+              {signup ? (
+                <label className="block">
+                  Full name
+                  <input name="name" autoComplete="name" className={inputStyle} maxLength={120} required />
+                </label>
+              ) : (
+                <label className="block">
+                  Sign in as
+                  <select name="accountType" defaultValue="" className={inputStyle} required>
+                    <option value="" disabled>Select account type</option>
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="ADMIN">Admin</option>
+                  </select>
+                </label>
+              )}
               <label className="block">
                 Email
                 <input name="email" type="email" autoComplete="username" className={inputStyle} required />
               </label>
               <label className="block">
                 Password
-                <input name="password" type="password" autoComplete="current-password" className={inputStyle} required />
+                <input
+                  name="password"
+                  type="password"
+                  autoComplete={signup ? "new-password" : "current-password"}
+                  className={inputStyle}
+                  minLength={signup ? 12 : undefined}
+                  maxLength={72}
+                  aria-describedby={signup ? "signup-password-hint" : undefined}
+                  required
+                />
               </label>
-              <Button disabled={busy}>{busy ? "Signing in…" : "Sign in"}</Button>
+              {signup && <p id="signup-password-hint" className="text-sm">Use at least 12 characters.</p>}
+              <Button disabled={busy}>{signup ? (busy ? "Creating account?" : "Create account") : (busy ? "Signing in?" : "Sign in")}</Button>
+              <div>
+                <LinkButton href={signup ? "/login" : "/signup"} variant="ghost">
+                  {signup ? "Already have an account? Sign in" : "Create a customer account"}
+                </LinkButton>
+              </div>
             </form>
           )}
         </div>

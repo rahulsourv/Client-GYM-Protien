@@ -4,6 +4,7 @@ import { backendUrl } from "./src/lib/backendUrl.js";
 const nextConfig = {
   async rewrites() {
     return [
+      "/auth/register",
       "/auth/me",
       "/auth/change-password",
       "/auth/logout-all",
