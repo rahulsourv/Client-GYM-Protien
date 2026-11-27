@@ -17,7 +17,7 @@ export default function AboutPage() {
     <>
       <PageHeader
         eyebrow="About"
-        lines={["Built in", `${store.city}.`]}
+        lines={["Our Story"]}
         description="A sports nutrition store with its own whey — and the experience to tell you what’s worth buying."
         crumbs={[{ label: "About" }]}
       />
