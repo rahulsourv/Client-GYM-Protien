@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { ProductGridSkeleton } from "@/components/ui/Skeletons";
 import PageHeader from "@/components/layout/PageHeader";
 import CatalogBrowser from "@/components/shop/CatalogBrowser";
 import { getPublicCatalog } from "@/lib/publicCatalog";
@@ -19,7 +20,7 @@ export default function ShopPage() {
         crumbs={[{ label: "Products" }]}
       />
       <section className="shell pb-28" aria-label="Products">
-        <Suspense fallback={<p role="status">Loading products…</p>}>
+        <Suspense fallback={<div role="status"><span className="sr-only">Loading products…</span><ProductGridSkeleton count={6} /></div>}>
           <ShopCatalog />
         </Suspense>
       </section>

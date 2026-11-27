@@ -4,6 +4,7 @@ import "./globals.css";
 import { ShopProvider } from "@/store/shop";
 import { AccountProvider } from "@/store/account";
 import SmoothScroll from "@/components/layout/SmoothScroll";
+import MotionFX from "@/components/motion/MotionFX";
 import Intro from "@/components/layout/Intro";
 import Header from "@/components/layout/Header";
 import MobileMenu from "@/components/layout/MobileMenu";
@@ -57,6 +58,7 @@ export default function RootLayout({ children }) {
             <Intro />
             <Suspense fallback={null}>
               <SmoothScroll />
+              <MotionFX />
               <Header />
             </Suspense>
             <MobileMenu />

@@ -43,7 +43,7 @@ export default function VariantPicker({ product, onSelect }) {
                 role="radio"
                 aria-checked={f === product.flavour}
                 onClick={() => pick(f, current)}
-                className="border border-line px-3.5 py-2 text-sm transition-colors hover:border-warm aria-checked:border-lime aria-checked:bg-lime aria-checked:text-ink"
+                className="press border border-line px-3.5 py-2 text-sm hover:border-warm aria-checked:border-lime aria-checked:bg-lime aria-checked:text-ink"
               >
                 {f}
               </button>
@@ -66,7 +66,7 @@ export default function VariantPicker({ product, onSelect }) {
                 aria-checked={pk === current}
                 disabled={!v}
                 onClick={() => pick(product.flavour, pk)}
-                className="flex flex-col items-start border border-line px-3.5 py-2 text-left transition-colors hover:border-warm disabled:cursor-not-allowed disabled:opacity-30 aria-checked:border-lime aria-checked:bg-lime aria-checked:text-ink"
+                className="press flex flex-col items-start border border-line px-3.5 py-2 text-left hover:border-warm disabled:cursor-not-allowed disabled:opacity-30 aria-checked:border-lime aria-checked:bg-lime aria-checked:text-ink"
                 title={v ? undefined : `Not available in ${product.flavour}`}
               >
                 <span className="text-sm">{pk}</span>

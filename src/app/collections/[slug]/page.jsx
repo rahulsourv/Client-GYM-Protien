@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { CollectionSkeleton } from "@/components/ui/Skeletons";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/layout/PageHeader";
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }) {
 
 export default function CollectionPage({ params }) {
   return (
-    <Suspense fallback={<p className="shell pb-24 pt-32" role="status">Loading collection…</p>}>
+    <Suspense fallback={<CollectionSkeleton />}>
       <CollectionContent params={params} />
     </Suspense>
   );

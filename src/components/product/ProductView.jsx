@@ -82,7 +82,7 @@ export default function ProductView({ product: p }) {
         <div className="shell grid gap-6 py-12 md:py-28 lg:grid-cols-12 lg:gap-12">
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
-              <p className="eyebrow text-mute">Product details</p>
+              <p className="eyebrow font-semibold text-mute">Product details</p>
               {/* The name is right above on phones, so only desktop repeats it here. */}
               <p className="display mt-4 hidden text-5xl md:text-6xl lg:block">{p.name}</p>
               <nav aria-label="On this page" className="mt-8 hidden lg:block">
@@ -102,7 +102,7 @@ export default function ProductView({ product: p }) {
                         <a
                           href={`#${s.id}`}
                           aria-current={on ? "location" : undefined}
-                          className={`relative flex gap-4 py-3 font-mono text-xs uppercase tracking-[0.14em] transition-[color,padding] duration-500 ${on ? "pl-4 font-bold text-ink" : "text-soft/70 hover:text-lime"}`}
+                          className={`relative flex gap-4 py-3 font-mono text-xs uppercase tracking-[0.14em] transition-[color,padding] duration-500 ${on ? "pl-4 font-bold text-ink" : "font-semibold text-soft/80 hover:text-lime"}`}
                         >
                           <span className={on ? "text-ink" : "text-mute"}>{String(i + 1).padStart(2, "0")}</span>
                           {s.label}
@@ -117,7 +117,7 @@ export default function ProductView({ product: p }) {
 
           <div className="flex flex-col border-t border-line lg:col-span-8 lg:gap-16 lg:border-t-0">
             <Block id="overview" title="Overview" defaultOpen>
-              <div className="flex max-w-2xl flex-col gap-4 text-[1.02rem] leading-relaxed text-soft/85">
+              <div className="flex max-w-2xl flex-col gap-4 text-[1.05rem] font-medium leading-relaxed text-warm/90">
                 {p.description.length ? p.description.map((d, k) => <p key={k}>{d}</p>) : <p>A description for this product hasn’t been published yet.</p>}
                 {isPlaceholder("description") && <Placeholder className="self-start">Draft description</Placeholder>}
               </div>
@@ -127,8 +127,8 @@ export default function ProductView({ product: p }) {
               <Block id="features" title="Key features">
                 <ul className="grid gap-px border border-line bg-line sm:grid-cols-2">
                   {p.features.map((f, i) => (
-                    <li key={f} className="flex gap-4 bg-charcoal p-5 text-sm leading-relaxed text-soft/85">
-                      <span className="font-mono text-xs text-lime">{String(i + 1).padStart(2, "0")}</span>
+                    <li key={f} className="flex gap-4 bg-charcoal p-5 text-[0.95rem] font-semibold leading-relaxed text-warm">
+                      <span className="font-mono text-xs font-bold text-lime">{String(i + 1).padStart(2, "0")}</span>
                       {f}
                     </li>
                   ))}
@@ -141,8 +141,8 @@ export default function ProductView({ product: p }) {
               <dl className="border-t border-line">
                 {specs.map(([k, v]) => (
                   <div key={k} className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-4 border-b border-line py-4 text-sm">
-                    <dt className="eyebrow text-mute">{k}</dt>
-                    <dd className="text-soft/90">{v}</dd>
+                    <dt className="eyebrow font-semibold text-mute">{k}</dt>
+                    <dd className="font-semibold text-warm">{v}</dd>
                   </div>
                 ))}
               </dl>
@@ -158,14 +158,14 @@ export default function ProductView({ product: p }) {
                           {s.value}
                           <span className="normal-case text-lime">{s.unit}</span>
                         </dd>
-                        <dt className="eyebrow mt-2 text-mute">{s.label}</dt>
+                        <dt className="eyebrow mt-2 font-semibold text-mute">{s.label}</dt>
                       </div>
                     ))}
                   </dl>
                   <p className="mt-3 text-xs text-mute">As printed on the pack. The full nutrition panel and ingredient list will be added here.</p>
                 </>
               ) : (
-                <p className="max-w-2xl text-sm leading-relaxed text-soft/80">
+                <p className="max-w-2xl text-[0.95rem] font-medium leading-relaxed text-warm/85">
                   The full nutrition panel and ingredient list haven’t been published for this listing yet. Please refer to the label on the product.
                 </p>
               )}
@@ -173,7 +173,7 @@ export default function ProductView({ product: p }) {
             </Block>
 
             <Block id="usage" title="How to use">
-              <p className="max-w-2xl text-sm leading-relaxed text-soft/80">
+              <p className="max-w-2xl text-[0.95rem] font-medium leading-relaxed text-warm/85">
                 {p.usage ?? "Follow the directions printed on the product label. If you have a medical condition, are pregnant or take medication, check with a doctor first."}
               </p>
               {!p.usage && <Placeholder className="mt-4">Owner to add usage directions</Placeholder>}
@@ -185,7 +185,7 @@ export default function ProductView({ product: p }) {
                 <Contact icon={Mail} label="Email" value={store.email} href={enquiry} />
                 <Contact icon={MapPin} label="Visit" value={store.address} href={directions} external />
               </div>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-soft/80">
+              <p className="mt-4 max-w-2xl text-[0.95rem] font-medium leading-relaxed text-warm/85">
                 There’s no online checkout — prices are shown so you know what to expect.{store.shippingNote && ` ${store.shippingNote}`}
               </p>
             </Block>
@@ -211,9 +211,9 @@ export default function ProductView({ product: p }) {
             </div>
             <a
               href={store.phoneHref}
-              className="flex h-12 items-center gap-2 bg-gold px-5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink active:scale-95"
+              className="press flex h-12 items-center gap-2 bg-gold px-5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink"
             >
-              <Phone className="size-4" aria-hidden /> Call
+              <Phone className="fx-ring size-4" aria-hidden /> Call
             </a>
           </motion.div>
         )}
@@ -259,7 +259,7 @@ function Block({ id, title, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div id={id} data-reveal="fade" className="scroll-mt-28 border-b border-line lg:border-b-0">
-      <h2 className="eyebrow text-warm">
+      <h2 className="eyebrow text-[0.75rem] font-bold text-warm">
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
@@ -288,7 +288,7 @@ function Contact({ icon: Icon, label, value, href, external }) {
     >
       <Icon className="size-4 text-lime" aria-hidden />
       <span className="eyebrow text-mute">{label}</span>
-      <span className="break-words text-sm text-soft/90 group-hover:text-warm">{value}</span>
+      <span className="break-words text-sm font-semibold text-warm">{value}</span>
     </a>
   );
 }

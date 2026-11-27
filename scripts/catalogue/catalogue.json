@@ -1,5 +1,5 @@
 {
-  "_readme": "Product catalogue for scripts/catalogue/import-catalogue.mjs: one entry per product photo in public/assets/sample_images. Flavour, size, servings and label facts are as printed on each pack; price null = not set. Categories are provisional. Re-run the import after editing: existing SKUs are updated, not duplicated, and --prune deactivates backend products and categories that are not listed here.",
+  "_readme": "Product catalogue for scripts/catalogue/import-catalogue.mjs: one entry per product photo in public/assets/sample_images. Flavour, size, servings and label facts are as printed on each pack; price in INR (placeholder prices except Platinum Whey, which is from the poster; confirm with the client). Categories are provisional. Re-run the import after editing: existing SKUs are updated, not duplicated, and --prune deactivates backend products and categories that are not listed here.",
   "categories": [
     {
       "name": "Whey Protein",
@@ -57,7 +57,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 3499,
       "description": "HV Isolate Whey is a pure whey protein isolate made for lean muscle and faster recovery. Every serving gives you 25 g of protein with zero carbs and zero sugar, so it fits easily into a cutting phase or a clean, high-protein diet.\n\nIt comes in a rich Double Rich Chocolate flavour, in a 1 kg tub with 33+ servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -96,7 +96,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 2999,
       "description": "Gold Standard 100% Whey combines three forms of whey protein: isolate, hydrolysed whey and concentrate. Each serving delivers 25 g of protein and 5.5 g of BCAAs, plus 3 g of added vitamins and minerals.\n\nMade for muscle building and faster recovery, in a Double Rich Chocolate flavour. 1 kg tub, 33+ servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -127,7 +127,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 4999,
       "description": "Performance Whey is an advanced formula for people who train hard and often. Each serving gives 24 g of protein, 5.5 g of BCAAs and 4 g of glutamine, with added digestive support so it sits easily.\n\nChocolate Milkshake flavour, in a 2 kg tub with 54 servings.",
       "benefits": [
         "24 g protein per serving",
@@ -206,7 +206,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 3199,
       "description": "Pro Enzyme Whey Protein is a premium whey with added digestive enzymes for better absorption and a lighter feel on the stomach. Each serving gives 24 g of protein, 5 g of BCAAs, 5 g of EAAs and 4 g of glutamine.\n\nNo added sugar and no banned substances. Rich Chocolate flavour, 1 kg tub.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -234,7 +234,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 2499,
       "description": "Yeast Protein Whey blends yeast protein with whey concentrate and whey isolate, then adds EAAs, BCAAs, glutamine, vitamins and minerals. The result is a complete amino profile with 25 g of protein per serving, rich in BCAAs and easy to digest.\n\nNo added sugar and no banned substances. 1 kg tub with 33+ servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -272,7 +272,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 3999,
       "description": "Chicken Protein is a pure chicken protein isolate, an alternative protein source for lean muscle and recovery. Each serving gives 25 g of protein with zero carbs and zero sugar.\n\nNatural Vanilla flavour, in a 1 kg tub with 33+ servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -310,7 +310,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 4299,
       "description": "Goat Meat Protein is a pure goat meat protein isolate for lean muscle and faster recovery. Each serving gives 25 g of protein with zero carbs and zero sugar.\n\nNatural Vanilla flavour, in a 1 kg tub with 33+ servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -348,7 +348,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 2799,
       "description": "Albumin Protein is pure egg white protein, a classic choice for lean muscle and recovery. Each serving gives 25 g of protein with zero carbs and zero sugar.\n\nNatural Vanilla flavour, in a 1 kg tub with 33+ servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -392,7 +392,7 @@
           "g"
         ]
       ],
-      "price": null,
+      "price": 5999,
       "description": "Cow Milk Protein Isolate is made from premium grass-fed cow milk. Each serving gives 27 g of protein, 6.2 g of BCAAs and 4.5 g of glutamine, with no added sugar.\n\nIt is lactose free and easy to digest, with high biological value for muscle recovery. Belgian Dark Chocolate flavour, in a 2 kg tub with 66 servings.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -412,7 +412,7 @@
         "Better digestion",
         "Overall wellness"
       ],
-      "price": null,
+      "price": 1999,
       "description": "Mix Seeds & Nuts Protein is a complete plant protein blend made from a mix of seeds and nuts. It is a good fit if you prefer plant-based protein for muscle building and everyday nutrition.\n\nMade for muscle building, sustained energy, better digestion and overall wellness.",
       "usage": "Add one serving to cold water or milk and shake until smooth. Have it after training or between meals to help you reach your daily protein target. Follow the serving size and directions printed on the pack."
     },
@@ -432,7 +432,7 @@
         "Improves performance",
         "Instant mix, easy absorption"
       ],
-      "price": null,
+      "price": 1299,
       "description": "BCAA 2:1:1 gives you the three branched chain amino acids, leucine, isoleucine and valine, in the classic 2:1:1 ratio. It helps muscle recovery and reduces muscle breakdown during hard training.\n\nA premium instant mix that dissolves easily for quick absorption. 300 g tub.",
       "usage": "Mix one serving in water and drink it before, during or after training. Follow the serving size and directions printed on the pack."
     },
@@ -454,7 +454,7 @@
         "Boosts performance",
         "55 servings per 300 g tub"
       ],
-      "price": null,
+      "price": 1499,
       "description": "EAA + BCAA combines all the essential amino acids with branched chain amino acids in one drink. It supports muscle recovery, reduces muscle breakdown and helps you keep going through long sessions.\n\nLemon Lime flavour, 300 g tub with 55 servings.",
       "usage": "Mix one serving in water and drink it before, during or after training. Follow the serving size and directions printed on the pack. Food supplement for healthy adults. Not a substitute for a varied, balanced diet."
     },
@@ -475,7 +475,7 @@
         "Supports gut health",
         "60 servings per 300 g tub"
       ],
-      "price": null,
+      "price": 999,
       "description": "Glutamine is pure L-glutamine powder. It supports muscle recovery, helps reduce muscle breakdown, and supports immune and gut health, especially during heavy training.\n\n300 g tub with 60 servings.",
       "usage": "Mix one serving in water and drink it before, during or after training. Follow the serving size and directions printed on the pack. Food supplement for healthy adults. Not a substitute for a varied, balanced diet."
     },
@@ -508,7 +508,7 @@
         ]
       ],
       "servingSize": "3 g",
-      "price": null,
+      "price": 549,
       "description": "Creatine Monohydrate is 100% pure creatine monohydrate, one of the most studied supplements for strength and power. Each serving gives 3 g of creatine with no sugar and no fillers.\n\nMade for more strength, more power, more muscle and faster recovery. 100 g tub.",
       "usage": "Mix one 3 g serving in water or juice once a day, every day, including rest days. Drink plenty of water through the day. Follow the directions printed on the pack. Food supplement for healthy adults. Not a substitute for a varied, balanced diet."
     }

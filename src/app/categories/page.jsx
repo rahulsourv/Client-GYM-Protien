@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { CategoryListSkeleton } from "@/components/ui/Skeletons";
 import PageHeader from "@/components/layout/PageHeader";
 import Categories from "@/components/sections/Categories";
 import { getPublicCatalog } from "@/lib/publicCatalog";
@@ -18,7 +19,7 @@ export default function CategoriesPage() {
         description="Everything on our shelf, sorted by what it does in your routine."
         crumbs={[{ label: "Categories" }]}
       />
-      <Suspense fallback={<p className="shell pb-24" role="status">Loading categories…</p>}>
+      <Suspense fallback={<CategoryListSkeleton />}>
         <CatalogCategories />
       </Suspense>
     </>

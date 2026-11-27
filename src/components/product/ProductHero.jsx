@@ -118,10 +118,10 @@ export default function ProductHero({ product: p, brand, category, onSelectVaria
           </p>
           {p.listedMrp && <p className="mt-1 font-mono text-xs text-mute">Listed MRP {formatPrice(p.listedMrp)}</p>}
           {p.placeholderFields.includes("price") && <Placeholder className="mt-2">Price to be confirmed</Placeholder>}
-          {meta && <p className="mt-3 text-sm text-mute">{meta}</p>}
+          {meta && <p className="mt-3 text-sm font-medium text-mute">{meta}</p>}
 
           {summary && (
-            <p className="mt-5 max-w-md text-[0.95rem] leading-relaxed text-soft/85">
+            <p className="mt-5 max-w-md text-[0.98rem] font-medium leading-relaxed text-warm/90">
               {summary}{" "}
               <a href="#details" className="whitespace-nowrap text-warm underline decoration-lime underline-offset-4 hover:text-lime">
                 Read more
@@ -138,21 +138,21 @@ export default function ProductHero({ product: p, brand, category, onSelectVaria
               aria-hidden
               className={`size-2 rounded-full ${p.availability === "in_stock" ? "bg-lime" : p.availability === "out_of_stock" ? "bg-red-500" : "bg-mute"}`}
             />
-            <span className="text-soft/80">{availabilityLabel[p.availability]}</span>
+            <span className="font-medium text-warm/85">{availabilityLabel[p.availability]}</span>
           </p>
 
           <div ref={buyRef} className="mt-6 flex max-w-md flex-col gap-3">
             <a
               href={store.phoneHref}
-              className="flex h-14 items-center justify-center gap-2 bg-gold font-mono text-[0.78rem] font-medium uppercase tracking-[0.14em] text-ink transition-colors hover:bg-warm active:scale-[0.98]"
+              className="press flex h-14 items-center justify-center gap-2 bg-gold font-mono text-[0.78rem] font-medium uppercase tracking-[0.14em] text-ink hover:bg-warm hover:text-obsidian"
             >
-              <Phone className="size-4" aria-hidden /> Call to order
+              <Phone className="fx-ring size-4" aria-hidden /> Call to order
             </a>
             <a
               href={enquiry}
-              className="flex h-14 items-center justify-center gap-2 border border-warm/25 font-mono text-[0.78rem] font-medium uppercase tracking-[0.14em] text-warm transition-colors hover:border-warm hover:bg-warm hover:text-obsidian active:scale-[0.98]"
+              className="press flex h-14 items-center justify-center gap-2 border border-warm/25 font-mono text-[0.78rem] font-medium uppercase tracking-[0.14em] text-warm hover:border-warm hover:bg-warm hover:text-obsidian"
             >
-              <Mail className="size-4" aria-hidden /> Email enquiry
+              <Mail className="fx-ring size-4" aria-hidden /> Email enquiry
             </a>
             <p className="text-xs leading-relaxed text-mute">
               No online checkout: call or email to order, or pick it up at our {store.city} store. {store.phone}

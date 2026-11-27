@@ -9,6 +9,7 @@ import Founder from "@/components/sections/Founder";
 import Philosophy from "@/components/sections/Philosophy";
 import { store } from "@/data/catalog";
 import { getPublicCatalog } from "@/lib/publicCatalog";
+import { CategoryListSkeleton, ProductGridSkeleton } from "@/components/ui/Skeletons";
 
 export const metadata = {
   alternates: { canonical: "/" },
@@ -41,11 +42,11 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Hero />
       <ProductReveal />
-      <Suspense fallback={<p className="shell py-12" role="status">Loading categories…</p>}>
+      <Suspense fallback={<div className="py-10 md:py-36"><CategoryListSkeleton /></div>}>
         <HomeCategories />
       </Suspense>
       <Signature />
-      <Suspense fallback={<p className="shell py-12" role="status">Loading products…</p>}>
+      <Suspense fallback={<div role="status" className="shell py-20"><span className="sr-only">Loading products…</span><ProductGridSkeleton count={4} columns="md:grid-cols-4" /></div>}>
         <HomeDiscovery />
       </Suspense>
       <Trust />

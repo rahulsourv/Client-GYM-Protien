@@ -237,3 +237,113 @@ html[data-theme="light"] .font-mono.text-lime {
     scroll-behavior: auto !important;
   }
 }
+
+/* ───────────────── MOTION PRINCIPLES ─────────────────
+ * One shared vocabulary for interaction motion. Everything below is switched
+ * off by the prefers-reduced-motion rule above (durations collapse to ~0).
+ */
+:root {
+  /* (6) slow in, slow out: ease into and out of every pose */
+  --ease-snap: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* (2) anticipation + (5) follow-through: dips back first, overshoots after */
+  --ease-anticipate: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  /* (5) follow-through: overshoot and settle */
+  --ease-follow: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* (9) snappy timing */
+  --dur-press: 70ms;
+  --dur-snap: 160ms;
+}
+
+/* (1) squash & stretch on press, (9) snappy in, (5) springy release */
+.press {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: 50% 100%;
+  transition: transform 0.55s var(--ease-follow), background-color 0.25s var(--ease-snap),
+    color 0.25s var(--ease-snap), border-color 0.25s var(--ease-snap), box-shadow 0.3s var(--ease-snap);
+}
+.press:active {
+  transform: scale(1.05, 0.9);
+  transition: transform var(--dur-press) var(--ease-snap), background-color 0.25s var(--ease-snap),
+    color 0.25s var(--ease-snap), border-color 0.25s var(--ease-snap), box-shadow 0.3s var(--ease-snap);
+}
+@media (hover: hover) {
+  .press:hover:not(:active) {
+    transform: translateY(-2px) scale(0.99, 1.02);
+  }
+}
+
+/* (10) exaggerated feedback: a ripple bursts from the exact tap point */
+.fx-ripple {
+  position: absolute;
+  z-index: -1;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.28;
+  pointer-events: none;
+  animation: fx-ripple 650ms var(--ease-snap) forwards;
+}
+@keyframes fx-ripple {
+  to {
+    transform: scale(var(--fx-r, 40));
+    opacity: 0;
+  }
+}
+
+/* (10) exaggerated feedback: a wrong answer shakes its head */
+.fx-shake {
+  animation: fx-shake 520ms var(--ease-snap);
+}
+@keyframes fx-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-12px) rotate(-1deg); }
+  30% { transform: translateX(10px) rotate(0.8deg); }
+  45% { transform: translateX(-7px); }
+  60% { transform: translateX(5px); }
+  75% { transform: translateX(-2px); }
+}
+
+/* (8) secondary action: icons react while their button does the main move */
+@keyframes fx-ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(-16deg); }
+  30% { transform: rotate(14deg); }
+  45% { transform: rotate(-10deg); }
+  60% { transform: rotate(6deg); }
+  75% { transform: rotate(-2deg); }
+}
+@media (hover: hover) {
+  .press:hover .fx-ring,
+  .group:hover .fx-ring {
+    animation: fx-ring 700ms var(--ease-snap);
+  }
+}
+.press:active .fx-ring {
+  animation: fx-ring 700ms var(--ease-snap);
+}
+
+/* (4) pose to pose: card entrances run from MotionFX.jsx (Web Animations API). */
+
+/* ───────────────── SKELETON LOADING ───────────────── */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-graphite);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-warm) 8%, transparent), transparent);
+  animation: skeleton-shimmer 1.4s var(--ease-snap) infinite;
+}
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}

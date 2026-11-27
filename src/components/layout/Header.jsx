@@ -70,7 +70,8 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [setSearchOpen]);
 
-  const solid = scrolled;
+  // The sign-in pages put a dark visual right under the bar, so it is always solid there.
+  const solid = scrolled || pathname === "/login" || pathname === "/signup";
   const under = (href) => pathname === href || pathname.startsWith(href + "/");
   const active = (l) => under(l.href) || (l.match ?? []).some(under);
 

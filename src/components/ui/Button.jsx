@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 const base =
-  "group/btn relative inline-flex items-center justify-center gap-3 overflow-hidden whitespace-nowrap font-mono text-[0.72rem] font-medium uppercase tracking-[0.14em] transition-[transform,background-color,color,border-color] duration-300 ease-[var(--ease-out-expo)] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40";
+  "press group/btn relative inline-flex items-center justify-center gap-3 overflow-hidden whitespace-nowrap font-mono text-[0.72rem] font-medium uppercase tracking-[0.14em] disabled:pointer-events-none disabled:opacity-40";
 
 const variants = {
   primary: "bg-gold text-ink h-14 px-7 hover:bg-warm hover:text-obsidian",
@@ -29,8 +29,8 @@ function Label({ children, arrow }) {
       </span>
       {arrow && (
         <span aria-hidden className="relative block size-4 overflow-hidden">
-          <ArrowUpRight className="absolute inset-0 size-4 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover/btn:-translate-y-full group-hover/btn:translate-x-full" />
-          <ArrowUpRight className="absolute inset-0 size-4 -translate-x-full translate-y-full transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover/btn:translate-x-0 group-hover/btn:translate-y-0" />
+          <ArrowUpRight className="absolute inset-0 size-4 transition-transform duration-500 ease-[var(--ease-anticipate)] group-hover/btn:-translate-y-full group-hover/btn:translate-x-full" />
+          <ArrowUpRight className="absolute inset-0 size-4 -translate-x-full translate-y-full transition-transform duration-500 ease-[var(--ease-anticipate)] delay-75 group-hover/btn:translate-x-0 group-hover/btn:translate-y-0" />
         </span>
       )}
     </>

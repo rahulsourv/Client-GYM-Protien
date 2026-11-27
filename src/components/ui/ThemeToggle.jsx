@@ -35,15 +35,15 @@ export default function ThemeToggle({ className = "" }) {
       onClick={toggle}
       aria-label={`Switch to ${next} theme`}
       title={`Switch to ${next} theme`}
-      className={`relative flex size-11 items-center justify-center overflow-hidden text-warm transition-colors hover:text-lime ${className}`}
+      className={`press relative flex size-11 items-center justify-center overflow-hidden text-warm transition-colors hover:text-lime ${className}`}
     >
       <Sun
         aria-hidden
-        className={`absolute size-5 transition-all duration-500 ease-[var(--ease-out-expo)] ${theme === "dark" ? "rotate-0 opacity-100" : "-rotate-90 scale-50 opacity-0"}`}
+        className={`absolute size-5 transition-all duration-700 ease-[var(--ease-anticipate)] ${theme === "dark" ? "rotate-0 opacity-100" : "-rotate-180 scale-50 opacity-0"}`}
       />
       <Moon
         aria-hidden
-        className={`absolute size-5 transition-all duration-500 ease-[var(--ease-out-expo)] ${theme === "light" ? "rotate-0 opacity-100" : "rotate-90 scale-50 opacity-0"}`}
+        className={`absolute size-5 transition-all duration-700 ease-[var(--ease-anticipate)] ${theme === "light" ? "rotate-0 opacity-100" : "rotate-180 scale-50 opacity-0"}`}
       />
     </button>
   );

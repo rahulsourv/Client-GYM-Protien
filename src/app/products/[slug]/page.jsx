@@ -4,6 +4,7 @@ import ProductView from "@/components/product/ProductView";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import { products, getProduct, getBrand, related } from "@/lib/catalog";
 import { getPublicCatalog } from "@/lib/publicCatalog";
+import { ProductPageSkeleton } from "@/components/ui/Skeletons";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }) {
 
 export default function ProductPage({ params }) {
   return (
-    <Suspense fallback={<p className="shell pb-24 pt-32" role="status">Loading product…</p>}>
+    <Suspense fallback={<ProductPageSkeleton />}>
       <ProductContent params={params} />
     </Suspense>
   );

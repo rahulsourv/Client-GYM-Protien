@@ -14,7 +14,7 @@ export default function ProductCard({ product: p, index, priority = false, sizes
   const category = p.categoryInfo ?? getCategory(p.category);
 
   return (
-    <article className="group/card relative flex flex-col">
+    <article data-pose style={{ "--i": (index ?? 0) % 4 }} className="group/card relative flex flex-col">
       <div className="relative">
         <Link href={`/products/${p.slug}`} className="block" aria-label={`${brand?.name} ${p.name}, ${p.flavour ?? ""} ${p.size ?? ""}`}>
           <div className={`relative aspect-[4/5] overflow-hidden ${own ? "bg-graphite" : ""}`}>
@@ -65,7 +65,11 @@ export default function ProductCard({ product: p, index, priority = false, sizes
                 {String(index + 1).padStart(2, "0")}
               </span>
             )}
-            {own && <span className="eyebrow absolute right-3 top-3 bg-lime px-2 py-1 text-ink">HV Original</span>}
+            {own && (
+              <span className="eyebrow absolute right-3 top-3 bg-lime px-2 py-1 text-ink transition-transform duration-500 ease-[var(--ease-follow)] delay-75 group-hover/card:-translate-y-1 group-hover/card:rotate-[-3deg]">
+                HV Original
+              </span>
+            )}
             {p.availability === "out_of_stock" && (
               <span className="eyebrow absolute right-3 top-3 bg-obsidian px-2 py-1 text-warm">Sold out</span>
             )}
