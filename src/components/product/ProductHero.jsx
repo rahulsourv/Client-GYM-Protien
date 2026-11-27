@@ -91,7 +91,7 @@ export default function ProductHero({ product: p, brand, category, onSelectVaria
         )}
 
         {/* Main image */}
-        <div className="order-1 lg:order-none">
+        <div className="order-1 -mx-[var(--gutter)] lg:order-none lg:mx-0">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={image.src}

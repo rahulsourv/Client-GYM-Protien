@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Plus } from "lucide-react";
 import { useGSAP } from "@/lib/gsap";
 import { setupReveals } from "@/components/motion/reveal";
 import ProductHero from "./ProductHero";
@@ -79,11 +79,12 @@ export default function ProductView({ product: p }) {
 
       {/* ── Full details ──────────────────────────────────────── */}
       <section ref={details} id="details" aria-label="Product details" className="border-t border-line bg-charcoal">
-        <div className="shell grid gap-10 py-20 md:py-28 lg:grid-cols-12 lg:gap-12">
+        <div className="shell grid gap-6 py-12 md:py-28 lg:grid-cols-12 lg:gap-12">
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
               <p className="eyebrow text-mute">Product details</p>
-              <p className="display mt-4 text-5xl md:text-6xl">{p.name}</p>
+              {/* The name is right above on phones, so only desktop repeats it here. */}
+              <p className="display mt-4 hidden text-5xl md:text-6xl lg:block">{p.name}</p>
               <nav aria-label="On this page" className="mt-8 hidden lg:block">
                 <ol className="flex flex-col border-t border-line">
                   {sections.map((s, i) => {
@@ -114,8 +115,8 @@ export default function ProductView({ product: p }) {
             </div>
           </aside>
 
-          <div className="flex flex-col gap-16 lg:col-span-8">
-            <Block id="overview" title="Overview">
+          <div className="flex flex-col border-t border-line lg:col-span-8 lg:gap-16 lg:border-t-0">
+            <Block id="overview" title="Overview" defaultOpen>
               <div className="flex max-w-2xl flex-col gap-4 text-[1.02rem] leading-relaxed text-soft/85">
                 {p.description.length ? p.description.map((d, k) => <p key={k}>{d}</p>) : <p>A description for this product hasn’t been published yet.</p>}
                 {isPlaceholder("description") && <Placeholder className="self-start">Draft description</Placeholder>}
@@ -168,7 +169,7 @@ export default function ProductView({ product: p }) {
                   The full nutrition panel and ingredient list haven’t been published for this listing yet. Please refer to the label on the product.
                 </p>
               )}
-              {!p.nutrition && <Placeholder className="mt-4">Owner to add label data</Placeholder>}
+              {!p.nutrition && !p.labelStats?.length && <Placeholder className="mt-4">Owner to add label data</Placeholder>}
             </Block>
 
             <Block id="usage" title="How to use">
@@ -250,14 +251,30 @@ function ScrollSpy({ ids, onChange }) {
   return null;
 }
 
-function Block({ id, title, children }) {
+/**
+ * A details block. On phones it is a tap-to-open row so the page stays short;
+ * from desktop width it is always open (the header button does nothing there).
+ */
+function Block({ id, title, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <div id={id} data-reveal="fade" className="scroll-mt-28">
-      <h2 className="eyebrow mb-6 flex items-center gap-3 text-warm">
-        <span aria-hidden className="h-px w-6 bg-lime" />
-        {title}
+    <div id={id} data-reveal="fade" className="scroll-mt-28 border-b border-line lg:border-b-0">
+      <h2 className="eyebrow text-warm">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-controls={`${id}-panel`}
+          className="flex min-h-14 w-full items-center gap-3 text-left lg:pointer-events-none lg:mb-6 lg:min-h-0"
+        >
+          <span aria-hidden className="h-px w-6 bg-lime" />
+          <span className="flex-1">{title}</span>
+          <Plus aria-hidden className={`size-4 text-mute transition-transform duration-300 lg:hidden ${open ? "rotate-45" : ""}`} />
+        </button>
       </h2>
-      {children}
+      <div id={`${id}-panel`} className={`${open ? "block pb-8" : "hidden"} lg:block lg:pb-0`}>
+        {children}
+      </div>
     </div>
   );
 }
