@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useShop } from "@/store/shop";
 import { useAccount } from "@/store/account";
+import { api } from "@/lib/api";
 import { useNavCategories } from "@/lib/navCategories";
 import { store } from "@/data/catalog";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
@@ -19,7 +20,13 @@ export default function MobileMenu() {
   const router = useRouter();
   const categories = useNavCategories();
 
-  function logout() {
+  async function logout() {
+    // Clears the httpOnly session cookie; a local-only sign-out would come back on reload.
+    try {
+      await api("/auth/logout", { method: "POST" });
+    } catch {
+      /* still sign out locally */
+    }
     updateSession(null);
     setMenuOpen(false);
     router.push("/login");
