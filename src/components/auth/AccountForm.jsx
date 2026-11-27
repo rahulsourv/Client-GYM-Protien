@@ -32,7 +32,12 @@ export default function AccountForm({ profile = false }) {
         const { accessToken } = await api("/auth/login", { method: "POST", body: form });
         if (!accessToken) throw new Error("The API did not return an access token.");
         const account = await api("/auth/me", { token: accessToken });
-        updateSession({ token: accessToken, user: account.user ?? account });
+        const user = account.user ?? account;
+        const accountType = ["ADMIN", "SUPER_ADMIN"].includes(user.role) ? "ADMIN" : user.role;
+        if (accountType !== form.accountType) {
+          throw new Error("Select the account type that matches your account.");
+        }
+        updateSession({ token: accessToken, user });
       } else {
         const changePassword = action === "change-password";
         await api(`/auth/${action}`, {
@@ -58,8 +63,8 @@ export default function AccountForm({ profile = false }) {
     submit(action, Object.fromEntries(new FormData(event.currentTarget)));
   }
 
-  const title = profile ? "Admin profile" : "Admin login";
-  const canAddProduct = ["ADMIN", "SUPER_ADMIN"].includes(session?.user.role);
+  const isAdmin = ["ADMIN", "SUPER_ADMIN"].includes(session?.user.role);
+  const title = profile ? (isAdmin ? "Admin profile" : "Profile") : "Login";
 
   return (
     <>
@@ -76,7 +81,7 @@ export default function AccountForm({ profile = false }) {
             <>
               {session.user.name && <h2 className="display text-3xl">{session.user.name}</h2>}
               <p>Signed in as {session.user.email}</p>
-              {canAddProduct && (
+              {isAdmin && (
                 <div className="flex flex-wrap gap-4">
                   <a href="#qr" className="underline underline-offset-4 hover:text-lime">Category QR codes</a>
                   <a href="#edit-catalog" className="underline underline-offset-4 hover:text-lime">Edit products &amp; categories</a>
@@ -102,6 +107,14 @@ export default function AccountForm({ profile = false }) {
           ) : (
             <form method="post" className="space-y-4" onSubmit={(event) => submitForm("login", event)}>
               <label className="block">
+                Sign in as
+                <select name="accountType" defaultValue="" className={inputStyle} required>
+                  <option value="" disabled>Select account type</option>
+                  <option value="CUSTOMER">Customer</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </label>
+              <label className="block">
                 Email
                 <input name="email" type="email" autoComplete="username" className={inputStyle} required />
               </label>
@@ -113,7 +126,7 @@ export default function AccountForm({ profile = false }) {
             </form>
           )}
         </div>
-        {profile && canAddProduct && <AddProductForm token={session.token} />}
+        {profile && isAdmin && <AddProductForm token={session.token} />}
       </section>
     </>
   );

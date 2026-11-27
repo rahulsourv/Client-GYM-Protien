@@ -1,7 +1,7 @@
 import AccountForm from "@/components/auth/AccountForm";
 
 export const metadata = {
-  title: "Admin Profile",
+  title: "Profile",
   robots: { index: false },
 };
 
