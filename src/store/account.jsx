@@ -16,7 +16,6 @@ export function AccountProvider({ children }) {
     async function restoreSession() {
       try {
         const token = sessionStorage.getItem(storageKey);
-        if (!token) return;
         const account = await api("/auth/me", { token, signal: controller.signal });
         if (!controller.signal.aborted) setSession({ token, user: account.user ?? account });
       } catch (error) {
@@ -34,7 +33,7 @@ export function AccountProvider({ children }) {
 
   const updateSession = useCallback((value) => {
     try {
-      if (value) sessionStorage.setItem(storageKey, value.token);
+      if (value?.token) sessionStorage.setItem(storageKey, value.token);
       else sessionStorage.removeItem(storageKey);
     } catch {
       // The active page can still use the in-memory session.

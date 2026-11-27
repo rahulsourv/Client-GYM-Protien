@@ -33,7 +33,7 @@ export default function AddProductForm({ token }) {
     const controller = new AbortController();
     fetch(imageUploadPath, {
       cache: "no-store",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       signal: controller.signal,
     })
       .then(async (response) => {
@@ -128,7 +128,7 @@ export default function AddProductForm({ token }) {
         setUploadProgress(`Uploading image ${index + 1} of ${files.length}…`);
         const response = await fetch(imageUploadPath, {
           method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           body: files[index],
         });
         const payload = await response.json().catch(() => null);

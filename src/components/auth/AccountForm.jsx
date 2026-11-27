@@ -30,16 +30,8 @@ export default function AccountForm({ profile = false, signup = false }) {
 
     try {
       if (action === "login" || action === "register") {
-        const { accessToken } = await api(`/auth/${action}`, { method: "POST", body: form });
-        if (!accessToken) throw new Error("The API did not return an access token.");
-        const account = await api("/auth/me", { token: accessToken });
-        const user = account.user ?? account;
-        const accountType = ["ADMIN", "SUPER_ADMIN"].includes(user.role) ? "ADMIN" : user.role;
-        const expectedType = action === "register" ? "CUSTOMER" : form.accountType;
-        if (accountType !== expectedType) {
-          throw new Error("Select the account type that matches your account.");
-        }
-        updateSession({ token: accessToken, user });
+        const { user } = await api(`/auth/${action}`, { method: "POST", body: form });
+        updateSession({ user });
       } else {
         const changePassword = action === "change-password";
         await api(`/auth/${action}`, {
@@ -48,7 +40,8 @@ export default function AccountForm({ profile = false, signup = false }) {
           body: form,
         });
         updateSession(null);
-        setNotice(changePassword ? "Password changed. Sign in again." : "Signed out of all sessions.");
+        if (action === "logout") router.push("/login");
+        else setNotice(changePassword ? "Password changed. Sign in again." : "Signed out of all sessions.");
       }
     } catch (requestError) {
       if (session && requestError.status === 401 && requestError.code !== "INVALID_CREDENTIALS") {
@@ -62,11 +55,6 @@ export default function AccountForm({ profile = false, signup = false }) {
     } finally {
       setBusy(false);
     }
-  }
-
-  function logout() {
-    updateSession(null);
-    router.push("/login");
   }
 
   function submitForm(action, event) {
@@ -97,7 +85,7 @@ export default function AccountForm({ profile = false, signup = false }) {
                     {session.user.name && <h2 className="display text-3xl">{session.user.name}</h2>}
                     <p className="break-all">Signed in as {session.user.email}</p>
                   </div>
-                  <Button type="button" variant="ghost" disabled={busy} onClick={logout}>
+                  <Button type="button" variant="ghost" disabled={busy} onClick={() => submit("logout")}>
                     Log out
                   </Button>
                 </div>
