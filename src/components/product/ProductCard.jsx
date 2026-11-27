@@ -3,12 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatPrice, getBrand, getCategory, getVariants } from "@/lib/catalog";
-import ProductImage from "./ProductImage";
+import ProductImage, { isPhoto, PHOTO_BG } from "./ProductImage";
 
 export default function ProductCard({ product: p, index, priority = false, sizes }) {
   const variants = getVariants(p);
   const alt = p.images[1];
   const own = p.brand === "hv-nutrition";
+  const photo = own && isPhoto(p.images[0]);
   const brand = p.brandInfo ?? getBrand(p.brand);
   const category = p.categoryInfo ?? getCategory(p.category);
 
@@ -17,7 +18,19 @@ export default function ProductCard({ product: p, index, priority = false, sizes
       <div className="relative">
         <Link href={`/products/${p.slug}`} className="block" aria-label={`${brand?.name} ${p.name}, ${p.flavour ?? ""} ${p.size ?? ""}`}>
           <div className={`relative aspect-[4/5] overflow-hidden ${own ? "bg-graphite" : ""}`}>
-            {own ? (
+            {photo ? (
+              <div className="absolute inset-0" style={{ background: PHOTO_BG }}>
+                <Image
+                  src={p.images[0].src}
+                  unoptimized={p.images[0].unoptimized}
+                  alt={p.images[0].alt}
+                  fill
+                  sizes={sizes ?? "(min-width:1024px) 25vw, 50vw"}
+                  priority={priority}
+                  className="object-contain transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover/card:scale-[1.04]"
+                />
+              </div>
+            ) : own ? (
               <div className="absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_40%,#2b2b2b_0%,#111_70%)]">
                 <Image
                   src={p.images[0].src}
@@ -48,7 +61,7 @@ export default function ProductCard({ product: p, index, priority = false, sizes
               </>
             )}
             {index != null && (
-              <span className={`absolute left-3 top-3 font-mono text-[0.65rem] ${own ? "text-mute" : "text-obsidian/50"}`}>
+              <span className={`absolute left-3 top-3 font-mono text-[0.65rem] ${own && !photo ? "text-mute" : "text-obsidian/50"}`}>
                 {String(index + 1).padStart(2, "0")}
               </span>
             )}

@@ -9,6 +9,7 @@ import { useAccount } from "@/store/account";
 import { useNavCategories } from "@/lib/navCategories";
 import { store } from "@/data/catalog";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -82,15 +83,21 @@ export default function MobileMenu() {
                 </li>
               ))}
             </ul>
-            {session && (
-              <button
-                type="button"
-                onClick={logout}
-                className="mt-6 border border-line px-4 py-2.5 font-mono text-xs uppercase tracking-widest text-warm active:border-lime active:text-lime"
-              >
-                Log out
-              </button>
-            )}
+            <div className="mt-6 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-1 font-mono text-xs uppercase tracking-widest text-mute">
+                Theme
+                <ThemeToggle />
+              </div>
+              {session && (
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="h-11 border border-line px-4 font-mono text-xs uppercase tracking-widest text-warm active:border-lime active:text-lime"
+                >
+                  Log out
+                </button>
+              )}
+            </div>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

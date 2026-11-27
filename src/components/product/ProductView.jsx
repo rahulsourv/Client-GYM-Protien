@@ -6,10 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useGSAP } from "@/lib/gsap";
 import { setupReveals } from "@/components/motion/reveal";
-import ProductCover from "./ProductCover";
-import FssaiBadge from "@/components/ui/FssaiBadge";
-import VariantPicker from "./VariantPicker";
-import { LinkButton } from "@/components/ui/Button";
+import ProductHero from "./ProductHero";
 import Placeholder from "@/components/ui/Placeholder";
 import { formatPrice, getBrand, getCategory, getVariants, availabilityLabel } from "@/lib/catalog";
 import { store } from "@/data/catalog";
@@ -22,10 +19,8 @@ export default function ProductView({ product: p }) {
   const router = useRouter();
   const [barVisible, setBarVisible] = useState(false);
   const buyRef = useRef(null);
-  const band = useRef(null);
   const [active, setActive] = useState("overview");
   const details = useRef(null);
-  useGSAP(() => setupReveals(), { scope: band });
   useGSAP(() => setupReveals(), { scope: details });
   const brand = p.brandInfo ?? getBrand(p.brand);
   const category = p.categoryInfo ?? getCategory(p.category);
@@ -72,44 +67,15 @@ export default function ProductView({ product: p }) {
   return (
     <>
       <ScrollSpy ids={sections.map((s) => s.id)} onChange={setActive} />
-      {/* ── Cover ─────────────────────────────────────────────── */}
-      <ProductCover key={p.id} product={p} brand={brand} category={category} />
-
-      {/* ── Choose · Availability · Buy ───────────────────────── */}
-      <div ref={band} className="shell grid gap-px pb-20 pt-10 md:pt-14 lg:grid-cols-12 lg:gap-10">
-        <BandCol n="01" label="Choose" className="lg:col-span-4">
-          <VariantPicker product={p} onSelect={(v) => router.replace(`/products/${v.slug}`, { scroll: false })} />
-        </BandCol>
-
-        <BandCol n="02" label="Availability" className="lg:col-span-3">
-          <div className="flex items-center gap-2 text-sm">
-            <span className={`size-2 rounded-full ${p.availability === "in_stock" ? "bg-lime" : p.availability === "out_of_stock" ? "bg-red-500" : "bg-mute"}`} aria-hidden />
-            <span className="text-soft/80">{availabilityLabel[p.availability]}</span>
-          </div>
-          {isPlaceholder("availability") && <Placeholder className="mt-3">Not yet listed in store</Placeholder>}
-          <a href="#details" className="eyebrow mt-6 inline-block text-mute underline decoration-line underline-offset-4 hover:text-warm">
-            Full product details ↓
-          </a>
-        </BandCol>
-
-        <BandCol n="03" label="How to buy" className="lg:col-span-5">
-          <div ref={buyRef}>
-            <p className="text-sm leading-relaxed text-soft/80">
-              We don’t sell online. Call or email us to order this product, or pick it up at our {store.city} store.
-            </p>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-              <LinkButton href={store.phoneHref} arrow={false} className="sm:flex-1">
-                <span className="flex items-center gap-2"><Phone className="size-4" aria-hidden /> Call to order</span>
-              </LinkButton>
-              <LinkButton href={enquiry} variant="ghost" arrow={false} className="sm:flex-1">
-                <span className="flex items-center gap-2"><Mail className="size-4" aria-hidden /> Email enquiry</span>
-              </LinkButton>
-            </div>
-            <p className="mt-4 font-mono text-xs text-mute">{store.phone}</p>
-            <FssaiBadge compact className="mt-5" />
-          </div>
-        </BandCol>
-      </div>
+      {/* ── Gallery · details · order ─────────────────────── */}
+      <ProductHero
+        key={p.id}
+        product={p}
+        brand={brand}
+        category={category}
+        buyRef={buyRef}
+        onSelectVariant={(v) => router.replace(`/products/${v.slug}`, { scroll: false })}
+      />
 
       {/* ── Full details ──────────────────────────────────────── */}
       <section ref={details} id="details" aria-label="Product details" className="border-t border-line bg-charcoal">
@@ -234,7 +200,7 @@ export default function ProductView({ product: p }) {
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-x-0 bottom-0 z-50 flex items-center gap-3 border-t border-line bg-obsidian/95 px-4 py-3 backdrop-blur lg:hidden"
+            className="fixed inset-x-0 bottom-0 z-50 flex items-center gap-3 border-t border-line bg-obsidian/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur lg:hidden"
           >
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm">{p.name}</p>
@@ -282,19 +248,6 @@ function ScrollSpy({ ids, onChange }) {
     };
   }, [key, onChange]);
   return null;
-}
-
-function BandCol({ n, label, className = "", children }) {
-  return (
-    <div data-reveal="fade" className={`relative pt-6 pb-8 lg:pb-0 ${className}`}>
-      <span data-reveal="rule" aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
-      <p className="eyebrow mb-5 flex gap-3 text-mute">
-        <span className="text-lime">{n}</span>
-        {label}
-      </p>
-      {children}
-    </div>
-  );
 }
 
 function Block({ id, title, children }) {

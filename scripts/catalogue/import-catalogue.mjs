@@ -60,7 +60,9 @@ function productFields(p) {
     ...(p.price != null && { price: p.price }),
     ...(p.servings && { servingsPerContainer: p.servings }),
     ...(p.servingSize && { servingSize: p.servingSize }),
-    ...(p.shortDescription && { shortDescription: p.shortDescription, description: p.shortDescription }),
+    ...(p.shortDescription && { shortDescription: p.shortDescription }),
+    ...((p.description || p.shortDescription) && { description: p.description || p.shortDescription }),
+    ...(p.usage && { usageInstructions: p.usage }),
     ...(p.benefits && { benefits: p.benefits }),
     ...(p.nutritionFacts && { nutritionFacts: p.nutritionFacts.map(([name, amount, unit]) => ({ name, amount, unit })) }),
   };
@@ -159,6 +161,7 @@ console.log("Signed in.");
 
 // Images: upload each file once (keyed by its content) and remember the URL.
 const imageUrls = {};
+const previousUploads = new Set();
 if (imagesBase) {
   for (const p of products) imageUrls[p.image] = new URL(p.image, imagesBase.endsWith("/") ? imagesBase : `${imagesBase}/`).href;
 } else {
@@ -168,11 +171,14 @@ if (imagesBase) {
     console.log("  Set Cloudinary on the backend and re-run, or pass --images-base=<public URL of public/assets/products/>.");
   } else {
     const cache = JSON.parse(await readFile(imageCacheFile, "utf8").catch(() => "{}"));
+    // Everything this script ever uploaded counts as ours, so older versions get replaced.
+    for (const url of Object.values(cache)) previousUploads.add(url);
     for (const file of new Set(products.map((p) => p.image))) {
       const bytes = await readFile(join(imagesDir, file));
       const key = `${file}#${createHash("sha1").update(bytes).digest("hex").slice(0, 12)}`;
       if (!cache[key]) {
-        const { url } = await call("POST", "/admin/product-images", { raw: bytes, contentType: "image/png" });
+        const contentType = /\.jpe?g$/i.test(file) ? "image/jpeg" : /\.webp$/i.test(file) ? "image/webp" : "image/png";
+        const { url } = await call("POST", "/admin/product-images", { raw: bytes, contentType });
         cache[key] = url;
         await writeFile(imageCacheFile, JSON.stringify(cache, null, 2));
         console.log(`  uploaded ${file}`);
@@ -202,7 +208,7 @@ for (const c of catalogue.categories) {
 // Products.
 const all = await listAll("products");
 const existing = new Map(all.map((product) => [product.sku, product]));
-const ourImages = new Set(Object.values(imageUrls));
+const ourImages = new Set([...previousUploads, ...Object.values(imageUrls)]);
 const summary = { created: 0, updated: 0, deactivated: 0, failed: 0 };
 for (const [index, p] of products.entries()) {
   const label = `[${index + 1}/${products.length}] ${p.sku}`;

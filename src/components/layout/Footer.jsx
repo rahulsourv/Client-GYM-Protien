@@ -61,7 +61,7 @@ function FooterCol({ title, className = "", children }) {
   return (
     <nav aria-label={title} className={className}>
       <p className="eyebrow mb-5 text-mute">{title}</p>
-      <ul className="flex flex-col gap-2.5">{children}</ul>
+      <ul className="flex flex-col gap-0.5 md:gap-2.5">{children}</ul>
     </nav>
   );
 }
@@ -69,7 +69,7 @@ function FooterCol({ title, className = "", children }) {
 function FooterLink({ href, children }) {
   return (
     <li>
-      <Link href={href} className="text-sm text-warm transition-colors hover:text-lime">
+      <Link href={href} className="inline-block py-2 text-sm text-warm transition-colors hover:text-lime md:py-0">
         {children}
       </Link>
     </li>

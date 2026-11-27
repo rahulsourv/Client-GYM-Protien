@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AddProductForm from "@/components/auth/AddProductForm";
+import AuthScreen from "@/components/auth/AuthScreen";
 import CreateAdminForm from "@/components/auth/CreateAdminForm";
 import PageHeader from "@/components/layout/PageHeader";
 import { Button, LinkButton } from "@/components/ui/Button";
@@ -20,7 +21,10 @@ export default function AccountForm({ profile = false, signup = false }) {
 
   useEffect(() => {
     if (session && !profile) router.replace("/profile");
-  }, [profile, router, session]);
+    // Signed-out visitors to /profile go straight to the sign-in screen.
+    // (Not while a "Password changed" style notice is showing.)
+    if (!session && profile && !checkingSession && !notice) router.replace("/login");
+  }, [checkingSession, notice, profile, router, session]);
 
   async function submit(action, form) {
     if (busy) return;
@@ -64,11 +68,16 @@ export default function AccountForm({ profile = false, signup = false }) {
 
   const isAdmin = ["ADMIN", "SUPER_ADMIN"].includes(session?.user.role);
   const canCreateAdmin = session?.user.role === "SUPER_ADMIN";
-  const title = profile ? (isAdmin ? "Admin profile" : "Profile") : signup ? "Customer signup" : "Login";
+  const title = isAdmin ? "Admin profile" : "Profile";
+
+  if (!profile) {
+    // Signed-in visitors are redirected to /profile by the effect above.
+    return <AuthScreen signup={signup} busy={busy} error={error} notice={notice} checking={checkingSession || !!session} onSubmit={submit} />;
+  }
 
   return (
     <>
-      <PageHeader lines={[title]} crumbs={[{ label: profile ? "Profile" : signup ? "Sign up" : "Login" }]} />
+      <PageHeader lines={[title]} crumbs={[{ label: "Profile" }]} />
       <section className="shell grid items-start gap-8 pb-24 lg:grid-cols-2">
         <div className="space-y-8">
           <div className="max-w-lg space-y-5 border border-line p-6">
@@ -76,8 +85,6 @@ export default function AccountForm({ profile = false, signup = false }) {
             {notice && <p role="status">{notice}</p>}
             {checkingSession ? (
               <p role="status">Checking your session…</p>
-            ) : !profile && session ? (
-              <LinkButton href="/profile">Open profile</LinkButton>
             ) : session ? (
               <>
                 <div className="flex flex-wrap items-start justify-between gap-4">
@@ -111,55 +118,13 @@ export default function AccountForm({ profile = false, signup = false }) {
                   Sign out of all sessions
                 </Button>
               </>
-            ) : profile ? (
-              <LinkButton href="/login">Sign in</LinkButton>
             ) : (
-              <form method="post" className="space-y-4" onSubmit={(event) => submitForm(signup ? "register" : "login", event)}>
-                {signup ? (
-                  <label className="block">
-                    Full name
-                    <input name="name" autoComplete="name" className={inputStyle} maxLength={120} required />
-                  </label>
-                ) : (
-                  <label className="block">
-                    Sign in as
-                    <select name="accountType" defaultValue="" className={inputStyle} required>
-                      <option value="" disabled>Select account type</option>
-                      <option value="CUSTOMER">Customer</option>
-                      <option value="ADMIN">Admin</option>
-                    </select>
-                  </label>
-                )}
-                <label className="block">
-                  Email
-                  <input name="email" type="email" autoComplete="username" className={inputStyle} required />
-                </label>
-                <label className="block">
-                  Password
-                  <input
-                    name="password"
-                    type="password"
-                    autoComplete={signup ? "new-password" : "current-password"}
-                    className={inputStyle}
-                    minLength={signup ? 12 : undefined}
-                    maxLength={72}
-                    aria-describedby={signup ? "signup-password-hint" : undefined}
-                    required
-                  />
-                </label>
-                {signup && <p id="signup-password-hint" className="text-sm">Use at least 12 characters.</p>}
-                <Button disabled={busy}>{signup ? (busy ? "Creating account…" : "Create account") : (busy ? "Signing in…" : "Sign in")}</Button>
-                <div>
-                  <LinkButton href={signup ? "/login" : "/signup"} variant="ghost">
-                    {signup ? "Already have an account? Sign in" : "Create a customer account"}
-                  </LinkButton>
-                </div>
-              </form>
+              <LinkButton href="/login">Sign in</LinkButton>
             )}
           </div>
-          {profile && canCreateAdmin && <CreateAdminForm token={session.token} />}
+          {canCreateAdmin && <CreateAdminForm token={session.token} />}
         </div>
-        {profile && isAdmin && <AddProductForm token={session.token} />}
+        {isAdmin && <AddProductForm token={session.token} />}
       </section>
     </>
   );

@@ -129,7 +129,7 @@ export default function Header() {
           <Link
             href="/contact"
             aria-current={under("/contact") ? "page" : undefined}
-            className="hidden h-10 items-center border border-line px-3 font-mono text-[0.8rem] font-medium uppercase tracking-[0.08em] text-warm transition-colors hover:border-lime hover:text-lime aria-[current=page]:text-lime sm:flex lg:hidden"
+            className="hidden h-10 items-center border border-line px-3 font-mono text-[0.8rem] font-medium uppercase tracking-[0.08em] text-warm transition-colors hover:border-lime hover:text-lime aria-[current=page]:text-lime min-[900px]:flex lg:hidden"
           >
             Contact
           </Link>
@@ -151,14 +151,23 @@ export default function Header() {
             <span className="hidden font-mono text-[0.9rem] uppercase tracking-[0.08em] md:inline">Search</span>
             <kbd className="hidden border border-line px-1.5 py-0.5 font-mono text-[0.7rem] text-mute xl:inline">/</kbd>
           </button>
-          <ThemeToggle />
+          <ThemeToggle className="max-sm:hidden" />
+          <Link
+            href={accountHref}
+            aria-label={accountLabel}
+            aria-current={under(accountHref) ? "page" : undefined}
+            className="flex size-11 shrink-0 items-center justify-center gap-2 border border-line font-mono text-[0.8rem] font-medium uppercase tracking-[0.08em] text-warm transition-colors hover:border-lime hover:text-lime aria-[current=page]:text-lime sm:h-10 sm:w-auto sm:px-3"
+          >
+            <AccountIcon className="size-4 sm:hidden" aria-hidden />
+            <span className="hidden sm:inline">{accountLabel}</span>
+          </Link>
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className="ml-1 flex h-11 items-center gap-2.5 pl-2 text-warm lg:hidden"
+            className="flex h-11 items-center gap-2.5 pl-2 text-warm lg:hidden"
           >
             <span aria-hidden className="hidden font-mono text-[0.85rem] font-medium uppercase tracking-[0.08em] xs:inline">
               {menuOpen ? "Close" : "Menu"}
@@ -168,15 +177,6 @@ export default function Header() {
               <span className={`h-0.5 w-6 bg-warm transition-transform duration-500 ${menuOpen ? "-translate-y-[4px] -rotate-45" : ""}`} />
             </span>
           </button>
-          <Link
-            href={accountHref}
-            aria-label={accountLabel}
-            aria-current={under(accountHref) ? "page" : undefined}
-            className="ml-1 flex h-10 shrink-0 items-center justify-center gap-2 border border-line px-2 font-mono text-[0.8rem] font-medium uppercase tracking-[0.08em] text-warm transition-colors hover:border-lime hover:text-lime aria-[current=page]:text-lime sm:px-3"
-          >
-            <AccountIcon className="size-4 sm:hidden" aria-hidden />
-            <span className="hidden sm:inline">{accountLabel}</span>
-          </Link>
         </div>
       </nav>
 

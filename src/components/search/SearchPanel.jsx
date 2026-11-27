@@ -29,10 +29,12 @@ export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
           autoFocus={autoFocus}
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search whey protein"
+          placeholder="Search products"
+          type="search"
+          enterKeyHint="search"
           autoComplete="off"
           spellCheck={false}
-          className="display min-w-0 flex-1 bg-transparent text-5xl text-warm outline-none placeholder:text-graphite md:text-7xl"
+          className="display min-w-0 flex-1 bg-transparent text-4xl text-warm outline-none placeholder:text-graphite sm:text-5xl md:text-7xl [&::-webkit-search-cancel-button]:hidden"
           aria-controls="search-results"
         />
         {q && (

@@ -76,7 +76,9 @@ export const getPublicCatalog = cache(async () => {
         availability: "unconfirmed",
         placeholderFields: [],
         images: images.length ? images : [{ src: "/brand/logo-hv.png", alt: "", width: 480, height: 480 }],
-        description: [record.description || record.shortDescription].filter(Boolean),
+        // Short line beside the photo; the full description (one paragraph per blank line) under Overview.
+        summary: record.shortDescription || undefined,
+        description: (record.description || record.shortDescription || "").split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean),
         features: record.benefits ?? [],
         labelStats: record.nutritionFacts?.map(({ name, amount, unit }) => ({ label: name, value: amount, unit })),
         usage: record.usageInstructions,

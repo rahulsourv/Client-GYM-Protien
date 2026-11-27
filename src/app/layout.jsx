@@ -36,6 +36,8 @@ export const metadata = {
 export const viewport = {
   themeColor: "#090909",
   colorScheme: "dark",
+  // Lets fixed bottom bars pad for the iPhone home indicator (env(safe-area-inset-bottom)).
+  viewportFit: "cover",
 };
 
 // Decides before first paint whether the once-per-session intro plays.
