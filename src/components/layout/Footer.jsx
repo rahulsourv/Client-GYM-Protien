@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { brands, categories } from "@/lib/catalog";
+import { brands } from "@/lib/catalog";
+import FooterCategories from "@/components/layout/FooterCategories";
 import { store } from "@/data/catalog";
 import Wordmark from "@/components/ui/Wordmark";
 import FssaiBadge from "@/components/ui/FssaiBadge";
@@ -31,9 +32,7 @@ export default function Footer() {
         </div>
         <FooterCol title="Shop" className="md:col-span-4 lg:col-span-3">
           <FooterLink href="/shop">All products</FooterLink>
-          {categories.map((c) => (
-            <FooterLink key={c.slug} href={`/collections/${c.slug}`}>{c.name}</FooterLink>
-          ))}
+          <FooterCategories />
         </FooterCol>
         <FooterCol title="Brands" className="md:col-span-4 lg:col-span-2">
           {brands.map((b) => (

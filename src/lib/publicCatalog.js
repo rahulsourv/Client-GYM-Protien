@@ -3,12 +3,29 @@ import { connection } from "next/server";
 import { backendUrl } from "@/lib/backendUrl";
 import { brands, categories, products } from "@/lib/catalog";
 
-export const getPublicCatalog = cache(async () => {
-  await connection();
+// The backend rate-limits per IP (100 requests / 15 min), and every page view needs
+// the catalog, so reuse a recent copy and fall back to the last good one on errors.
+const FRESH_MS = 60_000;
+let lastGood = null; // { at, data }
+
+async function fetchCatalogData() {
+  if (lastGood && Date.now() - lastGood.at < FRESH_MS) return lastGood.data;
   try {
     const response = await fetch(backendUrl("/catalog"), { cache: "no-store", signal: AbortSignal.timeout(5000) });
     if (!response.ok) throw new Error(`Catalog API returned ${response.status}`);
     const { data } = await response.json();
+    lastGood = { at: Date.now(), data };
+    return data;
+  } catch (error) {
+    if (lastGood) return lastGood.data;
+    throw error;
+  }
+}
+
+export const getPublicCatalog = cache(async () => {
+  await connection();
+  try {
+    const data = await fetchCatalogData();
     const categoryList = new Map(categories.map((category) => [category.slug, category]));
     const categoryById = new Map();
     const categoryByName = new Map();
@@ -38,10 +55,15 @@ export const getPublicCatalog = cache(async () => {
       const images = [...new Set(record.imageUrls ?? [])].map((src) => ({
         src, alt: record.name, width: 800, height: 800, unoptimized: true,
       }));
+      // Sizes of the same named product and flavour form one family ("BCAA Lemon" in 100 g and 300 g).
+      const name = withoutSize(record.name, record.weight, record.weightUnit);
+      const family = ["live", brandName, name, record.flavour ?? ""].join("|").toLowerCase();
       return {
         id: record._id,
         slug: `catalog-${record._id}`,
-        name: record.name,
+        family,
+        grams: record.weight * (record.weightUnit === "kg" ? 1000 : 1),
+        name,
         fullName: record.name,
         brand: brandInfo.slug,
         brandInfo,
@@ -61,12 +83,31 @@ export const getPublicCatalog = cache(async () => {
         sku: record.sku,
       };
     });
+    // Each variant carries its siblings (smallest size first) for the size toggle.
+    const families = Map.groupBy(live, (product) => product.family);
+    for (const product of live) {
+      product.variants = families
+        .get(product.family)
+        .map(({ id, slug, flavour, size, servings, price, grams }) => ({ id, slug, flavour, size, servings, price, grams }))
+        .sort((a, b) => a.grams - b.grams);
+    }
+    // Listings show one card per family: its smallest size.
+    const listed = [...families.values()].map((group) => group.reduce((a, b) => (b.grams < a.grams ? b : a)));
+
     return {
       categories: [...categoryList.values()],
-      products: [...live, ...products],
+      products: [...listed, ...products],
+      allProducts: [...live, ...products],
     };
   } catch (error) {
     console.error("Unable to load the public catalog", error.message);
-    return { categories, products, unavailable: true };
+    return { categories, products, allProducts: products, unavailable: true };
   }
 });
+
+/** "BCAA 100g Lemon" → "BCAA Lemon": the size is shown and toggled separately. */
+function withoutSize(name, weight, unit) {
+  const amount = String(weight).replace(".", "\\.");
+  const stripped = name.replace(new RegExp(`\\s*\\b${amount}\\s*${unit}\\b`, "i"), "").replace(/\s{2,}/g, " ").trim();
+  return stripped || name;
+}

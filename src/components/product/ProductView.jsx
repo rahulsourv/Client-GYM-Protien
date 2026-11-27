@@ -56,7 +56,7 @@ export default function ProductView({ product: p }) {
     ["Price", `${brand.own && p.price != null ? "From " : ""}${formatPrice(p.price)}${isPlaceholder("price") ? " (to be confirmed)" : ""}`],
     ["Listed MRP", p.listedMrp && formatPrice(p.listedMrp)],
     ["Availability", availabilityLabel[p.availability]],
-    ["Other options", variants.length > 1 && `${variants.length} flavours / sizes`],
+    ["Other options", variants.length > 1 && `${variants.length} ${new Set(variants.map((v) => v.flavour)).size > 1 ? "flavours / sizes" : "sizes"}`],
     ["Listed as", p.fullName !== p.name && p.fullName],
   ].filter(([, v]) => v);
 

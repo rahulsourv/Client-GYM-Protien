@@ -8,13 +8,10 @@ import { useAccount } from "@/store/account";
 import Wordmark from "@/components/ui/Wordmark";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useShop } from "@/store/shop";
-import { categories } from "@/lib/catalog";
-
-const categoryPaths = categories.map((c) => `/collections/${c.slug}`);
 
 // `match` lists the other routes that should light up the link as the current section.
 const links = [
-  { href: "/categories", label: "Categories", match: categoryPaths },
+  { href: "/categories", label: "Categories", match: ["/collections"] },
   { href: "/shop", label: "Products", match: ["/products"] },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

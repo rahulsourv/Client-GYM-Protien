@@ -34,7 +34,7 @@ export default function ProductPage({ params }) {
 async function ProductContent({ params }) {
   const { slug } = await params;
   const catalog = slug.startsWith("catalog-") ? await getPublicCatalog() : null;
-  const p = catalog ? catalog.products.find((product) => product.slug === slug) : getProduct(slug);
+  const p = catalog ? catalog.allProducts.find((product) => product.slug === slug) : getProduct(slug);
   if (!p && catalog?.unavailable) return <p className="shell pb-24 pt-32" role="status">The live catalog is temporarily unavailable.</p>;
   if (!p) notFound();
   const brand = p.brandInfo ?? getBrand(p.brand);
@@ -65,7 +65,7 @@ async function ProductContent({ params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <ProductView product={p} />
       <RelatedProducts products={catalog
-        ? catalog.products.filter((product) => product.id !== p.id && product.category === p.category).slice(0, 4)
+        ? catalog.products.filter((product) => product.family !== p.family && product.category === p.category).slice(0, 4)
         : related(p)} />
     </>
   );

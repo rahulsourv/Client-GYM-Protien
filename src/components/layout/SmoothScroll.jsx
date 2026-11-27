@@ -29,6 +29,28 @@ export default function SmoothScroll() {
     };
   }, []);
 
+  // Sections that stream in after load (e.g. the live catalog) push pinned
+  // sections like the shaker further down. Re-measure whenever the page height
+  // changes, otherwise their pins fire at stale positions and show a blank screen.
+  useEffect(() => {
+    let lastHeight = document.body.scrollHeight;
+    let timer;
+    const observer = new ResizeObserver(() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const height = document.body.scrollHeight;
+        if (height === lastHeight) return;
+        ScrollTrigger.refresh();
+        lastHeight = document.body.scrollHeight;
+      }, 150);
+    });
+    observer.observe(document.body);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, []);
+
   // New route → start at the top and let triggers re-measure.
   useEffect(() => {
     const lenis = getLenis();

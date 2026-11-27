@@ -27,24 +27,38 @@ function toLines(name) {
   return best;
 }
 
-/** Both title lines stacked at the top of the cover, behind the packshot. */
+function TitleLine({ line, index, className = "" }) {
+  return (
+    <span data-line={index % 2 ? "right" : "left"} className={`block overflow-hidden whitespace-nowrap px-[0.04em] pb-[0.04em] ${className}`}>
+      {[...line].map((c, ci) => (
+        <span key={ci} data-char className={`inline-block ${index === 0 ? "text-warm" : "text-lime"}`}>
+          {c === " " ? " " : c}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/** The product name on phones and tablets: both lines stacked above the packshot. */
 function TitleLayer({ lines, fontSize }) {
   return (
-    <div
-      data-title
-      aria-hidden
-      className="display pointer-events-none absolute inset-x-0 top-3 flex select-none flex-col items-center uppercase leading-[0.82]"
-      style={{ fontSize }}
-    >
-      {lines.map((line, li) => (
-      <span key={li} data-line className="block overflow-hidden whitespace-nowrap px-[0.04em] pb-[0.04em]">
-        {[...line].map((c, ci) => (
-          <span key={ci} data-char className={`inline-block ${li === 0 ? "text-warm" : "text-lime"}`}>
-            {c === " " ? " " : c}
-          </span>
-        ))}
-      </span>
-      ))}
+    <div data-title aria-hidden className="display pointer-events-none absolute inset-0 select-none uppercase leading-[0.82] lg:hidden">
+      <div className="absolute inset-x-0 top-3 flex flex-col items-center" style={{ fontSize }}>
+        {lines.map((line, li) => <TitleLine key={li} line={line} index={li} />)}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The product name on desktop, hugging the packshot: the first line just left of
+ * the lid, the second just right of the shoulder, a little lower.
+ */
+function SideTitle({ lines, fontSize }) {
+  return (
+    <div data-title aria-hidden className="display pointer-events-none absolute inset-0 hidden select-none uppercase leading-[0.82] lg:block" style={{ fontSize }}>
+      <TitleLine line={lines[0]} index={0} className="absolute right-full top-[7%] mr-[0.25em]" />
+      {lines[1] && <TitleLine line={lines[1]} index={1} className="absolute left-full top-[24%] ml-[0.25em]" />}
     </div>
   );
 }
@@ -63,10 +77,11 @@ export default function ProductCover({ product: p, brand, category }) {
   const longest = Math.max(...lines.map((l) => l.length));
   // Condensed display face: ~0.46em per glyph. Keep each line inside ~92vw,
   // and cap by height so the two stacked lines never eat the whole cover.
-  const fontSize = `min(${Math.min(23, 205 / longest).toFixed(2)}vw, 17svh)`;
-  // The packshot starts partway down the second line, so that line sits behind it.
-  // (The house tub's image has empty space above the lid, so it starts higher.)
-  const packTop = `calc(0.75rem + ${fontSize} * ${lines.length > 1 ? (own ? 0.9 : 1.15) : 0.5})`;
+  const fontSize = `min(${Math.min(23, 205 / longest).toFixed(2)}vw, 13svh)`;
+  // Desktop: each line sits beside the pack, so it must fit in roughly a quarter of the width.
+  const sideFontSize = `min(${Math.min(9, 54 / longest).toFixed(2)}vw, 13svh)`;
+  // Below desktop the packshot starts under the stacked title (lines are 0.82em tall).
+  const packTop = `calc(0.75rem + ${fontSize} * ${(lines.length * 0.82 + 0.12).toFixed(2)})`;
 
   useGSAP(
     () => {
@@ -94,9 +109,8 @@ export default function ProductCover({ product: p, brand, category }) {
 
       // Scroll: title lines part ways, packshot rises and settles.
       const st = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
-      const titleLines = q("[data-line]");
-      gsap.to(titleLines[0], { xPercent: -10, ease: "none", scrollTrigger: st });
-      if (titleLines[1]) gsap.to(titleLines[1], { xPercent: 10, ease: "none", scrollTrigger: st });
+      gsap.to(q('[data-line="left"]'), { xPercent: -10, ease: "none", scrollTrigger: st });
+      gsap.to(q('[data-line="right"]'), { xPercent: 10, ease: "none", scrollTrigger: st });
       gsap.to(q("[data-par]"), { yPercent: -12, scale: 0.92, ease: "none", scrollTrigger: st });
       gsap.to(q("[data-meta-col]"), { yPercent: -40, ease: "none", scrollTrigger: st });
 
@@ -166,13 +180,17 @@ export default function ProductCover({ product: p, brand, category }) {
         </h1>
         <TitleLayer lines={lines} fontSize={fontSize} />
 
-        {/* Packshot — in front of the title */}
-        <div className="absolute inset-x-0 bottom-0 flex items-start justify-center pb-[3%] [perspective:1200px]" style={{ top: packTop }}>
+        {/* Packshot */}
+        <div
+          className="absolute inset-x-0 bottom-0 top-[var(--pack-top)] flex items-start justify-center pb-[3%] [perspective:1200px] lg:top-3"
+          style={{ "--pack-top": packTop }}
+        >
           <div
             data-par
             className={`relative ${own ? "h-full" : "h-[88%]"}`}
             style={{ aspectRatio: "3 / 4" }}
           >
+            <SideTitle lines={lines} fontSize={sideFontSize} />
             {own && (
               <div
                 data-meta
@@ -234,7 +252,7 @@ export default function ProductCover({ product: p, brand, category }) {
         </div>
         <div data-meta-col className="absolute inset-y-0 right-[var(--gutter)] hidden flex-col items-end justify-center gap-3 text-right lg:flex">
           <p data-meta className="eyebrow text-mute">{own && p.price != null ? "Cover price — from" : "Cover price"}</p>
-          <p data-meta className="display text-[5.5vw] leading-none tabular-nums">{formatPrice(p.price)}</p>
+          <p data-meta className={`display leading-none tabular-nums ${p.price == null ? "max-w-[18vw] text-[2.6vw]" : "text-[5.5vw]"}`}>{formatPrice(p.price)}</p>
           {p.listedMrp && <p data-meta className="font-mono text-xs text-mute">Listed MRP {formatPrice(p.listedMrp)}</p>}
           {p.placeholderFields.includes("price") && (
             <div data-meta>

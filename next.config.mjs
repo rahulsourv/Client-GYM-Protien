@@ -15,6 +15,7 @@ const nextConfig = {
       "/admin/product-images",
       "/admin/products/:id",
       "/admin/products/:id/deactivate",
+      "/admin/users",
       "/verify/product/:token",
       "/verify/product/:token/scan",
     ].map((path) => ({

@@ -31,6 +31,8 @@ export const collectionSlugs = () => [...brands.map((b) => b.slug), ...categorie
 
 /** Sibling variants (flavour / size) of a product. */
 export function getVariants(product) {
+  // Live catalog products carry their own siblings (see publicCatalog.js).
+  if (product.variants) return product.variants;
   if (!product.family) return [product];
   return products.filter((p) => p.family === product.family);
 }

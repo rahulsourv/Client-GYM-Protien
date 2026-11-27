@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useShop } from "@/store/shop";
 import { useAccount } from "@/store/account";
-import { categories } from "@/lib/catalog";
+import { useNavCategories } from "@/lib/navCategories";
 import { store } from "@/data/catalog";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
 
@@ -13,7 +14,15 @@ const ease = [0.16, 1, 0.3, 1];
 
 export default function MobileMenu() {
   const { menuOpen, setMenuOpen } = useShop();
-  const { session } = useAccount();
+  const { session, updateSession } = useAccount();
+  const router = useRouter();
+  const categories = useNavCategories();
+
+  function logout() {
+    updateSession(null);
+    setMenuOpen(false);
+    router.push("/login");
+  }
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -73,6 +82,15 @@ export default function MobileMenu() {
                 </li>
               ))}
             </ul>
+            {session && (
+              <button
+                type="button"
+                onClick={logout}
+                className="mt-6 border border-line px-4 py-2.5 font-mono text-xs uppercase tracking-widest text-warm active:border-lime active:text-lime"
+              >
+                Log out
+              </button>
+            )}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

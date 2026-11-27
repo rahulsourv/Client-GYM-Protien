@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { brands, categories, byBrand, byCategory, hvWhey, formatPrice } from "@/lib/catalog";
+import { brands, byBrand, hvWhey, formatPrice } from "@/lib/catalog";
+import { useNavCategories } from "@/lib/navCategories";
 import ProductImage from "@/components/product/ProductImage";
 
 const ease = [0.16, 1, 0.3, 1];
 
 export default function MegaMenu({ open, onEnter, onClose }) {
+  const categories = useNavCategories();
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -33,7 +35,7 @@ export default function MegaMenu({ open, onEnter, onClose }) {
           <div className="shell grid grid-cols-12 gap-8 py-10">
             <Col title="Categories" i={0} className="col-span-3">
               {categories.map((c) => (
-                <MenuLink key={c.slug} href={`/collections/${c.slug}`} count={byCategory(c.slug).length}>
+                <MenuLink key={c.slug} href={`/collections/${c.slug}`} count={c.count}>
                   {c.name}
                 </MenuLink>
               ))}

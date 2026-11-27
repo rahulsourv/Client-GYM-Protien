@@ -1,0 +1,184 @@
+{
+  "_readme": "Product catalogue for scripts/catalogue/import-catalogue.mjs: one entry per product photo in public/assets/sample_images. Flavour, size, servings and label facts are as printed on each pack; price null = not set. Categories are provisional. Re-run the import after editing: existing SKUs are updated, not duplicated, and --prune deactivates backend products and categories that are not listed here.",
+  "categories": [
+    { "name": "Whey Protein", "description": "Whey protein powders: isolate, concentrate and hydrolysed blends." },
+    { "name": "Specialty Protein", "description": "Protein isolates from chicken, goat meat, egg white and cow milk." },
+    { "name": "Plant Protein", "description": "Plant-based protein blends." },
+    { "name": "Amino Acids", "description": "BCAA, EAA and glutamine for recovery and endurance." },
+    { "name": "Creatine", "description": "Creatine monohydrate for strength and power." }
+  ],
+  "products": [
+    {
+      "name": "Isolate Whey",
+      "sku": "HV-ISOLATE-WHEY-1KG",
+      "category": "Whey Protein",
+      "flavour": "Double Rich Chocolate",
+      "weight": 1, "weightUnit": "kg", "servings": 33,
+      "image": "isolate-whey.png",
+      "shortDescription": "Pure whey protein isolate.",
+      "benefits": ["Lean muscle", "Faster recovery", "Muscle support", "Better performance"],
+      "nutritionFacts": [["Protein", 25, "g"], ["Carbs", 0, "g"], ["Sugar", 0, "g"]],
+      "price": null
+    },
+    {
+      "name": "Gold Standard 100% Whey",
+      "sku": "HV-GOLD-STANDARD-WHEY-1KG",
+      "category": "Whey Protein",
+      "flavour": "Double Rich Chocolate",
+      "weight": 1, "weightUnit": "kg", "servings": 33,
+      "image": "gold-standard-whey.png",
+      "shortDescription": "Isolate, hydrolysed and concentrate whey blend.",
+      "benefits": ["For muscle building", "Faster recovery", "Immune support", "Better performance"],
+      "nutritionFacts": [["Protein", 25, "g"], ["BCAAs", 5.5, "g"], ["Vitamins & minerals", 3, "g"]],
+      "price": null
+    },
+    {
+      "name": "Performance Whey",
+      "sku": "HV-PERFORMANCE-WHEY-2KG",
+      "category": "Whey Protein",
+      "flavour": "Chocolate Milkshake",
+      "weight": 2, "weightUnit": "kg", "servings": 54,
+      "image": "performance-whey.png",
+      "shortDescription": "Advanced formula, high protein, digestive support.",
+      "nutritionFacts": [["Protein", 24, "g"], ["BCAAs", 5.5, "g"], ["Glutamine", 4, "g"]],
+      "price": null
+    },
+    {
+      "name": "Platinum Whey Protein",
+      "sku": "HV-PLATINUM-WHEY-1KG",
+      "category": "Whey Protein",
+      "flavour": "Unflavoured",
+      "weight": 1, "weightUnit": "kg",
+      "image": "platinum-whey-protein.png",
+      "shortDescription": "Hydrolysed, isolate and concentrate whey. 29.5 g protein per 30 g scoop.",
+      "benefits": ["No creatine added", "No banned substances", "No EAA / BCAA mix", "No amino spiking", "No added sugar"],
+      "nutritionFacts": [["Protein", 29.5, "g"]],
+      "servingSize": "30 g scoop",
+      "price": 9950
+    },
+    {
+      "name": "Pro Enzyme Whey Protein",
+      "sku": "HV-PRO-ENZYME-WHEY-1KG",
+      "category": "Whey Protein",
+      "flavour": "Rich Chocolate",
+      "weight": 1, "weightUnit": "kg",
+      "image": "pro-enzyme-whey-protein.png",
+      "shortDescription": "Premium whey with digestive enzymes.",
+      "benefits": ["Enhanced absorption", "Easy on stomach", "No added sugar", "No banned substance"],
+      "nutritionFacts": [["Protein", 24, "g"], ["BCAA", 5, "g"], ["EAA", 5, "g"], ["Glutamine", 4, "g"]],
+      "price": null
+    },
+    {
+      "name": "Yeast Protein Whey",
+      "sku": "HV-YEAST-PROTEIN-WHEY-1KG",
+      "category": "Whey Protein",
+      "weight": 1, "weightUnit": "kg", "servings": 33,
+      "image": "yeast-protein-whey.png",
+      "shortDescription": "Natural plant and dairy blend protein with added amino support.",
+      "benefits": ["High protein", "Easy digestion", "Complete amino profile", "Immunity support", "Muscle recovery"],
+      "nutritionFacts": [["Protein", 25, "g"]],
+      "price": null
+    },
+    {
+      "name": "Chicken Protein",
+      "sku": "HV-CHICKEN-PROTEIN-1KG",
+      "category": "Specialty Protein",
+      "flavour": "Natural Vanilla",
+      "weight": 1, "weightUnit": "kg", "servings": 33,
+      "image": "chicken-protein.png",
+      "shortDescription": "Pure chicken protein isolate.",
+      "benefits": ["Lean muscle", "Faster recovery", "Muscle support", "Better performance"],
+      "nutritionFacts": [["Protein", 25, "g"], ["Carbs", 0, "g"], ["Sugar", 0, "g"]],
+      "price": null
+    },
+    {
+      "name": "Goat Meat Protein",
+      "sku": "HV-GOAT-MEAT-PROTEIN-1KG",
+      "category": "Specialty Protein",
+      "flavour": "Natural Vanilla",
+      "weight": 1, "weightUnit": "kg", "servings": 33,
+      "image": "goat-meat-protein.png",
+      "shortDescription": "Pure goat meat protein isolate.",
+      "benefits": ["Lean muscle", "Faster recovery", "Muscle support", "Better performance"],
+      "nutritionFacts": [["Protein", 25, "g"], ["Carbs", 0, "g"], ["Sugar", 0, "g"]],
+      "price": null
+    },
+    {
+      "name": "Albumin Protein",
+      "sku": "HV-ALBUMIN-PROTEIN-1KG",
+      "category": "Specialty Protein",
+      "flavour": "Natural Vanilla",
+      "weight": 1, "weightUnit": "kg", "servings": 33,
+      "image": "albumin-protein.png",
+      "shortDescription": "Pure egg white albumin protein.",
+      "benefits": ["Lean muscle", "Faster recovery", "Muscle support", "Better performance"],
+      "nutritionFacts": [["Protein", 25, "g"], ["Carbs", 0, "g"], ["Sugar", 0, "g"]],
+      "price": null
+    },
+    {
+      "name": "Cow Milk Protein Isolate",
+      "sku": "HV-COW-MILK-PROTEIN-2KG",
+      "category": "Specialty Protein",
+      "flavour": "Belgian Dark Chocolate",
+      "weight": 2, "weightUnit": "kg", "servings": 66,
+      "image": "cow-milk-protein-isolate.png",
+      "shortDescription": "100% cow milk protein isolate from grass-fed cow milk.",
+      "benefits": ["Lactose free", "Easy to digest", "High biological value", "Muscle recovery"],
+      "nutritionFacts": [["Protein", 27, "g"], ["BCAAs", 6.2, "g"], ["Glutamine", 4.5, "g"], ["Added sugar", 0, "g"]],
+      "price": null
+    },
+    {
+      "name": "Mix Seeds & Nuts Protein",
+      "sku": "HV-MIX-SEEDS-NUTS-PROTEIN-1KG",
+      "category": "Plant Protein",
+      "weight": 1, "weightUnit": "kg",
+      "image": "mix-seeds-nuts-protein.png",
+      "shortDescription": "Complete plant protein blend.",
+      "benefits": ["Muscle building", "Sustained energy", "Better digestion", "Overall wellness"],
+      "price": null
+    },
+    {
+      "name": "BCAA 2:1:1",
+      "sku": "HV-BCAA-211-300G",
+      "category": "Amino Acids",
+      "weight": 300, "weightUnit": "g",
+      "image": "bcaa-2-1-1.png",
+      "shortDescription": "Branched chain amino acids: leucine, isoleucine, valine.",
+      "benefits": ["Muscle recovery", "Reduce muscle breakdown", "Enhance endurance", "Improve performance"],
+      "price": null
+    },
+    {
+      "name": "EAA + BCAA",
+      "sku": "HV-EAA-BCAA-300G",
+      "category": "Amino Acids",
+      "flavour": "Lemon Lime",
+      "weight": 300, "weightUnit": "g", "servings": 55,
+      "image": "eaa-bcaa.png",
+      "shortDescription": "Essential amino acids + branched chain amino acids.",
+      "benefits": ["Muscle recovery", "Reduces muscle breakdown", "Improves endurance", "Boosts performance"],
+      "price": null
+    },
+    {
+      "name": "Glutamine",
+      "sku": "HV-GLUTAMINE-300G",
+      "category": "Amino Acids",
+      "weight": 300, "weightUnit": "g", "servings": 60,
+      "image": "glutamine.png",
+      "shortDescription": "Pure L-glutamine powder.",
+      "benefits": ["Supports muscle recovery", "Boosts immune health", "Reduces muscle breakdown", "Supports gut health"],
+      "price": null
+    },
+    {
+      "name": "Creatine Monohydrate",
+      "sku": "HV-CREATINE-100G",
+      "category": "Creatine",
+      "weight": 100, "weightUnit": "g",
+      "image": "creatine-monohydrate.png",
+      "shortDescription": "100% pure creatine monohydrate.",
+      "benefits": ["More strength", "More power", "More muscle", "Faster recovery"],
+      "nutritionFacts": [["Creatine", 3, "g"], ["Sugar", 0, "g"]],
+      "servingSize": "3 g",
+      "price": null
+    }
+  ]
+}

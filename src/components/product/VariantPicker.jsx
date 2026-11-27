@@ -26,25 +26,31 @@ export default function VariantPicker({ product, onSelect }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <fieldset>
-        <legend className="eyebrow mb-2.5 text-mute">
+      {flavours.length <= 1 ? (
+        <p className="eyebrow text-mute">
           Flavour <span className="text-warm">— {product.flavour ?? "—"}</span>
-        </legend>
-        <div className="flex flex-wrap gap-2" role="radiogroup">
-          {flavours.map((f) => (
-            <button
-              key={f}
-              type="button"
-              role="radio"
-              aria-checked={f === product.flavour}
-              onClick={() => pick(f, current)}
-              className="border border-line px-3.5 py-2 text-sm transition-colors hover:border-warm aria-checked:border-lime aria-checked:bg-lime aria-checked:text-ink"
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </fieldset>
+        </p>
+      ) : (
+        <fieldset>
+          <legend className="eyebrow mb-2.5 text-mute">
+            Flavour <span className="text-warm">— {product.flavour ?? "—"}</span>
+          </legend>
+          <div className="flex flex-wrap gap-2" role="radiogroup">
+            {flavours.map((f) => (
+              <button
+                key={f}
+                type="button"
+                role="radio"
+                aria-checked={f === product.flavour}
+                onClick={() => pick(f, current)}
+                className="border border-line px-3.5 py-2 text-sm transition-colors hover:border-warm aria-checked:border-lime aria-checked:bg-lime aria-checked:text-ink"
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      )}
       <fieldset>
         <legend className="eyebrow mb-2.5 text-mute">
           {byServings ? "Pack" : "Size"} <span className="text-warm">— {[product.size, product.servings && `${product.servings} servings`].filter(Boolean).join(" · ")}</span>
