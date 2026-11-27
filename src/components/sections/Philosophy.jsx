@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
-import { setupReveals } from "@/components/motion/reveal";
 import Placeholder from "@/components/ui/Placeholder";
 
 // DRAFT brand statement — not an official HV Nutrition philosophy. Edit freely.
@@ -16,7 +15,7 @@ const beats = [
 ];
 
 /**
- * 09 — Brand philosophy, the last word before the footer. The page turns to
+ * 08 — Brand philosophy, the last word before the footer. The page turns to
  * paper; a shaker on the right fills, shakes and opens as you scroll.
  */
 export default function Philosophy() {
@@ -24,32 +23,25 @@ export default function Philosophy() {
 
   useGSAP(
     () => {
-      setupReveals();
       if (prefersReducedMotion()) return;
       const q = gsap.utils.selector(root);
-
-      // Words ink in as you read.
-      gsap.fromTo(
-        q("[data-word]"),
-        { opacity: 0.12 },
-        {
-          opacity: 1,
-          stagger: 0.1,
-          ease: "none",
-          scrollTrigger: { trigger: q("[data-statement]")[0], start: "top 75%", end: "bottom 45%", scrub: true },
-        }
-      );
 
       // The shaker routine, scrubbed by scroll.
       const mm = gsap.matchMedia();
       const build = (scrollTrigger) => {
         const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { ...scrollTrigger, scrub: 0.8 } });
         const steps = q("[data-step]");
-        gsap.set(q("[data-shaker]"), { svgOrigin: "120 330" });
+        const caps = q("[data-caption]");
+        // The shaker's tilt is written straight into its SVG transform, always pivoting
+        // low in the cup — GSAP's origin smoothing otherwise drifts it sideways.
+        const shakerEl = q("[data-shaker]")[0];
+        const sh = { r: 4, y: 40 };
+        const drawShaker = () => shakerEl.setAttribute("transform", `translate(0 ${sh.y}) rotate(${sh.r} ${SHAKER_ORIGIN})`);
+        drawShaker();
         gsap.set(q("[data-lid]"), { svgOrigin: "120 90" });
         gsap.set(q("[data-stream]"), { transformOrigin: "50% 0%" });
         gsap.set(q("[data-pour]"), { svgOrigin: "154 44" });
-        gsap.set(q("[data-heap]"), { svgOrigin: "152 182" });
+        gsap.set(q("[data-heap]"), { svgOrigin: HEAP_ORIGIN });
         // Scoop rolls over along its rim line (x axis), so the opening turns to face down.
         gsap.set(q("[data-scoop-tilt]"), { svgOrigin: `${SCOOP_LIP.x + 30} ${SCOOP_LIP.y}` });
 
@@ -57,8 +49,10 @@ export default function Philosophy() {
         tl.set(steps, { opacity: 0.3 }, 0)
           .set(q("[data-pour], [data-heap]"), { opacity: 0 }, 0)
           .set(steps[0], { opacity: 1 }, 0)
+          .set(caps, { autoAlpha: 0, y: 8 }, 0)
+          .set(caps[0], { autoAlpha: 1, y: 0 }, 0)
           .fromTo(q("[data-progress]"), { scaleX: 0 }, { scaleX: 1, duration: 10 }, 0)
-          .fromTo(q("[data-shaker]"), { y: 40, rotation: 4 }, { y: 0, rotation: 0, duration: 1.2, ease: "power2.out" }, 0)
+          .fromTo(sh, { r: 4, y: 40 }, { r: 0, y: 0, duration: 1.2, ease: "power2.out", onUpdate: drawShaker }, 0)
           .fromTo(q("[data-lid]"), { y: -70, opacity: 0 }, { y: -70, opacity: 0, duration: 0.01 }, 0)
           // 01 Fill — water pours, the level rises, the scoop drops in.
           .fromTo(q("[data-stream]"), { opacity: 0, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: 0.4 }, 0.2)
@@ -67,99 +61,129 @@ export default function Philosophy() {
           .to(q("[data-stream]"), { opacity: 0, duration: 0.3 }, 3)
           // A heaped scoop swings in, tips over the opening, and the powder pours out of its lip.
           .fromTo(q("[data-scoop]"), { x: 200, y: -30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 2.4)
-          .fromTo(q("[data-scoop-tilt]"), { scaleY: 1 }, { scaleY: -1, duration: 0.5, ease: "power2.inOut" }, 3)
+          .fromTo(q("[data-scoop-tilt]"), { scaleY: 1, svgOrigin: TILT_ORIGIN }, { scaleY: -1, svgOrigin: TILT_ORIGIN, duration: 0.5, ease: "power2.inOut" }, 3)
           .fromTo(q("[data-mound]"), { opacity: 1 }, { opacity: 0, duration: 0.5 }, 3.3)
           // A solid stream of powder falls from the lip to the water…
           .fromTo(q("[data-pour]"), { opacity: 0, scaleY: 0 }, { opacity: 0.95, scaleY: 1, duration: 0.35, ease: "power1.in", immediateRender: false }, 3.3)
           .to(q("[data-pour]"), { opacity: 0, scaleY: 0.2, duration: 0.35, ease: "power1.in" }, 4.25)
           // …and piles up on the surface until it's shaken in.
-          .fromTo(q("[data-heap]"), { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 1.1, ease: "power1.out", immediateRender: false }, 3.55)
-          .to(q("[data-scoop-tilt]"), { scaleY: 1, duration: 0.35, ease: "power2.inOut" }, 4.45)
+          .fromTo(q("[data-heap]"), { opacity: 0, scaleX: 0.25, scaleY: 0, svgOrigin: HEAP_ORIGIN }, { opacity: 1, scaleX: 1, scaleY: 1, svgOrigin: HEAP_ORIGIN, duration: 1.1, ease: "power1.out", immediateRender: false }, 3.55)
+          .to(q("[data-scoop-tilt]"), { scaleY: 1, svgOrigin: TILT_ORIGIN, duration: 0.35, ease: "power2.inOut" }, 4.45)
           .to(q("[data-scoop]"), { x: 200, y: -30, opacity: 0, duration: 0.45, ease: "power2.in" }, 4.65)
           // Lid goes on.
           .to(q("[data-lid]"), { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 4.9)
           // 02 Shake.
           .to(steps[0], { opacity: 0.3, duration: 0.2 }, 5.3)
           .to(steps[1], { opacity: 1, duration: 0.2 }, 5.3)
-          .to(q("[data-shaker]"), {
+          .to(caps[0], { autoAlpha: 0, y: -8, duration: 0.2 }, 5.3)
+          .to(caps[1], { autoAlpha: 1, y: 0, duration: 0.25 }, 5.45)
+          .to(sh, {
             keyframes: [
-              { rotation: 16, y: -24 },
-              { rotation: -16, y: 0 },
-              { rotation: 14, y: -20 },
-              { rotation: -14, y: 0 },
-              { rotation: 9, y: -12 },
-              { rotation: -6, y: 0 },
-              { rotation: 0, y: 0 },
+              { r: 16, y: -24 },
+              { r: -16, y: 0 },
+              { r: 14, y: -20 },
+              { r: -14, y: 0 },
+              { r: 9, y: -12 },
+              { r: -6, y: 0 },
+              { r: 0, y: 0 },
             ],
             duration: 3,
             ease: "sine.inOut",
+            onUpdate: drawShaker,
           }, 5.4)
           .fromTo(q("[data-wave]"), { x: 0 }, { x: -240, duration: 3.2 }, 5.4)
-          .to(q("[data-heap]"), { opacity: 0, scaleX: 1.4, duration: 1.4 }, 5.6)
+          .to(q("[data-heap]"), { opacity: 0, scaleX: 1.4, scaleY: 0.4, svgOrigin: HEAP_ORIGIN, duration: 1.4 }, 5.6)
           .to(q("[data-fill]"), { attr: { fill: "#5b3a28" }, duration: 2.4 }, 5.6)
           .fromTo(q("[data-foam]"), { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.8, stagger: 0.05, transformOrigin: "50% 50%" }, 7.6)
           // 03 Refuel — the spout flips open.
           .to(steps[1], { opacity: 0.3, duration: 0.2 }, 8.4)
           .to(steps[2], { opacity: 1, duration: 0.2 }, 8.4)
+          .to(caps[1], { autoAlpha: 0, y: -8, duration: 0.2 }, 8.4)
+          .to(caps[2], { autoAlpha: 1, y: 0, duration: 0.25 }, 8.55)
           .fromTo(q("[data-spout]"), { rotation: 0 }, { rotation: -120, duration: 0.8, ease: "back.out(1.6)", svgOrigin: "152 40" }, 8.6)
           .fromTo(q("[data-ready]"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6 }, 9.2)
           .to({}, { duration: 0.8 }, 9.2);
         return tl;
       };
 
-      mm.add("(min-width: 768px)", () => {
-        build({ trigger: root.current, start: "top 25%", end: "bottom bottom" });
-      });
-      mm.add("(max-width: 767px)", () => {
-        build({ trigger: q("[data-beats]")[0], start: "top 90%", end: "bottom 70%" });
+      // The section pins full-screen; the whole routine plays across the pinned scroll.
+      mm.add({ desktop: "(min-width: 768px)", mobile: "(max-width: 767px)" }, (ctx) => {
+        const tl = build({
+          trigger: root.current,
+          start: "top top",
+          end: () => `+=${window.innerHeight * (ctx.conditions.desktop ? 4 : 3.4)}`,
+          pin: true,
+          invalidateOnRefresh: true,
+        });
+        // Text column behind the shaker scrolls up from below the fold to above it.
+        const col = q("[data-scroller]")[0];
+        tl.fromTo(
+          col,
+          { y: () => window.innerHeight * 0.55 },
+          { y: () => -(col.offsetHeight - window.innerHeight * 0.35), duration: 10, ease: "none" },
+          0
+        );
       });
     },
     { scope: root }
   );
 
   return (
-    <section ref={root} aria-labelledby="philosophy-title" className="palette-fixed relative bg-warm text-obsidian">
-      <div className="shell grid grid-cols-1 md:grid-cols-12 md:gap-x-8">
-        <div className="pt-24 md:col-span-7 md:row-start-1 md:pt-40">
-          <div className="flex items-center justify-between gap-4">
-            <span className="eyebrow text-obsidian/60">(08) Philosophy</span>
-            <Placeholder className="text-obsidian/60">Draft copy — edit in Philosophy.jsx</Placeholder>
-          </div>
-          <h2 id="philosophy-title" data-statement className="display mt-10 max-w-[16ch] text-[13vw] leading-[0.88] md:mt-16 md:text-[6.4vw]">
-            {statement.split(" ").map((w, i) => (
-              <span key={i} data-word className="inline-block pr-[0.22em]">
-                {w}
+    <section ref={root} aria-labelledby="philosophy-title" className="palette-fixed relative h-svh overflow-hidden bg-warm text-obsidian">
+      {/* Layer 1 — text that scrolls up behind the shaker */}
+      <div aria-hidden={false} className="pointer-events-none absolute inset-0 z-0">
+        <div data-scroller className="shell flex flex-col items-center text-center will-change-transform motion-reduce:pt-32">
+          <h2 id="philosophy-title" className="display max-w-[16ch] text-[9vw] leading-[0.92] md:text-[5vw] lg:text-[4.4vw]">
+            {statement}
+          </h2>
+          {beats.map((b, i) => (
+            <div key={b.n} className="flex min-h-[85svh] flex-col items-center justify-center">
+              <span className="font-mono text-xs text-obsidian/50">{b.n}</span>
+              <p
+                className={`display mt-2 text-[30vw] leading-[0.82] md:text-[19vw] ${
+                  i === 1 ? "outline-text [--stroke:rgba(9,9,9,0.35)]" : "text-obsidian/[0.13]"
+                }`}
+              >
+                {b.title}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top strip */}
+      <div className="shell absolute inset-x-0 top-20 z-20 flex items-center justify-between gap-4 md:top-24">
+        <span className="eyebrow text-obsidian/60">(08) Philosophy</span>
+        <span className="hidden md:block">
+          <Placeholder className="text-obsidian/60">Draft copy — edit in Philosophy.jsx</Placeholder>
+        </span>
+      </div>
+
+      {/* Layer 2 — the shaker, centred */}
+      <div className="absolute inset-0 z-10 flex -translate-y-[5svh] flex-col items-center justify-center">
+        <Shaker />
+        <div className="mt-4 w-[min(300px,80vw)] md:mt-6">
+          <div className="flex justify-between">
+            {beats.map((b) => (
+              <span key={b.n} data-step className="eyebrow bg-warm/80 px-1 text-obsidian">
+                {b.n} {b.title}
               </span>
             ))}
-          </h2>
-        </div>
-
-        {/* The shaker: sticky on the right (desktop) / pinned under the header strip (mobile). */}
-        <div className="sticky top-0 z-10 -mx-[var(--gutter)] flex h-[58svh] flex-col items-center justify-center bg-warm px-[var(--gutter)] md:col-span-5 md:col-start-8 md:row-span-2 md:row-start-1 md:mx-0 md:h-svh md:self-start md:bg-transparent md:px-0 md:pb-6 md:pt-24">
-          <Shaker />
-          <div className="mt-4 w-full max-w-[300px] md:mt-8">
-            <div className="flex justify-between">
-              {beats.map((b) => (
-                <span key={b.n} data-step className="eyebrow text-obsidian">
-                  {b.n} {b.title}
-                </span>
-              ))}
-            </div>
-            <div className="mt-2 h-px bg-obsidian/15">
-              <div data-progress className="h-px origin-left bg-obsidian" />
-            </div>
+          </div>
+          <div className="mt-2 h-px bg-obsidian/15">
+            <div data-progress className="h-px origin-left bg-obsidian" />
           </div>
         </div>
-
-        <div data-beats className="pb-24 md:col-span-6 md:row-start-2 md:pb-40">
-          {beats.map((b) => (
-            <div key={b.n} className="flex min-h-[48svh] flex-col justify-center border-t border-obsidian/15 py-10 md:min-h-[78svh]">
-              <div data-reveal="fade">
-                <span className="font-mono text-xs text-obsidian/50">{b.n}</span>
-                <p className="display mt-3 text-[16vw] md:text-[7vw]">{b.title}</p>
-                <p className="mt-4 max-w-sm text-[1.02rem] leading-relaxed text-obsidian/70">{b.body}</p>
-              </div>
-            </div>
+        {/* Caption for the current beat, swapped as the steps change */}
+        <div className="relative mt-3 h-12 w-[min(440px,88vw)] text-center">
+          {beats.map((b, i) => (
+            <p
+              key={b.n}
+              data-caption
+              className={`absolute inset-x-0 top-0 text-[0.95rem] leading-snug text-obsidian/75 ${i === 0 ? "" : "opacity-0"}`}
+            >
+              {b.body}
+            </p>
           ))}
         </div>
       </div>
@@ -182,6 +206,11 @@ function wavePath(baseY) {
 
 // The scoop's rim: left end x, rim line y — just above the cup opening.
 const SCOOP_LIP = { x: 132, y: 42 };
+const TILT_ORIGIN = `${SCOOP_LIP.x + 30} ${SCOOP_LIP.y}`;
+// The shaker rocks around a point low in the cup, like a hand holding it.
+const SHAKER_ORIGIN = "120 330";
+// The powder pile grows up from where the pour hits the water (bottom centre of the heap).
+const HEAP_ORIGIN = "152 184";
 
 // Falling column of powder from the scoop lip down to the water.
 const POUR = "M140 44 Q154 40 168 44 L163 120 Q160 160 157 184 L149 184 Q146 160 143 120 Z";
@@ -193,7 +222,7 @@ const INNER = "M30 116 L210 116 L196.5 484 Q195 498 182 498 L58 498 Q45 498 43.5
 
 function Shaker() {
   return (
-    <div className="relative w-[min(44vw,calc((58svh-80px)*0.4375))] md:w-[min(30vw,320px,calc((100svh-230px)*0.4375))] lg:w-[min(22vw,320px,calc((100svh-230px)*0.4375))]">
+    <div className="relative w-[min(44vw,calc((100svh-380px)*0.4375))] md:w-[min(34vw,320px,calc((100svh-320px)*0.4375))] lg:w-[min(24vw,320px,calc((100svh-320px)*0.4375))]">
       <svg
         viewBox="-20 -100 280 640"
         className="block h-auto w-full overflow-visible"
@@ -220,7 +249,8 @@ function Shaker() {
 
           {/* Liquid + powder, clipped to the cup */}
           <g clipPath="url(#shaker-inner)">
-            <rect x="0" y="0" width="240" height="520" fill="#090909" opacity="0.03" />
+            {/* Frosted backing so the text scrolling behind doesn't show through the cup */}
+            <rect x="0" y="0" width="240" height="520" fill="#f3f2ed" opacity="0.88" />
             <g data-liquid>
               <path data-wave data-fill d={wavePath(178)} fill="#5b3a28" />
               {foam.map((f, i) => (
@@ -239,15 +269,17 @@ function Shaker() {
           {/* Scoop: slides in, tips at its lip, slides back out */}
           <g data-scoop opacity="0">
             <g data-scoop-tilt>
-              <rect x="186" y="42" width="78" height="11" rx="5.5" fill="#191919" />
-              <path d="M132 42 L192 42 L188 80 Q186 92 174 92 L150 92 Q138 92 136 80 Z" fill="#090909" />
-              <path d="M138 48 L140 78" stroke="#f3f2ed" strokeOpacity="0.25" strokeWidth="3" strokeLinecap="round" />
+             <g transform="translate(162 42) scale(1.45) translate(-162 -42)">
+              <rect x="186" y="41" width="82" height="13" rx="6.5" fill="#ffb300" stroke="#090909" strokeWidth="2.5" />
+              <path d="M132 42 L192 42 L188 80 Q186 92 174 92 L150 92 Q138 92 136 80 Z" fill="#ffb300" stroke="#090909" strokeWidth="3" strokeLinejoin="round" />
+              <path d="M140 50 L142 78" stroke="#ffffff" strokeOpacity="0.6" strokeWidth="3.5" strokeLinecap="round" />
               <g data-mound>
                 <path d="M134 42 Q162 20 190 42 Z" fill="#a47b58" />
                 <circle cx="150" cy="36" r="2.4" fill="#8a6446" />
                 <circle cx="168" cy="32" r="2" fill="#8a6446" />
                 <circle cx="178" cy="38" r="2.2" fill="#8a6446" />
               </g>
+             </g>
             </g>
           </g>
 

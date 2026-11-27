@@ -66,18 +66,18 @@ export default function Signature() {
   );
 
   return (
-    <section ref={root} aria-labelledby="sig-title" className="relative bg-charcoal py-24 md:py-32 lg:flex lg:min-h-svh lg:items-center lg:py-12">
-      <div className="shell grid w-full grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
+    <section ref={root} aria-labelledby="sig-title" className="relative bg-charcoal py-10 md:py-32 lg:flex lg:min-h-svh lg:items-center lg:py-12">
+      <div className="shell grid w-full grid-cols-1 gap-7 md:gap-12 lg:grid-cols-12 lg:gap-8">
         {/* Visual */}
-        <div data-rep-box data-reveal="clip" className="grain relative isolate min-h-[120vw] overflow-hidden bg-obsidian md:min-h-[90vw] lg:col-span-7 lg:h-[calc(100svh-6rem)] lg:min-h-[520px]">
+        <div data-rep-box data-reveal="clip" className="grain relative isolate min-h-[78vw] overflow-hidden bg-obsidian md:min-h-[90vw] lg:col-span-7 lg:h-[calc(100svh-6rem)] lg:min-h-[520px]">
           <div aria-hidden className="absolute inset-0 -z-10" style={{ background: "radial-gradient(50% 50% at 50% 62%, rgba(243,242,237,0.12) 0%, transparent 70%)" }} />
-          <p aria-hidden className="display absolute inset-x-0 top-[9%] z-0 text-center text-[19vw] leading-[0.8] lg:text-[10.5vw]">
+          <p aria-hidden className="display absolute inset-x-0 top-[7%] z-0 text-center text-[15vw] md:text-[19vw] leading-[0.8] lg:text-[10.5vw]">
             <span data-rep-top className="block">Make every</span>
             <span data-rep-bottom className="block">
               rep <span className="text-lime">count.</span>
             </span>
           </p>
-          <div data-rep-rise className="absolute inset-x-[14%] bottom-[11%] top-[30%] z-10">
+          <div data-rep-rise className="absolute inset-x-[20%] bottom-[13%] top-[34%] z-10 md:inset-x-[14%] md:bottom-[11%] md:top-[30%]">
             <Image src={p.images[0].src} alt={p.images[0].alt} fill sizes="(min-width:1024px) 42vw, 75vw" className="object-contain drop-shadow-[0_50px_60px_rgba(0,0,0,0.75)]" />
           </div>
           <div aria-hidden className="absolute bottom-5 left-0 z-20 w-full overflow-hidden whitespace-nowrap">
@@ -93,26 +93,26 @@ export default function Signature() {
         {/* Copy */}
         <div data-copy className="flex flex-col justify-center lg:col-span-5 lg:pl-6">
           <span data-in className="eyebrow text-mute">(04) The signature</span>
-          <h2 id="sig-title" className="display mt-4 text-[17vw] md:text-[12vw] lg:mt-3 lg:text-[clamp(3rem,4.6vw,5.5rem)]">
+          <h2 id="sig-title" className="display mt-3 text-[13vw] md:mt-4 md:text-[12vw] lg:mt-3 lg:text-[clamp(3rem,4.6vw,5.5rem)]">
             <span className="line-mask"><span data-title-line className="block">HV Whey</span></span>
             <span className="line-mask"><span data-title-line className="block text-lime">Protein.</span></span>
           </h2>
 
-          <div className="mt-6 flex flex-col gap-3 text-[0.95rem] leading-relaxed text-soft/80 lg:mt-5 lg:text-[0.9rem]">
+          <div className="mt-4 flex flex-col gap-3 text-[0.95rem] leading-relaxed text-soft/80 md:mt-6 lg:mt-5 lg:text-[0.9rem]">
             {p.description.map((d, i) => (
-              <p key={i} data-in>{d}</p>
+              <p key={i} data-in className={i > 0 ? "hidden md:block" : undefined}>{d}</p>
             ))}
             <div data-in>
               <Placeholder>Description is a draft</Placeholder>
             </div>
           </div>
 
-          <dl className="relative mt-8 grid grid-cols-3 lg:mt-6">
+          <dl className="relative mt-5 grid grid-cols-3 md:mt-8 lg:mt-6">
             <span data-rule aria-hidden className="absolute inset-x-0 top-0 h-px origin-left bg-line" />
             <span data-rule aria-hidden className="absolute inset-x-0 bottom-0 h-px origin-right bg-line" />
             {p.labelStats.map((s) => (
-              <div key={s.label} data-stat className="border-r border-line py-5 pr-3 last:border-r-0 lg:py-4 [&:not(:first-child)]:pl-4">
-                <dd className="display text-5xl lg:text-[clamp(2.25rem,3vw,3rem)]">
+              <div key={s.label} data-stat className="border-r border-line py-3 pr-3 last:border-r-0 md:py-5 lg:py-4 [&:not(:first-child)]:pl-4">
+                <dd className="display text-4xl md:text-5xl lg:text-[clamp(2.25rem,3vw,3rem)]">
                   <span data-count={s.value}>{s.value}</span>
                   <span className="normal-case text-lime">{s.unit}</span>
                 </dd>
@@ -122,7 +122,7 @@ export default function Signature() {
           </dl>
           <p data-in className="eyebrow mt-2 text-mute/70">As printed on the pack</p>
 
-          <div className="mt-8 flex flex-col gap-5 lg:mt-6 lg:gap-4">
+          <div className="mt-5 flex flex-col gap-4 md:mt-8 md:gap-5 lg:mt-6 lg:gap-4">
             <div data-in className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="eyebrow text-mute">Flavour · Size</p>
@@ -131,8 +131,8 @@ export default function Signature() {
                 </p>
                 <p className="mt-1 text-xs text-mute">{availabilityLabel[p.availability]}</p>
               </div>
-              <div className="text-right">
-                <p className="display text-5xl tabular-nums lg:text-[clamp(2.25rem,3vw,3rem)]">
+              <div className="sm:text-right">
+                <p className="display text-4xl tabular-nums md:text-5xl lg:text-[clamp(2.25rem,3vw,3rem)]">
                   From ₹<span data-count={p.price}>{formatPrice(p.price).replace(/[^\d,]/g, "")}</span>
                 </p>
                 <Placeholder className="mt-1">Price to be confirmed</Placeholder>

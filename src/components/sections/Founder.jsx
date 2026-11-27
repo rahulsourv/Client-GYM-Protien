@@ -32,7 +32,7 @@ export default function Founder() {
     <section
       ref={root}
       aria-labelledby="founder-title"
-      className="relative border-t border-line bg-charcoal py-20 md:py-28 lg:flex lg:min-h-svh lg:items-center lg:py-16"
+      className="relative border-t border-line bg-charcoal py-10 md:py-28 lg:flex lg:min-h-svh lg:items-center lg:py-16"
     >
       <div className="shell grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
         <div

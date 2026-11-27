@@ -83,12 +83,12 @@ export default function ProductReveal() {
         style={{ background: "radial-gradient(40% 50% at 50% 55%, rgba(255,179,0,0.08) 0%, transparent 70%), radial-gradient(60% 60% at 50% 45%, rgba(243,242,237,0.08) 0%, transparent 70%)" }}
       />
 
-      <div className="shell absolute inset-x-0 top-20 z-20 flex justify-between md:top-24">
+      <div className="shell absolute inset-x-0 top-6 z-20 flex justify-between md:top-24">
         <span className="eyebrow text-mute">(02) The tub</span>
         <span className="eyebrow text-mute">HV Whey · Chocolate · 1kg</span>
       </div>
 
-      <h2 id="reveal-title" data-head className="display absolute inset-0 z-0 flex flex-col items-center justify-center text-center text-[17vw] text-warm motion-reduce:opacity-15 md:text-[11.5vw]">
+      <h2 id="reveal-title" data-head className="display absolute inset-0 z-0 flex flex-col items-center justify-start pt-[14svh] text-center md:justify-center md:pt-0 text-[17vw] text-warm motion-reduce:opacity-15 md:text-[11.5vw]">
         <span className="line-mask"><span>Not just</span></span>
         <span className="line-mask"><span>another <span className="outline-text">scoop.</span></span></span>
       </h2>

@@ -27,7 +27,7 @@ export default function Categories({ bare = false, categoryList = categories, pr
   useGSAP(() => setupReveals(), { scope: root });
 
   return (
-    <section ref={root} aria-labelledby={bare ? undefined : "cat-title"} aria-label={bare ? "Categories" : undefined} className={`relative overflow-hidden bg-obsidian ${bare ? "pb-28" : "py-24 md:py-36"}`}>
+    <section ref={root} aria-labelledby={bare ? undefined : "cat-title"} aria-label={bare ? "Categories" : undefined} className={`relative overflow-hidden bg-obsidian ${bare ? "pb-28" : "py-10 md:py-36"}`}>
       <div className="shell">
         {!bare && (
         <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
