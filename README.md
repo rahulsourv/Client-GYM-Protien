@@ -2,6 +2,36 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+The frontend uses the HV Nutrition backend on Render by default. To use a
+locally running backend instead, set this in `.env`:
+
+```bash
+VITE_API_BASE_URL=http://localhost:5000/api/v1
+```
+
+Next.js uses this backend URL for catalog and login requests. Use `/login` with a seeded admin
+account, or enter a product verification code on `/verified`. Product QR links
+can open `/verify/product/<productToken>` directly.
+
+The admin profile generates printable category QR codes using the current site
+origin. Set `NEXT_PUBLIC_CATALOG_ORIGIN` to your public site origin if you need
+to print codes from localhost that will work on other devices.
+
+To enable uploads from **Profile → Add Product**, add these server-only
+variables to the backend's ignored `.env`, or to its hosting environment,
+then restart the backend.
+
+```dotenv
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+You can also set the single `CLOUDINARY_URL` value from your Cloudinary console.
+
+The product record stores the HTTPS image URLs. The first image is used on
+catalog cards, and the product detail page displays all uploaded images.
+
 First, run the development server:
 
 ```bash

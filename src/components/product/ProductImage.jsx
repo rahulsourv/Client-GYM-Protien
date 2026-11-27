@@ -24,6 +24,7 @@ export default function ProductImage({
         <div className="relative h-full w-full" style={{ maxWidth: image.width * 1.5, maxHeight: image.height * 1.5 }}>
           <Image
             src={image.src}
+            unoptimized={image.unoptimized}
             alt={image.alt}
             fill
             sizes={sizes}

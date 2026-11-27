@@ -65,7 +65,7 @@ export default function ProductGallery({ product }) {
             >
               {own ? (
                 <span className="absolute inset-0 bg-graphite">
-                  <Image src={im.src} alt="" fill sizes="76px" className="object-contain p-2" />
+                  <Image src={im.src} unoptimized={im.unoptimized} alt="" fill sizes="76px" className="object-contain p-2" />
                 </span>
               ) : (
                 <ProductImage image={{ ...im, alt: "" }} sizes="76px" className="absolute inset-0" pad="6%" />
@@ -110,7 +110,7 @@ function Stage({ own, image, priority }) {
   return own ? (
     <div className="grain absolute inset-0 bg-graphite">
       <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(55% 50% at 50% 45%, rgba(243,242,237,0.14), transparent 70%)" }} />
-      <Image src={image.src} alt={image.alt} fill priority={priority} sizes="(min-width:1024px) 50vw, 100vw" className="object-contain p-[10%] drop-shadow-[0_40px_50px_rgba(0,0,0,0.7)]" />
+      <Image src={image.src} unoptimized={image.unoptimized} alt={image.alt} fill priority={priority} sizes="(min-width:1024px) 50vw, 100vw" className="object-contain p-[10%] drop-shadow-[0_40px_50px_rgba(0,0,0,0.7)]" />
     </div>
   ) : (
     <ProductImage image={image} priority={priority} sizes="(min-width:1024px) 50vw, 100vw" className="absolute inset-0" pad="10%" />

@@ -7,7 +7,7 @@ import Lines from "@/components/motion/Lines";
 import CatalogBrowser from "@/components/shop/CatalogBrowser";
 
 /** 08 — Find your fuel: the live catalog, filterable right on the homepage. */
-export default function Discovery() {
+export default function Discovery({ categories, products, unavailable }) {
   const root = useRef(null);
   useGSAP(() => setupReveals(), { scope: root });
   return (
@@ -22,7 +22,8 @@ export default function Discovery() {
             Filter by brand, type and budget. Every product here is in the catalog right now.
           </p>
         </div>
-        <CatalogBrowser compact limit={8} />
+        {unavailable && <p role="status" className="mb-6 text-sm text-mute">The live catalog is temporarily unavailable.</p>}
+        <CatalogBrowser compact limit={8} base={products} categoryList={categories} defaultSort="newest" />
       </div>
     </section>
   );

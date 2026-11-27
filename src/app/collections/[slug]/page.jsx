@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/layout/PageHeader";
 import CatalogBrowser from "@/components/shop/CatalogBrowser";
-import { getCollection, collectionSlugs, byBrand, byCategory, hvWhey } from "@/lib/catalog";
+import { getCollection, collectionSlugs, hvWhey } from "@/lib/catalog";
+import { getPublicCatalog } from "@/lib/publicCatalog";
 
 export function generateStaticParams() {
   return collectionSlugs().map((slug) => ({ slug }));
@@ -19,11 +21,24 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function CollectionPage({ params }) {
+export default function CollectionPage({ params }) {
+  return (
+    <Suspense fallback={<p className="shell pb-24 pt-32" role="status">Loading collection…</p>}>
+      <CollectionContent params={params} />
+    </Suspense>
+  );
+}
+
+async function CollectionContent({ params }) {
   const { slug } = await params;
-  const c = getCollection(slug);
+  const { categories, products, unavailable } = await getPublicCatalog();
+  const category = categories.find((item) => item.slug === slug);
+  const c = category
+    ? { type: "category", title: category.name, description: category.description }
+    : getCollection(slug);
+  if (!c && unavailable) return <p className="shell pb-24 pt-32" role="status">The live catalog is temporarily unavailable.</p>;
   if (!c) notFound();
-  const list = c.type === "brand" ? byBrand(slug) : byCategory(slug);
+  const list = products.filter((product) => product[c.type] === slug);
   const own = c.type === "brand" && c.brand.own;
 
   return (
@@ -54,7 +69,7 @@ export default async function CollectionPage({ params }) {
         )}
       </PageHeader>
       <section className="shell pb-28" aria-label={`${c.title} products`}>
-        <CatalogBrowser base={list} lock={{ brand: c.type === "brand", category: c.type === "category" }} />
+        <CatalogBrowser base={list} categoryList={categories} lock={{ brand: c.type === "brand", category: c.type === "category" }} />
       </section>
     </>
   );

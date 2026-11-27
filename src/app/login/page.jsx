@@ -1,4 +1,4 @@
-import PageHeader from "@/components/layout/PageHeader";
+import AccountForm from "@/components/auth/AccountForm";
 
 export const metadata = {
   title: "Login",
@@ -6,11 +6,5 @@ export const metadata = {
 };
 
 export default function LoginPage() {
-  return (
-    <PageHeader
-      lines={["Login"]}
-      description="Account login is currently unavailable."
-      crumbs={[{ label: "Login" }]}
-    />
-  );
+  return <AccountForm />;
 }

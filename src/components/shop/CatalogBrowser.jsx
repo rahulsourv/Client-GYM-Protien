@@ -9,6 +9,7 @@ import { LinkButton, Button } from "@/components/ui/Button";
 import { brands, categories, filterProducts, formatPrice, products as allProducts } from "@/lib/catalog";
 
 const sorts = [
+  { value: "newest", label: "Newest" },
   { value: "featured", label: "Featured" },
   { value: "price-asc", label: "Price: low to high" },
   { value: "price-desc", label: "Price: high to low" },
@@ -18,13 +19,14 @@ const sorts = [
  * Filter / sort / search over the central catalog. Used by /shop,
  * /collections/[slug] and the homepage discovery section (compact).
  */
-export default function CatalogBrowser({ base = allProducts, lock = {}, compact = false, limit }) {
+export default function CatalogBrowser({ base = allProducts, categoryList = categories, lock = {}, compact = false, limit, defaultSort = "featured" }) {
   const bounds = useMemo(() => {
-    const ps = base.map((p) => p.price);
+    const ps = base.map((p) => p.price).filter((price) => price != null);
+    if (!ps.length) return [0, 0];
     return [Math.floor(Math.min(...ps) / 50) * 50, Math.ceil(Math.max(...ps) / 50) * 50];
   }, [base]);
 
-  const empty = { brands: [], categories: [], maxPrice: bounds[1], inStockOnly: false, query: "", sort: "featured" };
+  const empty = { brands: [], categories: [], maxPrice: null, inStockOnly: false, query: "", sort: defaultSort };
   const [f, setF] = useState(empty);
   const [drawer, setDrawer] = useState(false);
   const query = useDeferredValue(f.query);
@@ -34,12 +36,16 @@ export default function CatalogBrowser({ base = allProducts, lock = {}, compact 
 
   const toggle = (key, v) =>
     setF((s) => ({ ...s, [key]: s[key].includes(v) ? s[key].filter((x) => x !== v) : [...s[key], v] }));
-  const active = f.brands.length + f.categories.length + (f.maxPrice < bounds[1]) + f.inStockOnly + Boolean(f.query);
+  const active = f.brands.length + f.categories.length + (f.maxPrice !== null) + f.inStockOnly + Boolean(f.query);
   const reset = () => setF(empty);
   const closeDrawer = useCallback(() => setDrawer(false), []);
 
-  const brandOpts = brands.filter((b) => !lock.brand && base.some((p) => p.brand === b.slug));
-  const catOpts = categories.filter((c) => !lock.category && base.some((p) => p.category === c.slug));
+  const brandList = new Map(brands.map((brand) => [brand.slug, brand]));
+  for (const product of base) {
+    if (product.brandInfo) brandList.set(product.brand, product.brandInfo);
+  }
+  const brandOpts = [...brandList.values()].filter((b) => !lock.brand && base.some((p) => p.brand === b.slug));
+  const catOpts = categoryList.filter((c) => !lock.category && base.some((p) => p.category === c.slug));
 
   const filters = (
     <Filters
@@ -116,7 +122,9 @@ export default function CatalogBrowser({ base = allProducts, lock = {}, compact 
         </div>
 
         {/* Grid */}
-        {shown.length === 0 ? (
+        {base.length === 0 ? (
+          <p role="status" className="border border-line px-6 py-16 text-center text-mute">No products are listed here yet.</p>
+        ) : shown.length === 0 ? (
           <div className="border border-dashed border-line px-6 py-20 text-center">
             <p className="display text-5xl text-soft">Nothing matches that.</p>
             <p className="mt-3 text-sm text-mute">Loosen a filter or clear them all.</p>
@@ -219,7 +227,7 @@ function Filters({ f, setF, toggle, brandOpts, catOpts, bounds, base, compact })
           </div>
         </fieldset>
       )}
-      <fieldset className={compact ? "flex flex-wrap items-center gap-4" : ""}>
+      {base.some((product) => product.price != null) && <fieldset className={compact ? "flex flex-wrap items-center gap-4" : ""}>
         <legend className={`eyebrow text-mute ${compact ? "sr-only" : "mb-3"}`}>Price</legend>
         {compact && <span className="eyebrow w-20 text-mute">Max price</span>}
         <label className={`flex items-center gap-4 ${compact ? "min-w-64 flex-1 md:max-w-md" : ""}`}>
@@ -229,11 +237,14 @@ function Filters({ f, setF, toggle, brandOpts, catOpts, bounds, base, compact })
             min={bounds[0]}
             max={bounds[1]}
             step={50}
-            value={f.maxPrice}
-            onChange={(e) => setF((s) => ({ ...s, maxPrice: Number(e.target.value) }))}
+            value={f.maxPrice ?? bounds[1]}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              setF((s) => ({ ...s, maxPrice: value === bounds[1] ? null : value }));
+            }}
             className="h-1 flex-1 cursor-pointer accent-lime"
           />
-          <output className="w-20 text-right font-mono text-xs tabular-nums">≤ {formatPrice(f.maxPrice)}</output>
+          <output className="w-20 text-right font-mono text-xs tabular-nums">≤ {formatPrice(f.maxPrice ?? bounds[1])}</output>
         </label>
         {!compact && (
           <p className="mt-2 flex justify-between font-mono text-[0.65rem] text-mute">
@@ -241,7 +252,7 @@ function Filters({ f, setF, toggle, brandOpts, catOpts, bounds, base, compact })
             <span>{formatPrice(bounds[1])}</span>
           </p>
         )}
-      </fieldset>
+      </fieldset>}
       {!compact && (
         <fieldset>
           <legend className="eyebrow mb-3 text-mute">Availability</legend>

@@ -27,8 +27,8 @@ export default function ProductView({ product: p }) {
   const details = useRef(null);
   useGSAP(() => setupReveals(), { scope: band });
   useGSAP(() => setupReveals(), { scope: details });
-  const brand = getBrand(p.brand);
-  const category = getCategory(p.category);
+  const brand = p.brandInfo ?? getBrand(p.brand);
+  const category = p.categoryInfo ?? getCategory(p.category);
   const variants = getVariants(p);
   const isPlaceholder = (f) => p.placeholderFields.includes(f);
   const title = [brand.name, p.name, p.flavour, p.size].filter(Boolean).join(" ");
@@ -53,7 +53,7 @@ export default function ProductView({ product: p }) {
     ["Flavour", p.flavour],
     ["Size", p.size],
     ["Servings", p.servings && `${p.servings}`],
-    ["Price", `${brand.own ? "From " : ""}${formatPrice(p.price)}${isPlaceholder("price") ? " (to be confirmed)" : ""}`],
+    ["Price", `${brand.own && p.price != null ? "From " : ""}${formatPrice(p.price)}${isPlaceholder("price") ? " (to be confirmed)" : ""}`],
     ["Listed MRP", p.listedMrp && formatPrice(p.listedMrp)],
     ["Availability", availabilityLabel[p.availability]],
     ["Other options", variants.length > 1 && `${variants.length} flavours / sizes`],

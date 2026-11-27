@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LogIn, Search, ShieldCheck } from "lucide-react";
+import { LogIn, Search, ShieldCheck, UserRound } from "lucide-react";
+import { useAccount } from "@/store/account";
 import Wordmark from "@/components/ui/Wordmark";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useShop } from "@/store/shop";
@@ -21,6 +22,10 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname();
+  const { session } = useAccount();
+  const accountHref = session ? "/profile" : "/login";
+  const accountLabel = session ? "Profile" : "Login";
+  const AccountIcon = session ? UserRound : LogIn;
   const { setSearchOpen, setMenuOpen, menuOpen } = useShop();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -167,13 +172,13 @@ export default function Header() {
             </span>
           </button>
           <Link
-            href="/login"
-            aria-label="Login"
-            aria-current={under("/login") ? "page" : undefined}
+            href={accountHref}
+            aria-label={accountLabel}
+            aria-current={under(accountHref) ? "page" : undefined}
             className="ml-1 flex h-10 shrink-0 items-center justify-center gap-2 border border-line px-2 font-mono text-[0.8rem] font-medium uppercase tracking-[0.08em] text-warm transition-colors hover:border-lime hover:text-lime aria-[current=page]:text-lime sm:px-3"
           >
-            <LogIn className="size-4 sm:hidden" aria-hidden />
-            <span className="hidden sm:inline">Login</span>
+            <AccountIcon className="size-4 sm:hidden" aria-hidden />
+            <span className="hidden sm:inline">{accountLabel}</span>
           </Link>
         </div>
       </nav>

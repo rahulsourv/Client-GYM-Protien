@@ -7,7 +7,7 @@ const inr = new Intl.NumberFormat("en-IN", {
   currency: "INR",
   maximumFractionDigits: 0,
 });
-export const formatPrice = (n) => inr.format(n);
+export const formatPrice = (n) => n == null ? "Price on request" : inr.format(n);
 
 export const getProduct = (slug) => products.find((p) => p.slug === slug) ?? null;
 export const getProductById = (id) => products.find((p) => p.id === id) ?? null;
@@ -59,15 +59,15 @@ export function onePerFamily(list) {
 
 const norm = (s) => s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9 ]/g, " ");
 
-export function searchProducts(query) {
+export function searchProducts(query, list = products) {
   const terms = norm(query).split(/\s+/).filter(Boolean);
   if (!terms.length) return [];
-  return products
+  return list
     .map((p) => {
       const hay = norm(
-        [p.name, p.fullName, getBrand(p.brand)?.name, getCategory(p.category)?.name, p.flavour, p.size].join(" ")
+        [p.name, p.fullName, (p.brandInfo ?? getBrand(p.brand))?.name, (p.categoryInfo ?? getCategory(p.category))?.name, p.flavour, p.size, p.sku].join(" ")
       );
-      const name = norm(`${getBrand(p.brand)?.name} ${p.name} ${p.flavour}`);
+      const name = norm(`${(p.brandInfo ?? getBrand(p.brand))?.name} ${p.name} ${p.flavour}`);
       let score = 0;
       for (const t of terms) {
         if (!hay.includes(t)) return null;
@@ -90,17 +90,19 @@ export const priceBounds = () => {
  * @param {{brands?:string[],categories?:string[],maxPrice?:number,inStockOnly?:boolean,query?:string,sort?:string}} f
  */
 export function filterProducts(list, f = {}) {
-  let out = f.query ? searchProducts(f.query).filter((p) => list.includes(p)) : [...list];
+  let out = f.query ? searchProducts(f.query, list) : [...list];
   if (f.brands?.length) out = out.filter((p) => f.brands.includes(p.brand));
   if (f.categories?.length) out = out.filter((p) => f.categories.includes(p.category));
-  if (f.maxPrice != null) out = out.filter((p) => p.price <= f.maxPrice);
+  if (f.maxPrice != null) out = out.filter((p) => p.price != null && p.price <= f.maxPrice);
   if (f.inStockOnly) out = out.filter((p) => p.availability === "in_stock");
   switch (f.sort) {
+    case "newest":
+      break;
     case "price-asc":
-      out.sort((a, b) => a.price - b.price);
+      out.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
       break;
     case "price-desc":
-      out.sort((a, b) => b.price - a.price);
+      out.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
       break;
     default:
       // Featured: own brand first, then featured flag, then keep catalog order.

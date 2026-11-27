@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Hero from "@/components/sections/Hero";
 import ProductReveal from "@/components/sections/ProductReveal";
 import Categories from "@/components/sections/Categories";
@@ -7,6 +8,7 @@ import Trust from "@/components/sections/Trust";
 import Founder from "@/components/sections/Founder";
 import Philosophy from "@/components/sections/Philosophy";
 import { store } from "@/data/catalog";
+import { getPublicCatalog } from "@/lib/publicCatalog";
 
 export const metadata = {
   alternates: { canonical: "/" },
@@ -39,12 +41,26 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Hero />
       <ProductReveal />
-      <Categories />
+      <Suspense fallback={<p className="shell py-12" role="status">Loading categories…</p>}>
+        <HomeCategories />
+      </Suspense>
       <Signature />
-      <Discovery />
+      <Suspense fallback={<p className="shell py-12" role="status">Loading products…</p>}>
+        <HomeDiscovery />
+      </Suspense>
       <Trust />
       <Founder />
       <Philosophy />
     </>
   );
+}
+
+async function HomeCategories() {
+  const { categories, products } = await getPublicCatalog();
+  return <Categories categoryList={categories} productList={products} />;
+}
+
+async function HomeDiscovery() {
+  const { categories, products, unavailable } = await getPublicCatalog();
+  return <Discovery categories={categories} products={products} unavailable={unavailable} />;
 }

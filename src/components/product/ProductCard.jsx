@@ -9,16 +9,19 @@ export default function ProductCard({ product: p, index, priority = false, sizes
   const variants = getVariants(p);
   const alt = p.images[1];
   const own = p.brand === "hv-nutrition";
+  const brand = p.brandInfo ?? getBrand(p.brand);
+  const category = p.categoryInfo ?? getCategory(p.category);
 
   return (
     <article className="group/card relative flex flex-col">
       <div className="relative">
-        <Link href={`/products/${p.slug}`} className="block" aria-label={`${getBrand(p.brand)?.name} ${p.name}, ${p.flavour ?? ""} ${p.size ?? ""}`}>
+        <Link href={`/products/${p.slug}`} className="block" aria-label={`${brand?.name} ${p.name}, ${p.flavour ?? ""} ${p.size ?? ""}`}>
           <div className={`relative aspect-[4/5] overflow-hidden ${own ? "bg-graphite" : ""}`}>
             {own ? (
               <div className="absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_40%,#2b2b2b_0%,#111_70%)]">
                 <Image
                   src={p.images[0].src}
+                  unoptimized={p.images[0].unoptimized}
                   alt={p.images[0].alt}
                   fill
                   sizes={sizes ?? "(min-width:1024px) 25vw, 50vw"}
@@ -60,8 +63,8 @@ export default function ProductCard({ product: p, index, priority = false, sizes
 
       <div className="mt-3 flex flex-1 flex-col gap-1">
         <div className="flex items-center justify-between gap-2">
-          <span className={`eyebrow ${own ? "text-lime" : "text-mute"}`}>{getBrand(p.brand)?.name}</span>
-          <span className="eyebrow hidden text-mute xl:inline">{getCategory(p.category)?.short}</span>
+          <span className={`eyebrow ${own ? "text-lime" : "text-mute"}`}>{brand?.name}</span>
+          <span className="eyebrow hidden text-mute xl:inline">{category?.short}</span>
         </div>
         <h3 className="text-[0.95rem] leading-snug text-warm">
           <Link href={`/products/${p.slug}`} className="hover:text-lime">
@@ -73,7 +76,7 @@ export default function ProductCard({ product: p, index, priority = false, sizes
           {variants.length > 1 && <span className="text-warm/60"> · {variants.length} options</span>}
         </p>
         <p className="mt-auto pt-1 font-mono text-sm tabular-nums text-warm">
-          {own && "From "}
+          {own && p.price != null && "From "}
           {formatPrice(p.price)}
         </p>
       </div>

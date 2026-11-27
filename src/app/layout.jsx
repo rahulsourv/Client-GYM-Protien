@@ -1,6 +1,8 @@
 ﻿import { Archivo, Manrope, JetBrains_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { ShopProvider } from "@/store/shop";
+import { AccountProvider } from "@/store/account";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import Intro from "@/components/layout/Intro";
 import Header from "@/components/layout/Header";
@@ -38,7 +40,7 @@ export const viewport = {
 
 // Decides before first paint whether the once-per-session intro plays.
 // Also applies the saved colour theme before paint so there is no flash.
-const introScript = `document.documentElement.classList.add('js');try{if(localStorage.getItem('hv-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}try{if(!sessionStorage.getItem('hv-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.intro='play'}catch(e){}`;
+const introScript = `document.documentElement.classList.add('js');try{if(localStorage.getItem('hv-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}try{if(!location.pathname.startsWith('/categories/qr/')&&!sessionStorage.getItem('hv-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.intro='play'}catch(e){}`;
 
 export default function RootLayout({ children }) {
   return (
@@ -48,15 +50,19 @@ export default function RootLayout({ children }) {
         <style>{`html[data-intro="play"] .intro{display:flex}html.js [data-hero-hide]{visibility:hidden}`}</style>
       </head>
       <body className="min-h-dvh">
-        <ShopProvider>
-          <Intro />
-          <SmoothScroll />
-          <Header />
-          <MobileMenu />
-          <main id="main">{children}</main>
-          <Footer />
-          <SearchOverlay />
-        </ShopProvider>
+        <AccountProvider>
+          <ShopProvider>
+            <Intro />
+            <Suspense fallback={null}>
+              <SmoothScroll />
+              <Header />
+            </Suspense>
+            <MobileMenu />
+            <main id="main">{children}</main>
+            <Footer />
+            <SearchOverlay />
+          </ShopProvider>
+        </AccountProvider>
       </body>
     </html>
   );

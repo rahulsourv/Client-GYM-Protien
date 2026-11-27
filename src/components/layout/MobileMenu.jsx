@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useShop } from "@/store/shop";
+import { useAccount } from "@/store/account";
 import { categories } from "@/lib/catalog";
 import { store } from "@/data/catalog";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
@@ -12,6 +13,7 @@ const ease = [0.16, 1, 0.3, 1];
 
 export default function MobileMenu() {
   const { menuOpen, setMenuOpen } = useShop();
+  const { session } = useAccount();
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -30,7 +32,7 @@ export default function MobileMenu() {
     { href: "/contact", label: "Contact" },
     { href: "/verified", label: "Verified", highlight: true },
     { href: "/about", label: "About" },
-    { href: "/login", label: "Login" },
+    session ? { href: "/profile", label: "Profile" } : { href: "/login", label: "Login" },
   ];
 
   return (

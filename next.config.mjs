@@ -1,5 +1,26 @@
+import { backendUrl } from "./src/lib/backendUrl.js";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      "/auth/me",
+      "/auth/change-password",
+      "/auth/logout-all",
+      "/admin/categories",
+      "/admin/categories/:id",
+      "/admin/categories/:id/deactivate",
+      "/admin/products",
+      "/admin/product-images",
+      "/admin/products/:id",
+      "/admin/products/:id/deactivate",
+      "/verify/product/:token",
+      "/verify/product/:token/scan",
+    ].map((path) => ({
+      source: `/api/hv${path}`,
+      destination: backendUrl(path),
+    }));
+  },
   cacheComponents: true,
   partialPrefetching: true,
   images: {

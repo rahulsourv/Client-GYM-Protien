@@ -7,6 +7,7 @@ import { setupReveals } from "@/components/motion/reveal";
 import Placeholder from "@/components/ui/Placeholder";
 import { LinkButton } from "@/components/ui/Button";
 import { store } from "@/data/catalog";
+import { VerificationForm } from "@/components/verified/ProductVerification";
 
 const { fssai } = store;
 
@@ -154,6 +155,7 @@ export default function VerifiedView() {
               For questions about HV Nutrition Whey Protein or its packaging, contact HV Nutrition.
             </p>
             <Placeholder>Owner to provide sourcing & authenticity statement</Placeholder>
+            <VerificationForm />
             <a href={store.phoneHref} className="mt-2 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-warm underline decoration-lime underline-offset-4 hover:text-lime">
               <Phone className="size-4" aria-hidden /> Questions? Call {store.phone}
             </a>

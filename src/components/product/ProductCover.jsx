@@ -8,7 +8,7 @@ import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { onIntroDone } from "@/components/motion/reveal";
 import ProductImage from "./ProductImage";
 import Placeholder from "@/components/ui/Placeholder";
-import { formatPrice } from "@/lib/catalog";
+import { formatPrice, getBrand } from "@/lib/catalog";
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -135,7 +135,11 @@ export default function ProductCover({ product: p, brand, category }) {
             <ol className="eyebrow flex flex-wrap gap-2 text-mute">
               <li><Link href="/shop" className="hover:text-warm">Shop</Link></li>
               <li aria-hidden>/</li>
-              <li><Link href={`/collections/${p.brand}`} className="hover:text-warm">{brand.name}</Link></li>
+              <li>
+                {getBrand(p.brand)
+                  ? <Link href={`/collections/${p.brand}`} className="hover:text-warm">{brand.name}</Link>
+                  : brand.name}
+              </li>
               <li aria-hidden className="hidden sm:inline">/</li>
               <li className="hidden sm:inline"><Link href={`/collections/${p.category}`} className="hover:text-warm">{category.name}</Link></li>
             </ol>
@@ -185,6 +189,7 @@ export default function ProductCover({ product: p, brand, category }) {
                       {own ? (
                         <Image
                           src={img.src}
+                          unoptimized={img.unoptimized}
                           alt={img.alt}
                           fill
                           priority={i === 0}
@@ -224,7 +229,7 @@ export default function ProductCover({ product: p, brand, category }) {
           ))}
         </div>
         <div data-meta-col className="absolute inset-y-0 right-[var(--gutter)] hidden flex-col items-end justify-center gap-3 text-right lg:flex">
-          <p data-meta className="eyebrow text-mute">{own ? "Cover price — from" : "Cover price"}</p>
+          <p data-meta className="eyebrow text-mute">{own && p.price != null ? "Cover price — from" : "Cover price"}</p>
           <p data-meta className="display text-[5.5vw] leading-none tabular-nums">{formatPrice(p.price)}</p>
           {p.listedMrp && <p data-meta className="font-mono text-xs text-mute">Listed MRP {formatPrice(p.listedMrp)}</p>}
           {p.placeholderFields.includes("price") && (
@@ -262,7 +267,7 @@ export default function ProductCover({ product: p, brand, category }) {
       <div className="shell grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-6 sm:grid-cols-4 lg:hidden">
         <div data-meta className="col-span-2 flex flex-wrap items-end gap-x-3 gap-y-2 sm:col-span-4">
           <p className="display text-6xl leading-none tabular-nums">
-            {own && <span className="text-2xl">From </span>}
+            {own && p.price != null && <span className="text-2xl">From </span>}
             {formatPrice(p.price)}
           </p>
           {p.listedMrp && <p className="pb-1 font-mono text-xs text-mute">Listed MRP {formatPrice(p.listedMrp)}</p>}

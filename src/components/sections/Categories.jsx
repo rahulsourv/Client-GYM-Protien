@@ -8,20 +8,19 @@ import { useGSAP } from "@/lib/gsap";
 import { setupReveals } from "@/components/motion/reveal";
 import Lines from "@/components/motion/Lines";
 import ProductImage from "@/components/product/ProductImage";
-import { categories, byCategory, onePerFamily, hvWhey } from "@/lib/catalog";
+import { categories, products, onePerFamily } from "@/lib/catalog";
 
 /**
  * 04 — Shop by category. An editorial index instead of a tile grid: huge rows,
  * each with a fixed packshot thumbnail that zooms gently on hover.
  */
-export default function Categories({ bare = false }) {
+export default function Categories({ bare = false, categoryList = categories, productList = products }) {
   const root = useRef(null);
   const [active, setActive] = useState(null);
 
-  const rows = categories.map((c) => {
-    const list = byCategory(c.slug);
-    // Lead with our own tub for protein; otherwise the sharpest available packshot.
-    const lead = c.slug === "whey-protein" ? hvWhey() : [...onePerFamily(list)].sort((a, b) => b.images[0].width - a.images[0].width)[0];
+  const rows = categoryList.map((c) => {
+    const list = productList.filter((product) => product.category === c.slug);
+    const lead = onePerFamily(list).sort((a, b) => b.images[0].width - a.images[0].width)[0];
     return { ...c, count: list.length, lead };
   });
 
@@ -66,7 +65,7 @@ export default function Categories({ bare = false }) {
                   </span>
                   {/* Fixed thumbnail — zooms slightly on hover */}
                   <span className="block w-16 overflow-hidden md:w-28">
-                    {c.lead.brand === "hv-nutrition" ? (
+                    {c.lead?.brand === "hv-nutrition" && !c.lead.brandInfo ? (
                       <span className="relative block aspect-square bg-graphite">
                         <Image
                           src={c.lead.images[0].src}
@@ -78,7 +77,7 @@ export default function Categories({ bare = false }) {
                       </span>
                     ) : (
                       <ProductImage
-                        image={{ ...c.lead.images[0], alt: "" }}
+                        image={c.lead && { ...c.lead.images[0], alt: "" }}
                         sizes="(min-width:768px) 112px, 64px"
                         className="aspect-square"
                         imgClassName="transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-110"
