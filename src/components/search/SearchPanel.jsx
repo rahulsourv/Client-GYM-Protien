@@ -4,16 +4,18 @@ import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { searchProducts, categories, brands, formatPrice, getBrand } from "@/lib/catalog";
+import { searchProducts, brands, formatPrice, getBrand } from "@/lib/catalog";
+import { useSearchCatalog } from "@/lib/searchCatalog";
 import ProductImage from "@/components/product/ProductImage";
 
-const suggestions = ["Whey", "Chocolate"];
+const suggestions = ["Whey", "Creatine", "EAA", "BCAA"];
 
 /** Shared search UI used by the overlay and the /search page. */
 export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
   const [q, setQ] = useState("");
   const deferred = useDeferredValue(q);
-  const results = useMemo(() => searchProducts(deferred), [deferred]);
+  const { products, categories } = useSearchCatalog();
+  const results = useMemo(() => searchProducts(deferred, products), [deferred, products]);
   const hasQuery = deferred.trim().length > 0;
 
   return (
@@ -73,7 +75,7 @@ export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
         ) : results.length === 0 ? (
           <div className="py-10">
             <p className="display text-5xl text-soft">No match for “{deferred}”.</p>
-            <p className="mt-3 text-sm text-mute">Try whey or chocolate.</p>
+            <p className="mt-3 text-sm text-mute">Try whey, creatine or BCAA.</p>
           </div>
         ) : (
           <>
@@ -95,7 +97,7 @@ export default function SearchPanel({ onNavigate, onClose, autoFocus = true }) {
                   >
                     <ProductImage image={p.images[0]} sizes="80px" className="aspect-square w-16 shrink-0" pad="8%" />
                     <span className="min-w-0 flex-1">
-                      <span className="eyebrow block text-mute">{getBrand(p.brand)?.name}</span>
+                      <span className="eyebrow block text-mute">{(p.brandInfo ?? getBrand(p.brand))?.name}</span>
                       <span className="block truncate text-warm group-hover:text-lime">
                         {p.name} <span className="text-mute">· {[p.flavour, p.size].filter(Boolean).join(" · ")}</span>
                       </span>

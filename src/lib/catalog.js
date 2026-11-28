@@ -78,7 +78,8 @@ export function searchProducts(query, list = products) {
       return { p, score };
     })
     .filter(Boolean)
-    .sort((a, b) => b.score - a.score || a.p.price - b.p.price)
+    // Products without a price ("Price on request") sort after priced ones.
+    .sort((a, b) => b.score - a.score || (a.p.price ?? Infinity) - (b.p.price ?? Infinity) || 0)
     .map((r) => r.p);
 }
 
