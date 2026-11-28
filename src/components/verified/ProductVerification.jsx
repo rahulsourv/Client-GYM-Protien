@@ -70,7 +70,9 @@ function VerificationResult({ token }) {
       } catch (requestError) {
         if (!signal.aborted) {
           const message = Object.hasOwn(states, requestError.code) && states[requestError.code];
-          setError(message || (requestError.status === 404 ? "Product code not found." : requestError.message));
+          // A malformed code fails backend validation (400); to the customer it is simply not found.
+          const notFound = requestError.status === 404 || requestError.status === 400;
+          setError(message || (notFound ? "Product code not found. Check the code and try again." : requestError.message));
         }
       } finally {
         if (!signal.aborted) setBusy(false);

@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import PhotoButton from "@/components/ui/PhotoButton";
 import { api, listAdminRecords } from "@/lib/api";
+import { imageTypes, maxProductImages, uploadProductImage, validateProductImage } from "@/lib/productImages";
 import { useAccount } from "@/store/account";
 
 const inputStyle = "mt-2 w-full border border-line bg-obsidian p-3";
 const resources = { products: "Product", categories: "Category" };
+// Small bordered buttons, at least 36px tall so they are easy to tap on a phone.
+const photoAction = "min-h-9 flex-1 border border-line px-2 py-1.5 text-center hover:border-warm hover:text-lime";
 
-export default function CatalogEditor({ token, categories, categoryError, productRevision, onCategoryUpdated, onSuccess }) {
+export default function CatalogEditor({ token, categories, categoryError, imagesConfigured, productRevision, onCategoryUpdated, onSuccess }) {
   const { updateSession } = useAccount();
+  const [uploading, setUploading] = useState(false);
   const [products, setProducts] = useState(null);
   const [productError, setProductError] = useState("");
   const [attempt, setAttempt] = useState(0);
@@ -19,7 +24,10 @@ export default function CatalogEditor({ token, categories, categoryError, produc
   const [error, setError] = useState("");
   const isProduct = resource === "products";
   const kind = resources[resource];
-  const records = isProduct ? products : categories;
+  // Only products the public catalog lists: active, and not in a removed category.
+  const inactiveCategories = new Set(categories?.filter((c) => c.status === "INACTIVE").map((c) => c._id));
+  const liveProducts = products?.filter((p) => p.status === "ACTIVE" && !inactiveCategories.has(p.categoryId));
+  const records = isProduct ? liveProducts : categories;
   const listError = isProduct ? productError : categoryError;
   const record = records?.find((item) => item._id === selected);
 
@@ -89,6 +97,8 @@ export default function CatalogEditor({ token, categories, categoryError, produc
       const updated = await api(`/admin/${resource}/${record._id}${suffix}`, { method: "PATCH", body, token });
       if (isProduct) {
         setProducts((items) => items.map((item) => item._id === updated._id ? updated : item));
+        // A removed product leaves the list, so clear the selection.
+        if (updated.status !== "ACTIVE") setSelected("");
         setAttempt((value) => value + 1);
       } else {
         onCategoryUpdated(updated);
@@ -142,7 +152,7 @@ export default function CatalogEditor({ token, categories, categoryError, produc
       ) : !records ? (
         <p role="status">Loading {resource}…</p>
       ) : records.length === 0 && (
-        <p>No {resource} yet.</p>
+        <p>{isProduct ? "No live products yet." : "No categories yet."}</p>
       )}
       {error && <p role="alert">{error}</p>}
       {record && (
@@ -150,13 +160,25 @@ export default function CatalogEditor({ token, categories, categoryError, produc
           <fieldset disabled={busy} className="grid gap-4 sm:grid-cols-2">
             <Field name="name" label="Name" record={record} required maxLength={120} />
             {isProduct ? (
-              <ProductFields record={record} categories={categories ?? []} />
+              <ProductFields
+                record={record}
+                categories={categories ?? []}
+                images={
+                  <ImageField
+                    initial={record.imageUrls ?? []}
+                    token={token}
+                    configured={imagesConfigured}
+                    onUploading={setUploading}
+                    onUnauthorized={() => updateSession(null)}
+                  />
+                }
+              />
             ) : (
               <Field name="slug" label="URL slug" record={record} required maxLength={120} />
             )}
             <TextField name="description" label="Description" record={record} maxLength={2000} />
             <div className="flex flex-wrap gap-3 sm:col-span-2">
-              <Button disabled={busy}>{busy ? "Saving…" : "Save changes"}</Button>
+              <Button disabled={busy || uploading}>{busy ? "Saving…" : uploading ? "Uploading photos…" : "Save changes"}</Button>
               <Button type="button" variant="ghost" onClick={toggleStatus}>
                 {record.status === "ACTIVE" ? `Remove ${kind.toLowerCase()}` : `Restore ${kind.toLowerCase()}`}
               </Button>
@@ -187,7 +209,101 @@ function TextField({ name, label, record, ...props }) {
   );
 }
 
-function ProductFields({ record, categories }) {
+/**
+ * Product photos: thumbnails of the current images with remove / make-main, and a
+ * file picker that uploads straight away. The list is sent with the form as
+ * `imageUrls` (one per line), so Save changes stores the new order.
+ */
+function ImageField({ initial, token, configured, onUploading, onUnauthorized }) {
+  const [urls, setUrls] = useState(initial);
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const unavailable = configured === false;
+
+  async function add(event) {
+    const input = event.currentTarget;
+    const files = [...input.files];
+    input.value = "";
+    setError("");
+    if (!files.length) return;
+    if (urls.length + files.length > maxProductImages) {
+      setError(`A product can have at most ${maxProductImages} photos.`);
+      return;
+    }
+    const issue = files.map(validateProductImage).find(Boolean);
+    if (issue) {
+      setError(issue);
+      return;
+    }
+    setBusy(true);
+    onUploading(true);
+    try {
+      for (const [index, file] of files.entries()) {
+        setStatus(`Uploading photo ${index + 1} of ${files.length}…`);
+        const url = await uploadProductImage(file, token);
+        setUrls((list) => [...list, url]);
+      }
+      setStatus("Uploaded. Click Save changes to keep the new photos.");
+    } catch (uploadError) {
+      if (uploadError.status === 401) onUnauthorized();
+      setStatus("");
+      setError(uploadError.message);
+    } finally {
+      setBusy(false);
+      onUploading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-3 sm:col-span-2">
+      <p>Photos</p>
+      <input type="hidden" name="imageUrls" value={urls.join("\n")} />
+      {urls.length ? (
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {urls.map((url, index) => (
+            // Index in the key too: the same URL can appear twice, and actions work by position.
+            <li key={`${index}-${url}`} className="space-y-2 border border-line p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element -- admin preview of arbitrary Cloudinary URLs */}
+              <img src={url} alt={`Product photo ${index + 1}`} className="aspect-square w-full bg-white object-contain" />
+              <p className="text-xs text-mute">{index === 0 ? "Main photo" : `Photo ${index + 1}`}</p>
+              <div className="flex flex-wrap gap-2 text-sm">
+                {index > 0 && (
+                  <button type="button" className={photoAction} onClick={() => setUrls((list) => [list[index], ...list.filter((_, i) => i !== index)])}>
+                    Make main
+                  </button>
+                )}
+                <button type="button" className={photoAction} onClick={() => setUrls((list) => list.filter((_, i) => i !== index))}>
+                  Remove
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-sm text-mute">No photos yet.</p>
+      )}
+      <div className="space-y-2">
+        <PhotoButton
+          multiple
+          accept={imageTypes.join(",")}
+          disabled={busy || unavailable || urls.length >= maxProductImages}
+          onChange={add}
+          className="w-full sm:w-auto"
+        >
+          {busy ? "Uploading…" : urls.length ? "Add more photos" : "Add photos"}
+        </PhotoButton>
+        <p className="text-sm text-mute">
+          {unavailable ? "Photo upload is not set up on the backend (Cloudinary)." : `Up to ${maxProductImages} photos, 4 MB each. JPEG, PNG, WebP or AVIF.`}
+        </p>
+      </div>
+      {status && <p role="status" className="text-sm">{status}</p>}
+      {error && <p role="alert" className="text-sm">{error}</p>}
+    </div>
+  );
+}
+
+function ProductFields({ record, categories, images }) {
   const active = categories.filter((category) => category.status === "ACTIVE");
   return (
     <>
@@ -219,7 +335,7 @@ function ProductFields({ record, categories }) {
       <TextField name="ingredients" label="Ingredients (one per line)" record={record} />
       <TextField name="benefits" label="Benefits (one per line)" record={record} />
       <TextField name="warnings" label="Warnings (one per line)" record={record} />
-      <TextField name="imageUrls" label="Image URLs (one per line)" record={record} />
+      {images}
     </>
   );
 }

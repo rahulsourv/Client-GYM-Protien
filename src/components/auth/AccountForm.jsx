@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AddProductForm from "@/components/auth/AddProductForm";
 import AuthScreen from "@/components/auth/AuthScreen";
-import CreateAdminForm from "@/components/auth/CreateAdminForm";
 import PageHeader from "@/components/layout/PageHeader";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { api } from "@/lib/api";
@@ -67,7 +66,6 @@ export default function AccountForm({ profile = false, signup = false }) {
   }
 
   const isAdmin = ["ADMIN", "SUPER_ADMIN"].includes(session?.user.role);
-  const canCreateAdmin = session?.user.role === "SUPER_ADMIN";
   const title = isAdmin ? "Admin profile" : "Profile";
 
   if (!profile) {
@@ -99,9 +97,7 @@ export default function AccountForm({ profile = false, signup = false }) {
                 {isAdmin && (
                   <div className="flex flex-wrap gap-4">
                     <a href="#qr" className="underline underline-offset-4 hover:text-lime">Category QR codes</a>
-                    <a href="#edit-catalog" className="underline underline-offset-4 hover:text-lime">Edit products &amp; categories</a>
-                    {canCreateAdmin && <a href="#admins" className="underline underline-offset-4 hover:text-lime">Create admin</a>}
-                  </div>
+                    <a href="#edit-catalog" className="underline underline-offset-4 hover:text-lime">Edit products &amp; categories</a>                  </div>
                 )}
                 <form method="post" className="space-y-4" onSubmit={(event) => submitForm("change-password", event)}>
                   <label className="block">
@@ -122,7 +118,6 @@ export default function AccountForm({ profile = false, signup = false }) {
               <LinkButton href="/login">Sign in</LinkButton>
             )}
           </div>
-          {canCreateAdmin && <CreateAdminForm token={session.token} />}
         </div>
         {isAdmin && <AddProductForm token={session.token} />}
       </section>

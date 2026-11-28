@@ -9,8 +9,8 @@ const cookieOptions = {
   path: "/api/hv",
 };
 const routes = {
-  GET: /^\/(?:auth\/me|admin\/(?:categories|products)(?:\/[\w-]+)?|admin\/(?:product-images|users))$/,
-  POST: /^\/(?:auth\/(?:login|register|logout|logout-all)|admin\/(?:categories|products|product-images|users))$/,
+  GET: /^\/(?:auth\/me|admin\/(?:categories|products)(?:\/[\w-]+)?|admin\/product-images)$/,
+  POST: /^\/(?:auth\/(?:login|register|logout|logout-all)|admin\/(?:categories|products|product-images))$/,
   PATCH: /^\/(?:auth\/change-password|admin\/(?:categories|products)\/[\w-]+(?:\/deactivate)?)$/,
 };
 
@@ -41,6 +41,11 @@ async function proxy(request, { params }) {
   const token = request.cookies.get(sessionCookie)?.value;
   const authorization = token ? `Bearer ${token}` : request.headers.get("authorization");
   if (!signingIn && authorization) upstreamHeaders.set("Authorization", authorization);
+  // Every page load checks the session. Answer signed-out visitors here so they
+  // don't spend the backend's per-IP rate limit, which all site traffic shares.
+  if (endpoint === "/auth/me" && !authorization) {
+    return NextResponse.json({ message: "Not signed in." }, { status: 401, headers });
+  }
 
   try {
     const upstream = await fetch(backendUrl(`${endpoint}${request.nextUrl.search}`), {

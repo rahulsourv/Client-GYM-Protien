@@ -37,6 +37,9 @@ function Label({ children, arrow }) {
   );
 }
 
+/** Button styling for elements that are not <button>, such as a file-picker label. */
+export const buttonClass = (variant = "primary") => `${base} ${variants[variant]}`;
+
 export function Button({ variant = "primary", arrow = false, className = "", children, ...props }) {
   return (
     <button className={`${base} ${variants[variant]} ${className}`} {...props}>

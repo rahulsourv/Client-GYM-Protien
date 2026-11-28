@@ -6,12 +6,12 @@ import { CheckCircle, CircleAlert, X } from "lucide-react";
 import CategoryQRSection from "@/components/auth/CategoryQRSection";
 import CatalogEditor from "@/components/auth/CatalogEditor";
 import { Button } from "@/components/ui/Button";
+import PhotoButton from "@/components/ui/PhotoButton";
 import { api, listAdminRecords } from "@/lib/api";
-import { imageTypes, maxProductImages, validateProductImage } from "@/lib/productImages";
+import { imageTypes, imageUploadPath, maxProductImages, uploadProductImage, validateProductImage } from "@/lib/productImages";
 import { useAccount } from "@/store/account";
 
 const inputStyle = "mt-2 w-full border border-line bg-obsidian p-3";
-const imageUploadPath = "/api/hv/admin/product-images";
 
 export default function AddProductForm({ token }) {
   const { updateSession } = useAccount();
@@ -27,6 +27,7 @@ export default function AddProductForm({ token }) {
   const [imagesConfigured, setImagesConfigured] = useState(null);
   const [imageUploadFailed, setImageUploadFailed] = useState(false);
   const uploadedImages = useRef([]);
+  const [chosenPhotos, setChosenPhotos] = useState(0);
   const activeCategories = categories?.filter((category) => category.status === "ACTIVE");
 
   useEffect(() => {
@@ -126,17 +127,7 @@ export default function AddProductForm({ token }) {
     try {
       for (let index = uploadedImages.current.length; index < files.length; index += 1) {
         setUploadProgress(`Uploading image ${index + 1} of ${files.length}…`);
-        const response = await fetch(imageUploadPath, {
-          method: "POST",
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-          body: files[index],
-        });
-        const payload = await response.json().catch(() => null);
-        if (!response.ok || !payload?.url) {
-          if (response.status === 401) updateSession(null);
-          throw new Error(payload?.message || "Could not upload the product image.");
-        }
-        uploadedImages.current.push(payload.url);
+        uploadedImages.current.push(await uploadProductImage(files[index], token));
       }
       if (files.length) body.imageUrls = [...uploadedImages.current];
       uploading = false;
@@ -145,6 +136,7 @@ export default function AddProductForm({ token }) {
       setToast({ message: `Product created successfully. ${product?.name ?? body.name}` });
       setProductRevision((value) => value + 1);
       form.reset();
+      setChosenPhotos(0);
       uploadedImages.current = [];
       router.refresh();
     } catch (requestError) {
@@ -270,26 +262,33 @@ export default function AddProductForm({ token }) {
               Description
               <textarea name="description" className={inputStyle} maxLength={2000} rows={3} />
             </label>
-            <label className="sm:col-span-2">
-              Product images
-              <input
-                name="images"
-                type="file"
-                multiple
-                disabled={imagesConfigured === null || imagesConfigured === false}
-                accept={imageTypes.join(",")}
-                className={inputStyle}
-                onChange={() => {
-                  uploadedImages.current = [];
-                  setImageUploadFailed(false);
-                }}
-              />
-              <span className="mt-2 block text-sm text-mute">
+            <div className="space-y-2 sm:col-span-2">
+              <p>Product photos</p>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                <PhotoButton
+                  name="images"
+                  multiple
+                  disabled={imagesConfigured === null || imagesConfigured === false}
+                  accept={imageTypes.join(",")}
+                  className="w-full sm:w-auto"
+                  onChange={(event) => {
+                    uploadedImages.current = [];
+                    setImageUploadFailed(false);
+                    setChosenPhotos(event.currentTarget.files.length);
+                  }}
+                >
+                  {chosenPhotos ? "Change photos" : "Choose photos"}
+                </PhotoButton>
+                <span className="text-sm" aria-live="polite">
+                  {chosenPhotos ? `${chosenPhotos} photo${chosenPhotos === 1 ? "" : "s"} selected` : "No photos selected"}
+                </span>
+              </div>
+              <span className="block text-sm text-mute">
                 {imagesConfigured === false
                   ? "Cloudinary setup is required for images. You can still save this product without images."
                   : imagesConfigured === null ? "Checking image upload availability…" : "Up to 10 images, 4 MB each."}
               </span>
-            </label>
+            </div>
             {uploadProgress && <p role="status" className="sm:col-span-2">{uploadProgress}</p>}
             <div className="flex flex-wrap gap-3 sm:col-span-2">
               <Button disabled={busy || !activeCategories?.length}>{busy ? "Adding product…" : "Add product"}</Button>
@@ -305,6 +304,7 @@ export default function AddProductForm({ token }) {
         token={token}
         categories={categories}
         categoryError={categoryError}
+        imagesConfigured={imagesConfigured}
         productRevision={productRevision}
         onCategoryUpdated={(record) => {
           setCategories((items) => items.map((item) => item._id === record._id ? record : item)
