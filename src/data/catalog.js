@@ -129,8 +129,8 @@ export const store = {
   postcode: "712258",
   address: "7/1, Drubesh Chatterjee Lane, Uttarpara, Hooghly, West Bengal 712258",
   // From hvnutrition.in/contact-us — confirm these are still current.
-  phone: "+91 70481 36688",
-  phoneHref: "tel:+917048136688",
+  phone: "+91 97486 45839",
+  phoneHref: "tel:+919748645839",
   email: "hvnutritionservices@hvnutrition.in",
   // PLACEHOLDER — years of experience for the current owner not yet provided.
   yearsInNutrition: null,
